@@ -2,6 +2,14 @@
 
 @section('Titulo', 'Sage2.0 - Movimientos')
 
+@section('LinkCSS')
+<style>
+    .widget-user-header{
+        background: url({{asset('dist/img/escuela.jpg')}});
+    }
+</style>
+@endsection
+
 @section('ContenidoPrincipal')
 <section id="container" >
     <section id="main-content">
@@ -18,12 +26,12 @@
                     <div class="card-body">
                         <div class="card card-widget widget-user">
                         <!-- Add the bg color to the header using any of the bg-* classes -->
-                        <div class="widget-user-header text-white" style="background: url('../dist/img/escuela.jpg') center center;">
+                        <div class="widget-user-header text-white">
                             <h3 class="widget-user-username text-right">{{$NombreEscuela}}</h3>
                             <h5 class="widget-user-desc text-right">click....</h5>
                         </div>
                         <div class="widget-user-image">
-                            <img class="img-circle" src="../dist/img/logoescuela.png" alt="User Avatar">
+                            <img class="img-circle" src="{{asset('dist/img/logoescuela.png')}}" alt="User Avatar">
                         </div>
                         <div class="card-footer">
                             <div class="row">
