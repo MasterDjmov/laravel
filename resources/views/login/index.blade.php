@@ -12,7 +12,7 @@
 
       <div class="lock-box text-center">
           <img src="{{ asset('img/seguridad.jpg');}}" alt="lock avatar"/>
-          <h1><strong style="color:rgb(74, 71, 71)">Sistemaaaaa <strong><strong style="color: rgb(75, 15, 15)">SAGE</strong></h1>
+          <h1><strong style="color:rgb(74, 71, 71)">Sistema <strong><strong style="color: rgb(75, 15, 15)">SAGE</strong></h1>
           <span class="locked">{{$mensajeError}}</span>
           <form role="form" class="form-inline" method="POST" action="{{ route('login') }}">
             @csrf
