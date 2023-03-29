@@ -711,5 +711,49 @@ class LupController extends Controller
         return redirect("/getOpcionesOrg")->with('ConfirmarActualizarTurnos','OK');
     }
 
+    public function formularioLogo(Request $request){
+        //dd($request);
+        //if ($request->logoimg != "") {
+            
 
+            $logoimg = $request->file('logoimg');
+            $cue=session('CUEa');
+            //dd($logoimg->getClientOriginalName());
+            //guardo en disco para pdfs
+            $path2 = $logoimg->storeAs("public/CUE/$cue/", ('logo.'.$logoimg->extension()));
+
+            //inserto la foto en el server
+            $idSubOrg =session('idSubOrganizacion');
+            $actualizar = SubOrganizacionesModel::where('idSubOrganizacion', session('idSubOrganizacion'))
+            ->update([
+                'imagen_logo'=>'logo.'.$logoimg->extension(),
+            ]);
+            return redirect("/getOpcionesOrg")->with('ConfirmarLogoSubido','OK');
+        //} else {
+            //return redirect("/getOpcionesOrg")->with('ConfirmarLogoNoSubido','OK');
+        //}
+    }
+
+    public function formularioImgEscuela(Request $request){
+        //dd($request);
+        //if ($request->logoimg != "") {
+            
+
+            $img = $request->file('escuelaimg');
+            $cue=session('CUEa');
+            //dd($logoimg->getClientOriginalName());
+            //guardo en disco para pdfs
+            $path2 = $img->storeAs("public/CUE/$cue/", ('escuela.'.$img->extension()));
+
+            //inserto la foto en el server
+            $idSubOrg =session('idSubOrganizacion');
+            $actualizar = SubOrganizacionesModel::where('idSubOrganizacion', session('idSubOrganizacion'))
+            ->update([
+                'imagen_escuela'=>'escuela.'.$img->extension(),
+            ]);
+            return redirect("/getOpcionesOrg")->with('ConfirmarImagenEscuelaSubido','OK');
+        //} else {
+            //return redirect("/getOpcionesOrg")->with('ConfirmarLogoNoSubido','OK');
+        //}
+    }
 }

@@ -260,7 +260,7 @@
                                     </div>
                                     
                                     <div class="form-inline form-group">
-                                        <label for="carrera">Localidad</label>
+                                        <label for="localidad">Localidad</label>
                                         @php
                                         //consulta localizada
                                         $loc = DB::table('tb_localidades')
@@ -269,12 +269,12 @@
                                         if(count($loc)>0){
                                             echo' 
                                             <input type="text" class="form-control" id="DescripcionLocalidad" name="DescripcionLocalidad" value="'.$loc[0]->localidad.'" autocomplete="off">
-                                            <input type="hidden" class="form-control" id="idLocalidad" name="idLocalidad" value="'.$loc[0]->idLocalidad.'">
+                                            <input type="text" class="form-control" id="idLocalidad" name="idLocalidad" value="'.$loc[0]->idLocalidad.'">
                                             ';
                                         }else{
                                             echo' 
                                             <input type="text" class="form-control" id="DescripcionLocalidad" name="DescripcionLocalidad" value="" autocomplete="off">
-                                            <input type="hidden" class="form-control" id="idLocalidad" name="idLocalidad" value="">
+                                            <input type="text" class="form-control" id="idLocalidad" name="idLocalidad" value="">
                                             ';
                                         }
                                         @endphp
@@ -294,7 +294,7 @@
                                                     <div class="modal-header">
                                                         <div class="form-group">
                                                             <label for="Referencia">Buscar Localidad: </label>
-                                                            <input type="text" id="btLocalidad" onkeyup="getLocalidades()" placeholder="Ingrese Localidad">
+                                                            <input type="text" id="btLocalidad" onkeyup="getLocalidadesInstitucion()" placeholder="Ingrese Localidad">
                                                         </div>
                                                         
                                                     </div>
@@ -461,6 +461,99 @@
             </div> 
             <!-- /.fin row -->
 
+            <div class="row">
+                <!-- datos logo -->
+                <div class="col-md-6">
+                    <div class="card card-primary collapsed-card">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                            <i class="fas fa-book"></i>
+                            Panel de Control - Logo</h3>
+
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                            <!-- /.card-tools -->
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body" style="display: none;">
+                            <form method="POST" action="{{ route('formularioLogo') }}" class="formularioLogo" enctype="multipart/form-data">
+                            @csrf
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <label for="Logo">Logo</label>
+                                        @if ($SubOrganizacion[0]->imagen_logo != "")
+                                            
+                                            @php
+                                                $cuecompleto = $SubOrganizacion[0]->cuecompleto;
+                                                $logo =$SubOrganizacion[0]->imagen_logo;
+                                                $url="storage/CUE/$cuecompleto/$logo";
+                                            @endphp
+                                            <img src="{{asset($url)}}" style="width:150px">
+                                        @else
+                                            <img src="{{asset('storage/logoGenerico.png')}}" style="width:150px">
+                                        @endif
+                                        <input required="true" type="file" class="form-control" id="logoimg" name="logoimg"  value="">
+                                    </div>
+                                </div>
+                                <!-- /.card-body -->
+
+                                <div class="card-footer">
+                                    <button type="submit" class="btn btn-primary">Subir Imagen</button>
+                                </div>
+                            </form>       
+                        </div>
+                    </div>
+                </div>
+                <!-- /.fin m6-->
+
+                <div class="col-md-6">
+                    <div class="card card-primary collapsed-card">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                            <i class="fas fa-book"></i>
+                            Panel de Control - Fondo Escuela</h3>
+
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                            <!-- /.card-tools -->
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body" style="display: none;">
+                            <form method="POST" action="{{ route('formularioImgEscuela') }}" class="formularioImgEscuela" enctype="multipart/form-data">
+                            @csrf
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <label for="Logo">Logo</label>
+                                        @if ($SubOrganizacion[0]->imagen_escuela != "")
+                                            
+                                            @php
+                                                $cuecompleto = $SubOrganizacion[0]->cuecompleto;
+                                                $imagenEscuela =$SubOrganizacion[0]->imagen_escuela;
+                                                $url="storage/CUE/$cuecompleto/$imagenEscuela";
+                                            @endphp
+                                            <img src="{{asset($url)}}" style="width:150px">
+                                        @else
+                                            <img src="{{asset('storage/escuelaGenerica.jpg')}}" style="width:150px">
+                                        @endif
+                                        <input required="true" type="file" class="form-control" id="escuelaimg" name="escuelaimg"  value="">
+                                    </div>
+                                </div>
+                                <!-- /.card-body -->
+
+                                <div class="card-footer">
+                                    <button type="submit" class="btn btn-primary">Subir Imagen</button>
+                                </div>
+                            </form>       
+                        </div>
+                    </div>
+                </div>
+                <!-- /.fin m6-->                
+            </div> 
+            <!-- /.fin row -->
 
         </section>
     </section>
@@ -499,6 +592,7 @@
             </script>
         @endif
     <script>
+
 
     $('.formularioEdificio').submit(function(e){
         e.preventDefault();
@@ -613,4 +707,23 @@
     
     
 </script>
+        @if (session('ConfirmarLogoSubido')=='OK')
+            <script>
+            Swal.fire(
+                'Logo guardado',
+                'Se actualizo correctamente',
+                'success'
+                    )
+            </script>
+        @endif
+
+        @if (session('ConfirmarImagenEscuelaSubido')=='OK')
+            <script>
+            Swal.fire(
+                'Imagen de la Escuela guardada',
+                'Se actualizo correctamente',
+                'success'
+                    )
+            </script>
+        @endif
 @endsection

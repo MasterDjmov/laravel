@@ -195,7 +195,7 @@ function getAgentes() {
         }
     });
  }
-
+//carga de agente
  function getLocalidades(){
     $.ajax({
         type: "get",
@@ -217,6 +217,27 @@ function getAgentes() {
     
  }
 
+ //carga de localidad en institucion
+ function getLocalidadesInstitucion(){
+    $.ajax({
+        type: "get",
+        url: "/getLocalidadesInstitucion/"+ $("#btLocalidad").val(),
+        success: function (response) {
+            document.getElementById('contenidoLocalidades').innerHTML=response.msg;
+            
+        }
+    });
+ }
+
+ function seleccionarLocalidadInstitucion($idLocalidad){
+    
+    
+     var DescripcionLocalidad = document.getElementById('DescripcionLocalidad');
+     var nomLocalidadModal = document.getElementById('nomLocalidadModal'+$idLocalidad);
+     DescripcionLocalidad.value=nomLocalidadModal.value;
+     document.getElementById('idLocalidad').value=$idLocalidad;
+    
+ }
 
  function getDepartamentos(){
     //en realidad llama a localidad, no usa depto

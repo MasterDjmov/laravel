@@ -345,7 +345,31 @@ class AgController extends Controller
        
         return response()->json(array('status' => 200, 'msg' => $respuesta), 200);
     }
+    public function getLocalidadesInstitucion($localidad){
+        //traigo las relaciones Suborg->planes->carrera
+        $Localidades = DB::table('tb_localidades')
+        ->leftjoin('tb_provincias', 'tb_provincias.idProvincia', '=', 'tb_localidades.IdProvincia')
+        ->orWhere('localidad', 'like', '%' . $localidad . '%')->get();
 
+       //dd($Divisiones);
+        $respuesta="";
+       
+        foreach($Localidades as $obj){
+            $respuesta=$respuesta.'
+            <tr class="gradeX">
+                <td>'.$obj->idLocalidad.'</td>
+                <td>'.$obj->localidad.'<input type="hidden" id="nomLocalidadModal'.$obj->idLocalidad.'" value="'.$obj->localidad.'"</td>
+                <td>'.$obj->nombre.'</td>
+                <td>
+                    <button type="button" onclick="seleccionarLocalidadInstitucion('.$obj->idLocalidad.')">Seleccionar</button>
+                </td>
+            </tr>';
+            
+            
+        }
+       
+        return response()->json(array('status' => 200, 'msg' => $respuesta), 200);
+    }
     public function getDepartamentos($departamento){
         //traigo las relaciones Suborg->planes->carrera
         //por alguna razon esta ligado y cargo en localiddes los dpto

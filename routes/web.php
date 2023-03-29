@@ -65,6 +65,8 @@ Route::get('/desvincularDivision/{idDivision}',[LupController::class,'desvincula
 Route::get('/verAsigEspCur',[LuiController::class,'verAsigEspCur'])->name('verAsigEspCur');
 Route::post('/formularioAsignaturas',[LupController::class,'formularioAsignaturas'])->name('formularioAsignaturas');
 Route::post('/formularioEspCur',[LupController::class,'formularioEspCur'])->name('formularioEspCur');
+Route::post('/formularioLogo',[LupController::class,'formularioLogo'])->name('formularioLogo');
+Route::post('/formularioImgEscuela',[LupController::class,'formularioImgEscuela'])->name('formularioImgEscuela');
 
 Route::get('/getCargosSalariales/{idRegimenSalarial}',[LuiController::class,'getCargosSalariales'])->name('getCargosSalariales');
 Route::post('/AltaPlaza',[LuiController::class,'AltaPlaza'])->name('AltaPlaza');
@@ -82,6 +84,7 @@ Route::get('/getBuscarAgente/{DNI}',[AgController::class,'getBuscarAgente'])->na
 Route::get('/getAgentesRel/{DNI}',[AgController::class,'getAgentesRel'])->name('getAgentesRel');
 Route::post('/agregarAgenteEscuela',[AgController::class,'agregarAgenteEscuela'])->name('agregarAgenteEscuela');
 Route::get('/getLocalidades/{localidad}',[AgController::class,'getLocalidades'])->name('getLocalidades');
+Route::get('/getLocalidadesInstitucion/{localidad}',[AgController::class,'getLocalidadesInstitucion'])->name('getLocalidadesInstitucion');
 Route::get('/getDepartamentos/{departamento}',[AgController::class,'getDepartamentos'])->name('getDepartamentos');
 Route::get('/agregaNodo/{nodo}',[AgController::class,'agregaNodo'])->name('agregaNodo');
 Route::post('/agregarDatoANodo',[AgController::class,'agregarDatoANodo'])->name('agregarDatoANodo');

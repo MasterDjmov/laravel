@@ -3,11 +3,26 @@
 @section('Titulo', 'Sage2.0 - Movimientos')
 
 @section('LinkCSS')
-<style>
-    .widget-user-header{
-        background: url({{asset('dist/img/escuela.jpg')}});
-    }
-</style>
+@if ($SubOrganizaciones[0]->imagen_escuela != ""){
+    <?php 
+        $cuecompleto=$SubOrganizaciones[0]->cuecompleto;
+        $url="storage/CUE/$cuecompleto/".$SubOrganizaciones[0]->imagen_escuela;
+        echo '<style>
+                .widget-user-header{background: url('.$url.');
+                }
+            </style>';
+        
+    ?>
+}@else{
+        <?php 
+        echo '<style>
+                .widget-user-header{background: url("storage/escuelaGenerica.jpg");
+                }
+            </style>';
+    ?>
+}@endif
+
+
 @endsection
 
 @section('ContenidoPrincipal')
@@ -19,7 +34,7 @@
                     <!-- About Me Box -->
                     <div class="card card-primary">
                     <div class="card-header">
-                        <h3 class="card-title">Institución</h3>
+                        <h3 class="card-title">Institución {{$NombreEscuela}}</h3>
                     </div>
                     <!-- /.card-header -->
                     
@@ -27,17 +42,40 @@
                         <div class="card card-widget widget-user">
                         <!-- Add the bg color to the header using any of the bg-* classes -->
                         <div class="widget-user-header text-white">
-                            <h3 class="widget-user-username text-right">{{$NombreEscuela}}</h3>
-                            <h5 class="widget-user-desc text-right">click....</h5>
+                            
                         </div>
                         <div class="widget-user-image">
-                            <img class="img-circle" src="{{asset('dist/img/logoescuela.png')}}" alt="User Avatar">
+                        @if ($SubOrganizaciones[0]->imagen_logo != ""){
+                            <?php 
+                                $cuecompleto=$SubOrganizaciones[0]->cuecompleto;
+                                $url="storage/CUE/$cuecompleto/".$SubOrganizaciones[0]->imagen_logo;
+                            ?>
+                        }@else{
+                            <?php $url="storage/logoGenerico.png";?>
+                        }@endif
+
+                            <img class="img-circle" src="{{asset($url)}}" alt="User Avatar">
                         </div>
                         <div class="card-footer">
                             <div class="row">
                             <div class="col-sm-4 border-right">
                                 <div class="description-block">
-                                <h5 class="description-header">30</h5>
+                                <h5 class="description-header">
+                                @php
+                                    $cue=$SubOrganizaciones[0]->cuecompleto;
+                                    $cantidadAgente = DB::select("SELECT
+                                        count(idNodo) as totalAgentes
+                                    FROM
+                                        tb_nodos
+                                        INNER JOIN
+                                        tb_suborganizaciones
+                                        ON 
+                                            tb_nodos.CUE = tb_suborganizaciones.cuecompleto
+                                            and tb_nodos.CUE = '$cue'");
+                                            //print_r($cantidadAgente);
+                                            echo $cantidadAgente[0]->totalAgentes;
+                                @endphp
+                                </h5>
                                 <span class="description-text">Cant. Docentes</span>
                                 </div>
                                 <!-- /.description-block -->
@@ -122,12 +160,55 @@
                         <strong><i class="far fa-file-alt mr-1"></i> CUE / CUE-Anexo</strong>
 
                         <p class="text-muted">{{$SubOrganizaciones[0]->CUE." / ".$SubOrganizaciones[0]->cuecompleto}}</p>
+                        
+                        
                     </div>
                     <!-- /.card-body -->
                     </div>
                     <!-- /.card -->
                 </div>
-                
+                 <div class="col-md-6">
+                    <!-- About Me Box -->
+                    <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Ubicación Geográfica de la Institución</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    
+                    <div class="card-body">
+                        <div class="card card-widget widget-user">
+                        <!-- Add the bg color to the header using any of the bg-* classes -->
+                        <!--Google map-->
+                        
+                        @if ($SubOrganizaciones[0]->Latitud != "")
+                            <div id="map-container-google-2" class="z-depth-1-half map-container" style="height: 500px;">
+                                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3475.1243238122856!2d-66.8517673850141!3d-29.42516258211173!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9427da2e0b207409%3A0x386d44c96736dcf7!2sJardin%20De%20Infantes%20N%C2%B0%204%20Ovidio%20Decroli!5e0!3m2!1ses!2sar!4v1680095961758!5m2!1ses!2sar" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                            </div>
+                        @else
+                            <div id="map-container-google-2" class="z-depth-1-half map-container" style="height: 500px;">
+                                <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d13902.180178667782!2d-66.8591713!3d-29.4128624!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9427dbb5a47cfffb%3A0xfd11460a935fc0f2!2sMinisterio%20de%20Educaci%C3%B3n!5e0!3m2!1ses!2sar!4v1680097273941!5m2!1ses!2sar" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                            </div>
+                        @endif
+                        
+                       
+                        
+                        <!--Google Maps-->
+                       @if ($SubOrganizaciones[0]->Latitud == "")
+                        <div class="card-footer">
+                        
+                            <div class="alert alert-warning alert-dismissible">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                <h5><i class="icon fas fa-exclamation-triangle"></i> Alerta!</h5>
+                                No se asigno dirección de Google Maps para esta Institución
+                            </div>
+                        
+                        </div>
+                        @endif
+                    </div>
+                    <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
             </div>
             
         </section>
