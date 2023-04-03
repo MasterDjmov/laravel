@@ -8,7 +8,7 @@
         <section class="wrapper">
         <div class="alert alert-warning alert-dismissible">
                             <h5><i class="icon fas fa-exclamation-triangle"></i> Alerta!</h5>
-                            Aqui dejar algun mensaje<br>
+                            Aqui dejar algun mensajesssssssssssssssssssssss<br>
                             Ejemplo: <b>aqui algun ejemplo</b>
                         </div>
             <!-- Inicio Selectores fila 2 -->
