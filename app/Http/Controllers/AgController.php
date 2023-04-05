@@ -814,5 +814,5 @@ class AgController extends Controller
         session(['infoNodos'=>$infoNodos]);
     }
 
-
+    //algo que poner
 }
