@@ -3,7 +3,7 @@
 @section('Titulo', 'Sage2.0 - Movimientos')
 
 @section('LinkCSS')
-@if ($SubOrganizaciones[0]->imagen_escuela != ""){
+@if ($SubOrganizaciones[0]->imagen_escuela != "")
     <?php 
         $cuecompleto=$SubOrganizaciones[0]->cuecompleto;
         $url="storage/CUE/$cuecompleto/".$SubOrganizaciones[0]->imagen_escuela;
@@ -13,14 +13,14 @@
             </style>';
         
     ?>
-}@else{
+@else
         <?php 
         echo '<style>
                 .widget-user-header{background: url("storage/escuelaGenerica.jpg");
                 }
             </style>';
     ?>
-}@endif
+@endif
 
 
 @endsection
@@ -28,11 +28,11 @@
 @section('ContenidoPrincipal')
 <section id="container" >
     <section id="main-content">
-        <section class="wrapper">
+        <section class="content-wrapper">
             <div class="row">
                 <div class="col-md-6">
                     <!-- About Me Box -->
-                    <div class="card card-primary">
+                    <div class="card card-lightblue">
                     <div class="card-header">
                         <h3 class="card-title">Institución {{$NombreEscuela}}</h3>
                     </div>
@@ -169,7 +169,7 @@
                 </div>
                  <div class="col-md-6">
                     <!-- About Me Box -->
-                    <div class="card card-primary">
+                    <div class="card card-lightblue">
                     <div class="card-header">
                         <h3 class="card-title">Ubicación Geográfica de la Institución</h3>
                     </div>
@@ -186,7 +186,7 @@
                             </div>
                         @else
                             <div id="map-container-google-2" class="z-depth-1-half map-container" style="height: 500px;">
-                                <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d13902.180178667782!2d-66.8591713!3d-29.4128624!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9427dbb5a47cfffb%3A0xfd11460a935fc0f2!2sMinisterio%20de%20Educaci%C3%B3n!5e0!3m2!1ses!2sar!4v1680097273941!5m2!1ses!2sar" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                                <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d13902.180178667782!2d-66.8591713!3d-29.4128624!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9427dbb5a47cfffb%3A0xfd11460a935fc0f2!2sMinisterio%20de%20Educaci%C3%B3n!5e0!3m2!1ses!2sar!4v1680097273941!5m2!1ses!2sar" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" ></iframe>
                             </div>
                         @endif
                         
