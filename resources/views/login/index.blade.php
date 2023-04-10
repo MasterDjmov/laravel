@@ -7,27 +7,30 @@
 
   <div class="lock-wrapper">
 
-      <div id="time" style="color:rgb(74, 71, 71)"></div>
+    <div id="time" style="color:rgb(74, 71, 71)"></div>
 
 
-      <div class="lock-box text-center">
-          <img src="{{ asset('img/seguridad.jpg');}}" alt="lock avatar"/>
-          <h1><strong style="color:rgb(74, 71, 71)">Sistema <strong><strong style="color: rgb(75, 15, 15)">SAGE</strong></h1>
-          <span class="locked">{{$mensajeError}}</span>
-          <form role="form" class="form-inline" method="POST" action="{{ route('login') }}">
-            @csrf
-                <div class="form-group col-lg-12">
-                  <input type="email" placeholder="Email" id="email" name="email" class="form-control lock-input btn-lg">
-                  <input type="password" placeholder="Password" id="password" name="clave" class="form-control lock-input btn-lg">
-                </div>
-                <div class="form-group col-lg-12">
-                  <button class="btn btn-block btn-success btn-lg" type="submit">
-                      <i class="fa fa-arrow-right"></i>
-                  </button>
-                </div>
-              
-          </form>
+    <div class="card text-center bg-op-1">
+      <img src="{{ asset('img/seguridad.jpg');}}" alt="lock avatar"/>
+      <div class="card-body">
+        <h1><strong style="color:rgb(74, 71, 71)">Sistema <strong><strong style="color: rgb(75, 15, 15)">SAGE</strong></h1>
+        <span class="locked">{{$mensajeError}}</span>
+        <form role="form" class="form-group" method="POST" action="{{ route('login') }}">
+          @csrf
+            <div class="form-group">
+              <input type="email" placeholder="Email" id="email" name="email" class="form-control mb-2">
+              <input type="password" placeholder="Password" id="password" name="clave" class="form-control">
+            </div>
+                  
+            <div class="form-group">
+              <button class="btn btn-block btn-success btn-lg" type="submit">
+                  <i class="fa fa-arrow-right"></i>
+              </button>
+            </div>
+                
+        </form>
       </div>
+    </div>
   </div>
 </body>
 @endsection
