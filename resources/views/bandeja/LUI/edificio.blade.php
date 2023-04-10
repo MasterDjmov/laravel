@@ -6,7 +6,7 @@
 
 <section id="container" >
     <section id="main-content">
-        <section class="wrapper">
+        <section class="content-wrapper">
 
         <!-- page start-->
         <div class="row">
@@ -15,7 +15,6 @@
                     <header class="panel-heading">
                         Informacion del Edificio
                         <div class="alert alert-success alert-block fade in">
-                            
                             <h4>
                                 <i class="fa fa-ok-sign"></i>
                                 INFORMACION
