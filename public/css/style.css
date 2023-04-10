@@ -326,7 +326,7 @@ ul.sidebar-menu li a.active i {
 /*main content*/
 
 #main-content {
-    margin-left: 210px;
+    
 }
 
 .header, .footer {
@@ -5511,4 +5511,8 @@ a.guest-on i {
     height:100%;
     width:100%;
     position:absolute;
+  }
+
+  .bg-op-1{
+    background-color: rgba(255, 255, 255, 0.8);
   }
