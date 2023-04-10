@@ -6,7 +6,7 @@
 
 <section id="container" >
     <section id="main-content">
-        <section class="wrapper">
+        <section class="content-wrapper">
             <a href="{{route('verArbol',$idSubOrg)}}" type="button" class="btn btn-info block"><i class="fa fa-mail-reply-all"></i> Volver a Organizaciones</a>
 
         <!-- page start-->
