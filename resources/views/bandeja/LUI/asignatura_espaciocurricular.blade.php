@@ -5,18 +5,19 @@
 @section('ContenidoPrincipal')
 <section id="container" >
     <section id="main-content">
-        <section class="wrapper">
+        <section class="content-wrapper">
             <!-- Inicio Selectores -->
             <div class="row">
                 <div class="col-md-6">
                     <!-- Inicio Tabla-Card -->
-                    <div class="card">
-                        <div class="card-header">
-                            <div class="alert alert-warning alert-dismissible">
-                                <h5><i class="icon fas fa-exclamation-triangle"></i> Alerta!</h5>
-                                Antes de agregar una nueva Asignatura, primero consulte en la lista si ya existe<br>
-                                Ejemplo: <b>Nivel Inicial debe usar Asignatura Generica</b>
-                            </div>
+                    <div class="alert alert-warning alert-dismissible">
+                        <h5><i class="icon fas fa-exclamation-triangle"></i> Importante!</h5>
+                        Antes de agregar una nueva Asignatura, primero consulte en la lista si ya existe<br>
+                        Ejemplo: <b>Nivel Inicial debe usar Asignatura Generica</b>
+                    </div>
+                    <div class="card card-lightblue">
+                        <div class="card-header ">
+                            
                             <h3 class="card-title">Lista de Asignaturas en SAGE</h3>
                         </div>
                         <!-- /.card-header -->
@@ -48,7 +49,7 @@
                         <!-- /.card-body -->
                     </div>
                     <!-- /.card -->
-                    <div class="card card-default">
+                    <div class="card card-lightblue">
                     <div class="card-header">
                         <h3 class="card-title">
                         <i class="fas fa-book"></i>
@@ -63,11 +64,11 @@
                             <label for="Descripcion">Asignatura</label>
                             <input type="text" class="form-control" id="Descripcion" name="Descripcion" placeholder="Ingrese Descripcion de la Asignatura">
                         </div>
-                          
-                        <div class="card-footer">
+                    </div>      
+                        <div class="card-footer bg-transparent">
                             <button type="submit" class="btn btn-primary">Agregar</button>
                         </div>
-                    </div>
+                    
                     </form>
                     <!-- /.card-body -->
                     </div>
@@ -77,145 +78,150 @@
                 <!-- /.col -->
 
                 <div class="col-md-6">
-                    <div class="card card-default">
-                    <div class="card-header">
-                        <h3 class="card-title">
-                            <div class="alert alert-warning alert-dismissible">
-                            <h5><i class="icon fas fa-exclamation-triangle"></i> Alerta!</h5>
-                            No todos los niveles educativos requieren Esp. Curriculares, pero Inicial debe agregar minimo uno<br>
-                            Ejemplo: <b>Nivel Inicial NO requiere de Espacios Curriculares</b>
-                        </div>
-                        <i class="fas fa-book"></i>
-                        Panel de Control - Espacios Curriculares
-                        </h3>
+                    <div class="alert alert-warning alert-dismissible">
+                        <h5><i class="icon fas fa-exclamation-triangle"></i> Alerta!</h5>
+                        No todos los niveles educativos requieren Esp. Curriculares, pero Inicial debe agregar minimo uno<br>
+                        Ejemplo: <b>Nivel Inicial NO requiere de Espacios Curriculares</b>
                     </div>
-                    <!-- /.card-header -->
+                    <div class="card card-lightblue">
+                        <div class="card-header">
+                            <h3 class="card-title"> <i class="fas fa-book mr-2"></i>Panel de Control - Espacios Curriculares</h3>
+                        </div>
+                        <!-- /.card-header -->
                     <form method="POST" action="{{ route('formularioEspCur') }}" class="formularioEspCur">
                     @csrf
-                    <div class="card-body">
-                        <div class="form-inline form-group">
-                                <label for="Asignatura">Asignaturas</label>
-                                <input type="text" class="form-control" id="DescripcionAsignatura" name="DescripcionAsignatura" value="" autocomplete="off">
-                                <input type="hidden" class="form-control" id="Asignatura" name="Asignatura" value="">
-                                <a class="btn btn-success" data-toggle="modal" href="#modalAsignatura">
-                                    <i class="fa fa-ellipsis-h"></i>
-                                </a>
-                                
-                                <div class="modal fade" id="modalAsignatura" style="display: none;" aria-hidden="true">
-                                    <div class="modal-dialog modal-lg">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h4 class="modal-title">Lista de Asignatura Cargadas</h4>
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">×</span>
-                                                </button>
-                                            </div>
-                                            <div class="modal-header">
-                                                <div class="form-group">
-                                                    <label for="Referencia">Buscar Asignatura: </label>
-                                                    <input type="text" id="btAsignatura" onkeyup="getAsignatura()" placeholder="Ingrese Nombre de la Carrera">
+                        <div class="card-body">
+                            <div class="form-group row">
+                                    <label for="Asignatura" class="col-auto align-self-center">Asignaturas</label>
+                                    <div class="col-6">
+                                        <input type="text" class="form-control" id="DescripcionAsignatura" name="DescripcionAsignatura" value="" autocomplete="off">
+                                        <input type="hidden" class="form-control" id="Asignatura" name="Asignatura" value="">
+                                    </div>
+                                    <a class="btn btn-success" data-toggle="modal" href="#modalAsignatura">
+                                        <i class="fa fa-ellipsis-h"></i>
+                                    </a>
+                                    
+                                    <div class="modal fade" id="modalAsignatura" style="display: none;" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title">Lista de Asignatura Cargadas</h4>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">×</span>
+                                                    </button>
+                                                </div>
+                                                
+                                                <div class="modal-body">
+                                                    <div class="card card-olive">
+                                                        <div class="card-header">
+                                                            <div class="input-group">
+                                                                <label class="col-auto col-form-label" for="Referencia">Buscar Asignatura: </label>
+                                                                <input class="form-control form-control-sm" type="text" id="btAsignatura" onkeyup="getAsignatura()" placeholder="Ingrese Nombre de la Carrera">
+                                                            </div>
+                                                        </div>
+                                                        <div class="card-body">
+                                                            <table id="" class="table table-bordered table-striped">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>ID</th>
+                                                                        <th>Descripcion</th>
+                                                                        <th>OPCION</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody id="contenidoAsignatura">
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer justify-content-end">
+                                                    <button type="button" class="btn bg-olive btn-default" data-dismiss="modal">Cerrar</button>
                                                 </div>
                                             </div>
-                                            <div class="modal-body">
-                                                <table id="" class="table table-bordered table-striped">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>ID</th>
-                                                            <th>Descripcion</th>
-                                                            <th>OPCION</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody id="contenidoAsignatura">
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                            <div class="modal-footer justify-content-between">
-                                                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-                                            </div>
+                                            <!-- /.modal-content -->
                                         </div>
-                                        <!-- /.modal-content -->
+                                        <!-- /.modal-dialog -->
                                     </div>
-                                    <!-- /.modal-dialog -->
-                                </div>
-                                <!-- /.fin modal -->
-                        </div> 
+                                    <!-- /.fin modal -->
+                            </div> 
                         {{-- <div class="form-group">
-                            <label for="Asignatura">Asignaturas</label>
-                            <select class="form-control" name="Asignatura" id="Asignatura">
-                            @foreach($Asignaturas as $key => $o)
-                                <option value="{{$o->idAsignatura}}">{{$o->Descripcion}}</option>
-                            @endforeach
-                            </select>
-                        </div>  --}}
-                        <div class="form-group">
-                            <label for="Carrera">Carreras Disponibles</label>
-                            <select class="form-control" name="Carrera" id="Carrera">
-                            @foreach($CarrerasRelSubOrg as $key => $o)
-                                <option value="{{$o->idCarrera}}">{{$o->Descripcion}}</option>
-                            @endforeach
-                            </select>
-                        </div> 
-                        <div class="form-group">
-                            <label for="Planes">Planes de Estudio</label>
-                            <select class="form-control" name="Planes" id="Planes">
-                            @foreach($Planes as $key => $o)
-                                <option value="{{$o->idPlanEstudio}}">{{$o->DescripcionPlan}}</option>
-                            @endforeach
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="CursoDivision">Cursos Disponibles</label>
-                            <select class="form-control" name="CursoDivision" id="CursoDivision">
-                            @foreach($Divisiones as $key => $o)
-                                <option value="{{$o->Curso}}">{{$o->Curso}}</option>
-                            @endforeach
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="TipoHora">Tipo de Hora</label>
-                            <select class="form-control" name="TipoHora" id="TipoHora">
-                            @foreach($TiposHora as $key => $o)
-                                <option value="{{$o->idTipoHora}}">{{$o->Descripcion}}</option>
-                            @endforeach
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="CantHoras">Cantidad de Horas</label>
-                            <input type="text" class="form-control" id="CantHoras" name="CantHoras" placeholder="Horas de carga">
-                        </div>
-                        <div class="form-group">
-                            <label for="RegimenDictado">Regimen de Dictado</label>
-                            <select class="form-control" name="RegimenDictado" id="RegimenDictado">
-                            @foreach($RegimenDictado as $key => $o)
-                                <option value="{{$o->idRegimenDictado}}">{{$o->Descripcion}}</option>
-                            @endforeach
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="TiposDeEspacioCurricular">Tipo de Esp. Curricular</label>
-                            <select class="form-control" name="TiposDeEspacioCurricular" id="TiposDeEspacioCurricular">
-                            @foreach($TiposDeEspacioCurricular as $key => $o)
-                                <option value="{{$o->idTipoEspacioCurricular}}">{{$o->TiposDeEspacio}}</option>
-                            @endforeach
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="Observacion">Observación</label><br>
-                            <textarea class="form-control" name="Observaciones" rows="5" cols="100%"></textarea>
-                        </div>
-                         @if(count($CarrerasRelSubOrg)>0)
-                            <div class="card-footer">
-                                <button type="submit" class="btn btn-primary">Agregar</button>
+                                <label for="Asignatura">Asignaturas</label>
+                                <select class="form-control" name="Asignatura" id="Asignatura">
+                                @foreach($Asignaturas as $key => $o)
+                                    <option value="{{$o->idAsignatura}}">{{$o->Descripcion}}</option>
+                                @endforeach
+                                </select>
+                            </div>  --}}
+                            <div class="form-group">
+                                <label for="Carrera">Carreras Disponibles</label>
+                                <select class="form-control" name="Carrera" id="Carrera">
+                                @foreach($CarrerasRelSubOrg as $key => $o)
+                                    <option value="{{$o->idCarrera}}">{{$o->Descripcion}}</option>
+                                @endforeach
+                                </select>
+                            </div> 
+                            <div class="form-group">
+                                <label for="Planes">Planes de Estudio</label>
+                                <select class="form-control" name="Planes" id="Planes">
+                                @foreach($Planes as $key => $o)
+                                    <option value="{{$o->idPlanEstudio}}">{{$o->DescripcionPlan}}</option>
+                                @endforeach
+                                </select>
                             </div>
-                        @endif 
+                            <div class="form-group">
+                                <label for="CursoDivision">Cursos Disponibles</label>
+                                <select class="form-control" name="CursoDivision" id="CursoDivision">
+                                @foreach($Divisiones as $key => $o)
+                                    <option value="{{$o->Curso}}">{{$o->Curso}}</option>
+                                @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="TipoHora">Tipo de Hora</label>
+                                <select class="form-control" name="TipoHora" id="TipoHora">
+                                @foreach($TiposHora as $key => $o)
+                                    <option value="{{$o->idTipoHora}}">{{$o->Descripcion}}</option>
+                                @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="CantHoras">Cantidad de Horas</label>
+                                <input type="text" class="form-control" id="CantHoras" name="CantHoras" placeholder="Horas de carga">
+                            </div>
+                            <div class="form-group">
+                                <label for="RegimenDictado">Regimen de Dictado</label>
+                                <select class="form-control" name="RegimenDictado" id="RegimenDictado">
+                                @foreach($RegimenDictado as $key => $o)
+                                    <option value="{{$o->idRegimenDictado}}">{{$o->Descripcion}}</option>
+                                @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="TiposDeEspacioCurricular">Tipo de Esp. Curricular</label>
+                                <select class="form-control" name="TiposDeEspacioCurricular" id="TiposDeEspacioCurricular">
+                                @foreach($TiposDeEspacioCurricular as $key => $o)
+                                    <option value="{{$o->idTipoEspacioCurricular}}">{{$o->TiposDeEspacio}}</option>
+                                @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="Observacion">Observación</label><br>
+                                <textarea class="form-control" name="Observaciones" rows="5" cols="100%"></textarea>
+                            </div>
+                        </div>
+                            @if(count($CarrerasRelSubOrg)>0)
+                                <div class="card-footer bg-transparent">
+                                    <button type="submit" class="btn btn-primary">Agregar</button>
+                                </div>
+                            @endif 
                         
-                    </div>
+                    
                     </form>
                     <!-- /.card-body -->
                     </div>
                     <!-- /.card -->
                     <!-- Inicio Tabla-Card -->
-                    <div class="card">
+                    <div class="card card-lightblue">
                     <div class="card-header">
                         <h3 class="card-title">Lista de Espacios Curriculares</h3>
                     </div>
