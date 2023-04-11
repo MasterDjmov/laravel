@@ -17,7 +17,7 @@
                             <div class="input-group m-3">
                                 <label class="sr-only" for="buscarAgente">DNI del Agente</label>
                                 <input type="text" class="form-control form-control-lg rounded border-0" id="buscarAgente"
-                                    placeholder="Ingrese DNI sin Puntos">
+                                    placeholder="Ingrese DNI sin Puntos" autocomplete="off">
                                 <div class="input-group-append">
                                     <button type="button" class="btn btn-default btn-lg border"
                                         onclick="getNuevoAgenteDNI()"><i class="fa fa-search"></i>
@@ -64,7 +64,7 @@
                                             </div>
                                             <div class="col-6">
                                                 <label for="Documento">Documento: </label>
-                                                <input type="text" class="form-control" disabled id="Documento" placeholder="Ingrese numero de documento">
+                                                <input type="text" autocomplete="off" class="form-control" disabled id="Documento" placeholder="Ingrese numero de documento">
                                                 <input type="hidden" id="DH" name="Documento">
                                             </div>
                                             
@@ -74,11 +74,11 @@
                                         <div class="form-group row">
                                             <div class="col-4">
                                                 <label for="Apellido">Apellido: </label>
-                                                <input type="text" class="form-control" id="Apellido" name="Apellido" placeholder="Ingrese apellido">
+                                                <input type="text" autocomplete="off" class="form-control" id="Apellido" name="Apellido" placeholder="Ingrese apellido">
                                             </div>
                                             <div class="col-4">
                                                 <label for="Nombre">Nombre: </label>
-                                                <input type="text" class="form-control" id="Nombre" name="Nombre" placeholder="Ingrese nombre">
+                                                <input type="text" autocomplete="off" class="form-control" id="Nombre" name="Nombre" placeholder="Ingrese nombre">
                                             </div>
                                             <div class="col-4">
                                                 <label for="Sexo">Sexo: </label>
@@ -94,7 +94,7 @@
                                         <div class="form-group row">
                                             <div class="col-6">
                                                 <label for="CUIL">CUIL: </label>
-                                                <input type="text" class="form-control" id="CUIL" name="CUIL" placeholder="Ingrese numero de cuil">
+                                                <input type="text" autocomplete="off" class="form-control" id="CUIL" name="CUIL" placeholder="Ingrese numero de cuil">
                                             </div>
                                             <div class="col-6">
                                                 <label for="TipoDeAgente">Tipo de Agente: </label>
@@ -110,11 +110,11 @@
                                         <div class="form-group row">
                                             <div class="col-4">
                                                 <label for="Telefono">Telefono: </label>
-                                                <input type="text" class="form-control" id="Telefono" name="Telefono" placeholder="Ingrese numero de telefono">
+                                                <input type="text" autocomplete="off" class="form-control" id="Telefono" name="Telefono" placeholder="Ingrese numero de telefono">
                                             </div>
                                             <div class="col-4">
                                                 <label for="Domicilio">Domicilio: </label>
-                                                <input type="text" class="form-control" id="Domicilio" name="Domicilio" placeholder="Ingrese Domicilio">
+                                                <input type="text" autocomplete="off" class="form-control" id="Domicilio" name="Domicilio" placeholder="Ingrese Domicilio">
                                             </div>
                                             <div class="col-4">
                                                 <label for="Localidad">Localidad</label>
@@ -140,7 +140,7 @@
                                                                         <div class="card-header">
                                                                             <div class="input-group">
                                                                                 <label class="col-auto col-form-label">Lista de Localidades: </label>
-                                                                                <input class="form-control form-control-sm" type="text" onkeyup="getLocalidades()" id="btLocalidad" placeholder="Escribe una localidad">
+                                                                                <input autocomplete="off" class="form-control form-control-sm" type="text" onkeyup="getLocalidades()" id="btLocalidad" placeholder="Escribe una localidad">
                                                                             </div>
                                                                         </div>
                                                                         <!-- /.card-header -->
@@ -176,12 +176,12 @@
                                         <div class="form-group row">
                                             <div class="col-4">
                                                 <label for="FechaNacimiento">Fecha de Nacimiento: </label>
-                                                <input type="date" class="form-control" id="FechaNacimiento" name="FechaNacimiento" placeholder="Ingrese Fecha de Nacimiento">
+                                                <input type="date" autocomplete="off" class="form-control" id="FechaNacimiento" name="FechaNacimiento" placeholder="Ingrese Fecha de Nacimiento">
                                             </div>
                                             <div class="col-4">
                                                 <label for="LugarNacimiento">Lugar de Nacimiento</label>
                                                 <div class="input-group">
-                                                    <input type="text" class="form-control" id="nomLugarNacimiento" name="nomLugarNacimiento" placeholder="Nom Lugar Nacimiento">
+                                                    <input type="text" class="form-control" id="nomLugarNacimiento" name="nomLugarNacimiento" placeholder="Nom Lugar Nacimiento" autocomplete="off">
                                                     <input type="text" class="form-control" id="LugarNacimiento" name="LugarNacimiento" placeholder="id LugarNacimiento" hidden>
                                                     <a class="btn btn-success" data-toggle="modal" href="#modalLugarNacimiento">
                                                         <i class="fa fa-ellipsis-h"></i>
@@ -201,7 +201,7 @@
                                                                         <div class="card-header">
                                                                             <div class="input-group">
                                                                                 <h3 class="col-auto col-form-label">Lista de Departamentos: </h3>
-                                                                                <input class="form-control form-control-sm" type="text" onkeyup="getDepartamentos()" id="btDepartamentos" placeholder="Escribe un departamento">
+                                                                                <input autocomplete="off" class="form-control form-control-sm" type="text" onkeyup="getDepartamentos()" id="btDepartamentos" placeholder="Escribe un departamento">
                                                                             </div>
                                                                         </div>
                                                                         
@@ -253,7 +253,7 @@
                                             </div>
                                             <div class="col-4">
                                                 <label for="Correo">Correo Electronico: </label>
-                                                <input type="email" class="form-control" id="Correo" name="Correo" placeholder="Ingrese Correo Electronico">
+                                                <input type="email" autocomplete="off" class="form-control" id="Correo" name="Correo" placeholder="Ingrese Correo Electronico">
                                             </div>
                                             <div class="col-4">
                                                 <label for="Nacionalidad">Nacionalidad: </label>

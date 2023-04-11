@@ -69,7 +69,7 @@
                                       <a  href="#modalAgente" class="btn mx-1 " data-toggle="modal" data-placement="top" title="Agregar Docente"  data-target="#modalAgente">
                                         <span class="material-symbols-outlined pt-1" >group_add</span>
                                       </a>
-                                      <a  href="#modalCargo" class="btn mx-1 " data-toggle="modal" data-placement="top" title="Cargo/Funcion"  data-target="#modalCargo">
+                                      <a  href="#modalCargoFuncion" class="btn mx-1 " data-toggle="modal" data-placement="top" title="Cargo/Funcion"  data-target="#modalCargoFuncion">
                                         <span class="material-symbols-outlined pt-1" >library_add</span>
                                       </a>
                                       <a  href="#modalEspCur" class="btn mx-1 " data-toggle="modal" data-placement="top" title="Esp. Curricular"  data-target="#modalEspCur">
@@ -151,7 +151,7 @@
                     <!-- /.modal -->
 
                     <!-- /.modal -->
-                    <div class="modal fade" id="modalCargo">
+                    <div class="modal fade" id="modalCargoFuncion">
                       <div class="modal-dialog modal-lg">
                       <div class="modal-content">
                           <div class="modal-header">
@@ -164,7 +164,7 @@
                             <div class="card card-olive">
                               <div class="card-header">
                                 <h3 class="card-title">Buscar Cargos / Funciones: </h3>
-                                <input type="text" class="form-control" id="btCargos" onkeyup="getCargosFunciones()" placeholder="Ingrese Cargo/Funcion o Codigo Salarial">
+                                <input type="text" class="form-control" id="btCargos" onkeyup="getCargosFunciones()" placeholder="Ingrese Cargo/Funcion o Codigo Salarial" autocomplete="off">
                               </div>
                               <!-- /.card-header -->
                               <div class="card-body">
@@ -213,7 +213,7 @@
                               <div class="card-header">
                                 <div class="form-inline">
                                   <label class="col-auto col-form-label">Lista de Agentes: </label>
-                                  <input type="text" class="form-control form-control-sm col-5" id="buscarAgente" placeholder="Ingrese DNI sin Puntos" value="">
+                                  <input type="text" autocomplete="off" class="form-control form-control-sm col-5" id="buscarAgente" placeholder="Ingrese DNI sin Puntos" value="">
                                   <button class="btn btn-sm btn-info form-control" type="button" id="traerAgentes" onclick="getAgentes()">Buscar
                                       <i class="fa fa-search ml-2"></i>
                                   </button>

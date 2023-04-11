@@ -299,7 +299,7 @@
                                                                 <div class="card-header">
                                                                     <div class="input-group">
                                                                         <label class="col-auto col-form-label" for="Referencia">Buscar Localidad: </label>
-                                                                        <input class="form-control form-control-sm" type="text" id="btLocalidad" onkeyup="getLocalidadesInstitucion()" placeholder="Ingrese Localidad">
+                                                                        <input class="form-control form-control-sm" type="text" id="btLocalidad" onkeyup="getLocalidadesInstitucion()" placeholder="Ingrese Localidad" autocomplete="off">
                                                                     </div>
                                                                 </div>
                                                                 <div class="card-body">
@@ -319,7 +319,7 @@
                                                             </div>
                                                         </div>
                                                         <div class="modal-footer justify-content-end">
-                                                            <button type="button" class="btn bg-olive btn-default" data-dismiss="modal">Cerrar</button>
+                                                            <button type="button" class="btn bg-olive btn-default" data-dismiss="modal" >Cerrar</button>
                                                         </div>
                                                     </div>
                                                     <!-- /.modal-content -->

@@ -51,7 +51,7 @@
                                                 <div class="card-header">
                                                     <div class="input-group">
                                                         <label class="col-auto col-form-label" for="Referencia">Buscar Carrera: </label>
-                                                        <input class="form-control form-control-sm" type="text" id="btCarreras" onkeyup="getCarrerasTodas()" placeholder="Ingrese Nombre de la Carrera">
+                                                        <input class="form-control form-control-sm" type="text" id="btCarreras" onkeyup="getCarrerasTodas()" autocomplete="off" placeholder="Ingrese Nombre de la Carrera">
                                                     </div>
                                                 </div>
                                                 <div class="card-body">

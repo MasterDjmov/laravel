@@ -120,7 +120,8 @@ function getAgentes() {
      var DescripcionAgente = document.getElementById('DescripcionNombreAgente');
      var nomAgenteModal = document.getElementById('nomAgenteModal'+$idAgente);
      DescripcionAgente.innerHTML="Docente: " + nomAgenteModal.value;
-     document.getElementById('idAgenteNuevoNodo').value=$idAgente;   
+     document.getElementById('idAgenteNuevoNodo').value=$idAgente; 
+     $('#modalAgente').modal('hide');  
  }
 
  function getAgentesActualizar() {
@@ -141,6 +142,7 @@ function getAgentes() {
      var nomAgenteModal = document.getElementById('nomAgenteModal'+$idAgente);
      DescripcionAgente.value=nomAgenteModal.value;
      document.getElementById('idAgente').value=$idAgente;
+     $('#modalAgente').modal('hide');
  }
  function getAgentesRel(nodo) {
     //alert(nodo);
@@ -214,6 +216,7 @@ function getAgentes() {
      var nomLocalidadModal = document.getElementById('nomLocalidadModal'+$idLocalidad);
      DescripcionLocalidad.value=nomLocalidadModal.value;
      document.getElementById('Localidad').value=$idLocalidad;
+     $('#modalLocalidad').modal('hide');
     
  }
 
@@ -224,6 +227,7 @@ function getAgentes() {
         url: "/getLocalidadesInstitucion/"+ $("#btLocalidad").val(),
         success: function (response) {
             document.getElementById('contenidoLocalidades').innerHTML=response.msg;
+            
             
         }
     });
@@ -236,6 +240,7 @@ function getAgentes() {
      var nomLocalidadModal = document.getElementById('nomLocalidadModal'+$idLocalidad);
      DescripcionLocalidad.value=nomLocalidadModal.value;
      document.getElementById('idLocalidad').value=$idLocalidad;
+     $('#modalLocalidad').modal('hide');
     
  }
 
@@ -258,7 +263,7 @@ function getAgentes() {
      var id = document.getElementById('nomDepartamentoModal'+$idDepartamento);
      Descripcion.value=id.value;
      document.getElementById('LugarNacimiento').value=$idDepartamento;
-    
+     $('#modalLugarNacimiento').modal('hide');
  }
 
  function activarSegundaVentana(){
@@ -315,6 +320,8 @@ function getAgentes() {
      console.log(nomCarreraModal)
      DescripcionCarreras.value=nomCarreraModal.value;
      document.getElementById('Carreras').value=$idCarrera;
+     $('#modalCarrera').modal('hide');
+     
     
  }
  
@@ -337,7 +344,7 @@ function getAgentes() {
      var nomAsignaturaModal = document.getElementById('nomAsignaturaModal'+$idAsignatura);
      DescripcionAsignatura.value=nomAsignaturaModal.value;
      document.getElementById('Asignatura').value=$idAsignatura;
-    
+     $('#modalAsignatura').modal('hide');
  }
 
  //ag con cargos y funciones
@@ -359,7 +366,7 @@ function getAgentes() {
     var nomCodigoModal = document.getElementById('nomCodigoModal'+$idCargo);
     DescripcionCargo.innerHTML=nomCargoModal.value+"("+ nomCodigoModal.value +")";
     document.getElementById('CargoSal').value=$idCargo;
-   
+    $('#modalCargoFuncion').modal('hide');
 }
 
 function seleccionarAsigAgente($idAsignatura){
@@ -369,6 +376,7 @@ function seleccionarAsigAgente($idAsignatura){
     //console.log(document.getElementById('nomAsignaturaAgenteModal'+$idAsignatura).value)
     DescripcionEspCur.innerHTML=nomAsigModal.value;
     document.getElementById('idEspCur').value=nomCodigoModal.value;
+    $('#modalEspCur').modal('hide');
    
 }
 
@@ -395,5 +403,5 @@ function getFilterNodes(){
     var nomCodigoModal = document.getElementById('nomCodigoModal'+$idCargo);
     DescripcionCargo.innerHTML=nomCargoModal.value+"("+ nomCodigoModal.value +")";
     document.getElementById('CargoSal').value=$idCargo;
-   
+    $('#modalCargoFuncion').modal('hide');
 }

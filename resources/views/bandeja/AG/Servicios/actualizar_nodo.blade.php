@@ -50,7 +50,7 @@
                                 <div class="form-group">
                                     <label class="label-form" for="Descripcion">Docente: </label>
                                     <div class="input-group">
-                                        <input type="text" class="form-control" id="DescripcionNombreAgenteActualizar" name="DescripcionNombreAgenteActualizar" placeholder="Ingrese Descripcion" value="{{$infoNodos[0]->Nombres}}">
+                                        <input type="text" autocomplete="off" class="form-control" id="DescripcionNombreAgenteActualizar" name="DescripcionNombreAgenteActualizar" placeholder="Ingrese Descripcion" value="{{$infoNodos[0]->Nombres}}">
                                         <input type="hidden" name="idAgente"  id="idAgente" value="{{$infoNodos[0]->Agente}}">
                                         <span class="input-group-append">
                                             <a href="#modalAgente" class="btn btn-info btn-flat"  data-toggle="modal" data-placement="top" title="Agregar Docente"  data-target="#modalAgente">Agregar</a>
@@ -256,7 +256,7 @@
                         <div class="card-header">
                             <h3 class="card-title">Lista de Agentes: </h3>
                             <div class="input-group">
-                                <input type="text" class="form-control" id="buscarAgente" placeholder="Ingrese DNI sin Puntos" value="">
+                                <input type="text" autocomplete="off" class="form-control" id="buscarAgente" placeholder="Ingrese DNI sin Puntos" value="">
                                 <button class="btn btn-info" type="button" id="traerAgentes" onclick="getAgentesActualizar()">buscar
                                     <i class="fa fa-search"></i>
                                 </button>

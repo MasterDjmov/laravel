@@ -62,7 +62,7 @@
                     <div class="card-body">
                         <div class="form-group">
                             <label for="Descripcion">Asignatura</label>
-                            <input type="text" class="form-control" id="Descripcion" name="Descripcion" placeholder="Ingrese Descripcion de la Asignatura">
+                            <input type="text" autocomplete="off" class="form-control" id="Descripcion" name="Descripcion" placeholder="Ingrese Descripcion de la Asignatura">
                         </div>
                     </div>      
                         <div class="card-footer bg-transparent">
@@ -116,7 +116,7 @@
                                                         <div class="card-header">
                                                             <div class="input-group">
                                                                 <label class="col-auto col-form-label" for="Referencia">Buscar Asignatura: </label>
-                                                                <input class="form-control form-control-sm" type="text" id="btAsignatura" onkeyup="getAsignatura()" placeholder="Ingrese Nombre de la Carrera">
+                                                                <input class="form-control form-control-sm" type="text" id="btAsignatura" onkeyup="getAsignatura()" placeholder="Ingrese Nombre de la Carrera" autocomplete="off">
                                                             </div>
                                                         </div>
                                                         <div class="card-body">
