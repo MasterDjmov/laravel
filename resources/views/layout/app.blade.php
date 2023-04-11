@@ -44,16 +44,25 @@
   @yield('LinkCSS')
 
 </head>
+<!--BODY-->
 @if(session('Validar') !="")
-<body class="hold-transition sidebar-mini layout-fixed">
+<body class=" sidebar-mini layout-fixed ">
 {{-- <div class="loader"></div>  --}}
 
-<div class="wrapper">
+<div class=""> <!-- Aquí era así <div class="wrapper"> -->
 
   <!-- Preloader -->
   <div class="preloader flex-column justify-content-center align-items-center">
     <img class="animation__shake" src="{{ asset('dist/img/AdminLTELogo.png'); }}" alt="SAGE2.0" height="60" width="60">
   </div>
+
+  <!--Hamburguesa-->
+  <nav class="main-header navbar navbar-expand navbar-light">
+    <ul class="navbar-nav align-items-center">
+      <li class="nav-item"> <a href="#" class="nav-link" data-widget="pushmenu" role="button"><i class="fas fa-bars"></i></a></li>
+      <li class="nav-item d-none d-sm-inline-block"><a href="#" class="nav-link h5">Nombre página</a></li>
+    </ul>
+  </nav>
 
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
@@ -80,12 +89,11 @@
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-          <li class="nav-item menu-open">
-            <a href="#" class="nav-link active">
-              <i class="nav-icon fas fa-tachometer-alt"></i>
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-th"></i>
               <p>
-                Dashboard
-                <i class="right fas fa-angle-left"></i>
+                Inicio
               </p>
             </a>
           </li>

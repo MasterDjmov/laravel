@@ -5,11 +5,11 @@
 @section('ContenidoPrincipal')
 <section id="container" >
     <section id="main-content">
-        <section class="wrapper">
+        <section class="content-wrapper">
             <!-- Inicio Selectores -->
             <div class="row">
                 <div class="col-md-6">
-                    <div class="card card-default">
+                    <div class="card card-lightblue">
                         <div class="card-header">
                             <h3 class="card-title">
                             <i class="fas fa-book"></i>
@@ -52,10 +52,11 @@
                                     <label for="FA">Fecha de Alta</label>
                                     <input type="date" class="form-control" id="FA" name="FA" placeholder="Ingrese Fecha de Alta" value="{{$FechaActual}}">
                                 </div>
-                                <div class="card-footer">
-                                    <button type="submit" class="btn btn-primary">Agregar</button>
-                                </div>
                             </div>
+                            <div class="card-footer bg-transparent">
+                                <button type="submit" class="btn btn-primary">Agregar</button>
+                            </div>
+                            
                         </form>
                         <!-- /.card-body -->
                     </div>
@@ -64,12 +65,12 @@
                     
                 <!-- Inicio Tabla-Card -->
                 <div class="col-md-6">
-                    <div class="card card-default">
+                    <div class="card card-lightblue">
                         <div class="card-header">
                             <h3 class="card-title">Lista de Carreras Activas</h3>
                         </div>
                         <!-- /.card-header -->
-                        <div class="card-body">
+                        <div class="card-body table-responsive">
                             <table id="example" class="table table-bordered table-striped">
                                 <thead>
                                     <tr>
@@ -92,7 +93,7 @@
                                             <td>{{$o->DescripcionTurno}}</td>
                                             <td>{{$o->FechaAlta}}</td>
                                             <td>
-                                                <a href="{{route('desvincularDivision',$o->idDivision)}}">
+                                                <a class="d-flex justify-content-center" href="{{route('desvincularDivision',$o->idDivision)}}">
                                                     <i class="fa fa-trash"></i>
                                                 </a>
                                             </td>

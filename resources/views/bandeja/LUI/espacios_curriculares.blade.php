@@ -5,10 +5,10 @@
 @section('ContenidoPrincipal')
 <section id="container" >
     <section id="main-content">
-        <section class="wrapper">
+        <section class="content-wrapper">
             <a href="{{route('getCarrerasPlanes')}}" type="button" class="btn btn-info block"><i class="fa fa-mail-reply-all"></i> Volver a Carreras Y Planes</a>
             <!-- Inicio Tabla-Card -->
-            <div class="card">
+            <div class="card card-lightblue">
               <div class="card-header">
                 <h3 class="card-title">Espacios Curriculares</h3>
                 <button class="btn btn-success">Solicitar Agregar Espacio Curricular y etc etc</button>

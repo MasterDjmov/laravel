@@ -10,7 +10,7 @@
 ?>
 <section id="container" >
     <section id="main-content">
-        <section class="wrapper">
+        <section class="content-wrapper">
 
         <!-- page start-->
         <div class="row">

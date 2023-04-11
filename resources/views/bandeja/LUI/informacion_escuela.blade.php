@@ -5,17 +5,18 @@
 @section('ContenidoPrincipal')
 <section id="container" >
     <section id="main-content">
-        <section class="wrapper">
-        <div class="alert alert-warning alert-dismissible">
-                            <h5><i class="icon fas fa-exclamation-triangle"></i> Alerta!</h5>
-                            Aqui dejar algun mensajesssssssssssssssssssssss<br>
-                            Ejemplo: <b>aqui algun ejemplo</b>
-                        </div>
+        <section class="content-wrapper">
+            <!-- Mensaje ALERTA -->
+            <div class="alert alert-warning alert-dismissible">
+                <h4><i class="icon fas fa-exclamation-triangle"></i> AVISO!</h4>
+                En esta sección podrá actualizar todos los datos institucionales<br>
+                Ejemplo: <b>CUE, Teléfono, dirección</b>
+            </div>
             <!-- Inicio Selectores fila 2 -->
             <div class="row">
                 <!-- datos edificio -->
                 <div class="col-md-6">
-                    <div class="card card-primary collapsed-card">
+                    <div class="card card-lightblue collapsed-card">
                         <div class="card-header">
                             <h3 class="card-title">
                             <i class="fas fa-book"></i>
@@ -128,13 +129,12 @@
                                     </div>
                                     
                                 </div>
-                                <!-- /.card-body -->
-
-                                <div class="card-footer">
-                                    <button type="submit" class="btn btn-primary">Actualizar</button>
-                                </div>
-                            </form>       
+                                <!-- /.card-body -->      
                         </div>
+                        <div class="card-footer bg-transparent">
+                            <button type="submit" class="btn btn-primary">Actualizar</button>
+                        </div>
+                    </form> 
                     </div>
                 </div>
                 <!-- /.fin m6-->
@@ -142,7 +142,7 @@
                 <div class="col-md-6">
                     <form method="POST" action="{{ route('formularioTurnos') }}" class="formularioTurnos">
                     @csrf
-                    <div class="card card-primary collapsed-card">
+                    <div class="card card-lightblue collapsed-card">
                         <div class="card-header">
                             <h3 class="card-title">
                             <i class="fas fa-book"></i>
@@ -215,7 +215,7 @@
                         @endforeach
                         </div>
                         <!-- /.card-body -->
-                        <div class="card-footer">
+                        <div class="card-footer bg-transparent">
                             <button type="submit" class="btn btn-primary">Actualizar</button>
                         </div>
                     </div>
@@ -229,7 +229,7 @@
             <div class="row">
                 <!-- datos edificio -->
                 <div class="col-md-6">
-                    <div class="card card-primary collapsed-card">
+                    <div class="card card-lightblue collapsed-card">
                         <div class="card-header">
                             <h3 class="card-title">
                             <i class="fas fa-book"></i>
@@ -259,69 +259,75 @@
                                         <input type="text" class="form-control" id="Referencia" name="Referencia" placeholder="Calles de Referencia" value="{{$Edificio[0]->CallesReferencia}}">
                                     </div>
                                     
-                                    <div class="form-inline form-group">
+                                    <div class="form-group">
                                         <label for="localidad">Localidad</label>
-                                        @php
-                                        //consulta localizada
-                                        $loc = DB::table('tb_localidades')
-                                        ->where('tb_localidades.idLocalidad',$Edificio[0]->Localidad)
-                                        ->get();
-                                        if(count($loc)>0){
-                                            echo' 
-                                            <input type="text" class="form-control" id="DescripcionLocalidad" name="DescripcionLocalidad" value="'.$loc[0]->localidad.'" autocomplete="off">
-                                            <input type="text" class="form-control" id="idLocalidad" name="idLocalidad" value="'.$loc[0]->idLocalidad.'">
-                                            ';
-                                        }else{
-                                            echo' 
-                                            <input type="text" class="form-control" id="DescripcionLocalidad" name="DescripcionLocalidad" value="" autocomplete="off">
-                                            <input type="text" class="form-control" id="idLocalidad" name="idLocalidad" value="">
-                                            ';
-                                        }
-                                        @endphp
-                                        <a class="btn btn-success" data-toggle="modal" href="#modalLocalidad">
-                                            <i class="fa fa-ellipsis-h"></i>
-                                        </a>
-                                        <div class="modal fade" id="modalLocalidad" style="display: none;" aria-hidden="true">
-                                            <div class="modal-dialog modal-lg">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h4 class="modal-title">Localidades</h4>
-                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                            <span aria-hidden="true">×</span>
-                                                        </button>
-                                                        
-                                                    </div>
-                                                    <div class="modal-header">
-                                                        <div class="form-group">
-                                                            <label for="Referencia">Buscar Localidad: </label>
-                                                            <input type="text" id="btLocalidad" onkeyup="getLocalidadesInstitucion()" placeholder="Ingrese Localidad">
+                                        <div class="form-inline">
+                                            @php
+                                            //consulta localizada
+                                            $loc = DB::table('tb_localidades')
+                                            ->where('tb_localidades.idLocalidad',$Edificio[0]->Localidad)
+                                            ->get();
+                                            if(count($loc)>0){
+                                                echo' 
+                                                <input type="text" class="form-control" id="DescripcionLocalidad" name="DescripcionLocalidad" value="'.$loc[0]->localidad.'" autocomplete="off">
+                                                <input type="text" class="form-control" id="idLocalidad" name="idLocalidad" value="'.$loc[0]->idLocalidad.'" hidden>
+                                                ';
+                                            }else{
+                                                echo' 
+                                                <input type="text" class="form-control" id="DescripcionLocalidad" name="DescripcionLocalidad" value="" autocomplete="off">
+                                                <input type="text" class="form-control" id="idLocalidad" name="idLocalidad" value="" hidden>
+                                                ';
+                                            }
+                                            @endphp
+                                            <a class="btn btn-primary" data-toggle="modal" href="#modalLocalidad">
+                                                <i class="fa fa-ellipsis-h"></i>
+                                            </a>
+                                            <!--MODAL-->
+                                            <div class="modal fade" id="modalLocalidad" style="display: none;" aria-hidden="true">
+                                                <div class="modal-dialog modal-lg">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h4 class="modal-title">Localidades</h4>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">×</span>
+                                                            </button>
+                                                            
                                                         </div>
                                                         
+                                                        <div class="modal-body">
+                                                            <div class="card card-olive"> 
+                                                                <div class="card-header">
+                                                                    <div class="input-group">
+                                                                        <label class="col-auto col-form-label" for="Referencia">Buscar Localidad: </label>
+                                                                        <input class="form-control form-control-sm" type="text" id="btLocalidad" onkeyup="getLocalidadesInstitucion()" placeholder="Ingrese Localidad">
+                                                                    </div>
+                                                                </div>
+                                                                <div class="card-body">
+                                                                    <table id="" class="table table-bordered table-striped">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th>ID</th>
+                                                                                <th>LOCALIDAD</th>
+                                                                                <th>PROVINCIA</th>
+                                                                                <th>OPCION</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody id="contenidoLocalidades">
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer justify-content-end">
+                                                            <button type="button" class="btn bg-olive btn-default" data-dismiss="modal">Cerrar</button>
+                                                        </div>
                                                     </div>
-                                                    <div class="modal-body">
-                                                        <table id="" class="table table-bordered table-striped">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th>ID</th>
-                                                                    <th>LOCALIDAD</th>
-                                                                    <th>PROVINCIA</th>
-                                                                    <th>OPCION</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody id="contenidoLocalidades">
-                                                            
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                    <div class="modal-footer justify-content-between">
-                                                        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-                                                    </div>
+                                                    <!-- /.modal-content -->
                                                 </div>
-                                                <!-- /.modal-content -->
+                                                <!-- /.modal-dialog -->
                                             </div>
-                                            <!-- /.modal-dialog -->
+                                            <!-- /.fin modal -->
                                         </div>
-                                        <!-- /.fin modal -->
                                     </div>
                                     <div class="form-group">
                                         <label for="turnos">Zona</label>
@@ -363,13 +369,12 @@
                                     </div>
                                     <input type="hidden" name="id" value="{{$Edificio[0]->idEdificio}}">
                                 </div>
-                                <!-- /.card-body -->
-
-                                <div class="card-footer">
-                                    <button type="submit" class="btn btn-primary">Actualizar</button>
-                                </div>
-                            </form>       
+                                <!-- /.card-body -->     
                         </div>
+                        <div class="card-footer bg-transparent">
+                                <button type="submit" class="btn btn-primary">Actualizar</button>
+                            </div>
+                        </form>  
                     </div>
                 </div>
                 <!-- /.fin m6-->
@@ -377,7 +382,7 @@
                 <div class="col-md-6">
                     <form method="POST" action="{{ route('formularioNiveles') }}" class="formularioNiveles">
                     @csrf
-                    <div class="card card-primary collapsed-card">
+                    <div class="card card-lightblue collapsed-card">
                         <div class="card-header">
                             <h3 class="card-title">
                             <i class="fas fa-book"></i>
@@ -464,7 +469,7 @@
             <div class="row">
                 <!-- datos logo -->
                 <div class="col-md-6">
-                    <div class="card card-primary collapsed-card">
+                    <div class="card card-lightblue collapsed-card">
                         <div class="card-header">
                             <h3 class="card-title">
                             <i class="fas fa-book"></i>
@@ -498,18 +503,18 @@
                                     </div>
                                 </div>
                                 <!-- /.card-body -->
-
-                                <div class="card-footer">
-                                    <button type="submit" class="btn btn-primary">Subir Imagen</button>
-                                </div>
-                            </form>       
+                                   
                         </div>
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-primary">Subir Imagen</button>
+                        </div>
+                        </form>
                     </div>
                 </div>
                 <!-- /.fin m6-->
 
                 <div class="col-md-6">
-                    <div class="card card-primary collapsed-card">
+                    <div class="card card-lightblue collapsed-card">
                         <div class="card-header">
                             <h3 class="card-title">
                             <i class="fas fa-book"></i>
@@ -543,12 +548,12 @@
                                     </div>
                                 </div>
                                 <!-- /.card-body -->
-
-                                <div class="card-footer">
-                                    <button type="submit" class="btn btn-primary">Subir Imagen</button>
-                                </div>
-                            </form>       
-                        </div>
+                            </div>
+                            <div class="card-footer">
+                                <button type="submit" class="btn btn-primary">Subir Imagen</button>
+                            </div>
+                        </form>       
+                        
                     </div>
                 </div>
                 <!-- /.fin m6-->                

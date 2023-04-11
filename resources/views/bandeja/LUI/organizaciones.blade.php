@@ -6,9 +6,9 @@
 
 <section id="container" >
     <section id="main-content">
-        <section class="wrapper">
+        <section class="content-wrapper">
             <!-- Inicio Tabla-Card -->
-            <div class="card">
+            <div class="card card-lightblue">
               <div class="card-header">
                 <h3 class="card-title">ORGANIZACIONES</h3>
               </div>
