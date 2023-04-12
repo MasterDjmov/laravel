@@ -111,7 +111,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="CorreoElectronico">Correo Electronico</label>
-                                        <input type="email" class="form-control" id="CorreoElectronico" name="CorreoElectronico" placeholder="Correo Electronico" value="{{$SubOrganizacion[0]->CorreoElectronico}}">
+                                        <input type="email" class="form-control" id="CorreoElectronico" name="CorreoElectronico" placeholder="Correo Electronico" value="{{session('UsuarioEmail')}}">
                                     </div>
                                     <div class="form-group">
                                         <label for="Mnemo">Mnemo</label>
