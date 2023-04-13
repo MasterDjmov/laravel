@@ -46,8 +46,10 @@ class LoginController extends Controller
                 session(['CUEa'=>$subOrganizacion[0]->cuecompleto]);
                 session(['idSubOrganizacion'=>$reparticion[0]->subOrganizacion]);     
                 session(['Validar' => 'ok']);
+                
                 $datos=array(
                     'mensajeError'=>"Usuario Correcto",
+                    'mensajeNAV'=>'Bandeja Principal'
                     );
                 
                 return view('bandeja.index',$datos);

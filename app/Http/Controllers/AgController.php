@@ -154,7 +154,8 @@ class AgController extends Controller
             'CargosInicial'=>$CargosInicial,
             'SituacionDeRevista'=>$SituacionRevista,
             'Divisiones'=>$Divisiones,
-            'EspaciosCurriculares'=>$EspaciosCurriculares
+            'EspaciosCurriculares'=>$EspaciosCurriculares,
+            'mensajeNAV'=>'Panel de Configuración de POF(Planta Orgánica Funcional)'
         );
         //lo guardo para controlar a las personas de una determinada cue/suborg
         session(['CUE'=>$subOrganizacion[0]->CUE]);
@@ -598,7 +599,8 @@ class AgController extends Controller
                     'EspaciosCurriculares'=>$EspaciosCurriculares,
                     'CargosSalariales'=>$CargosSalariales,
                     'DiasSemana'=>$DiasSemana,
-                    'Nodo'=>$idNodo
+                    'Nodo'=>$idNodo,
+                    'mensajeNAV'=>'Panel de Configuración de Agente'
                 );
        
         return view('bandeja.AG.Servicios.actualizar_nodo',$datos);       

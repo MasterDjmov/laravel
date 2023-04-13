@@ -121,7 +121,8 @@ class LuiController extends Controller
              'Modalidades'=>$Modalidades,
              'Jornadas'=>$Jornadas,
              'FechaAlta'=>$FechaAlta,
-             'Categorias'=>$Categorias
+             'Categorias'=>$Categorias,
+             'mensajeNAV'=>'Panel de Administración / Configuración'
 
          );
          return view('bandeja.LUI.informacion_escuela',$datos);       
@@ -150,7 +151,8 @@ class LuiController extends Controller
         $datos=array(
             'mensajeError'=>"",
             'SubOrganizaciones'=>$Suborganizaciones,
-            'NombreEscuela'=>$Suborganizaciones[0]->Descripcion
+            'NombreEscuela'=>$Suborganizaciones[0]->Descripcion,
+            'mensajeNAV'=>'Datos Institucionales'
            
         );
         return view('bandeja.LUI.suborganizaciones',$datos);
@@ -284,7 +286,8 @@ class LuiController extends Controller
             'CarrerasTodas'=>$CarrerasTodas,
             'CarrerasRelSubOrg'=>$CarrerasRelSubOrg,
             'PlanesDeEstudio'=>$PlanesDeEstudio,
-            'PlanesRelSubOrg'=>$PlanesRelSubOrg
+            'PlanesRelSubOrg'=>$PlanesRelSubOrg,
+            'mensajeNAV'=>'Panel de Configuración de Carreras y Planes'
         );
         return view('bandeja.LUI.carreras_planes',$datos);
 
@@ -489,8 +492,8 @@ class LuiController extends Controller
                     'Cursos'=>$Cursos,
                     'Division'=>$Division,
                     'Divisiones'=>$Divisiones,
-                    'FechaActual'=>$FechaAlta = Carbon::parse(Carbon::now())->format('Y-m-d')
-
+                    'FechaActual'=>$FechaAlta = Carbon::parse(Carbon::now())->format('Y-m-d'),
+                    'mensajeNAV'=>'Panel de Configuración de Cursos y Divisiones'
         
                 );
                 return view('bandeja.LUI.divisiones',$datos); 
@@ -564,7 +567,8 @@ class LuiController extends Controller
             'CarrerasRelSubOrg'=>$CarrerasRelSubOrg,
             'Planes'=>$Planes,
             'TiposHora'=>$TiposHora,
-            'RegimenDictado'=>$RegimenDictado
+            'RegimenDictado'=>$RegimenDictado,
+            'mensajeNAV'=>'Panel de Configuración de Asignaturas / Planes y Modalidades'
 
 
         );

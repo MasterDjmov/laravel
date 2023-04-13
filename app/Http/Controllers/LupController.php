@@ -213,6 +213,7 @@ class LupController extends Controller
             'Sexos' => $Sexos,
             'EstadosCiviles' => $EstadosCiviles,
             'Nacionalidades' => $Nacionalidades,
+            'mensajeNAV'=>'Panel de Configuración de Agentes / No Agentes'
         );
         //dd($infoPlaza);
         return view('bandeja.LUP.nuevo_agente',$datos);
