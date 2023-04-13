@@ -60,7 +60,7 @@
   <nav class="main-header navbar navbar-expand navbar-light">
     <ul class="navbar-nav align-items-center">
       <li class="nav-item"> <a href="#" class="nav-link" data-widget="pushmenu" role="button"><i class="fas fa-bars"></i></a></li>
-      <li class="nav-item d-none d-sm-inline-block"><a href="#" class="nav-link h5">Nombre página</a></li>
+      <li class="nav-item d-none d-sm-inline-block"><a href="#" class="nav-link h5">Aqui nombre de la pagina activa</a></li>
     </ul>
   </nav>
 
