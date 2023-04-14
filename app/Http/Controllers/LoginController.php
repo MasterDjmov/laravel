@@ -56,13 +56,15 @@ class LoginController extends Controller
             }
             else{
                 $datos=array(
-                    'mensajeError'=>"No se encontro el usuario en el Sistema"
+                    'mensajeError'=>"No se encontro el usuario en el Sistema",
+                    'mensajeNAV'=>'Bandeja Principal'
                     );
                 return view('login.index',$datos);
             }
         }else{
             $datos=array(
-                'mensajeError'=>"Los campos estan vacios"
+                'mensajeError'=>"Los campos estan vacios",
+                'mensajeNAV'=>'Bandeja Principal'
                 );
             return view('login.index',$datos);
         }
