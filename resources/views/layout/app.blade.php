@@ -67,7 +67,7 @@
             {
               echo $mensajeNAV;
             }else{
-              echo "sin Mensaje NAV";
+              echo "No Autenticado";
             }
             ?>
         </a>
