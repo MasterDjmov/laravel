@@ -62,7 +62,14 @@
       <li class="nav-item"> <a href="#" class="nav-link" data-widget="pushmenu" role="button"><i class="fas fa-bars"></i></a></li>
       <li class="nav-item d-none d-sm-inline-block">
         <a href="#" class="nav-link h5">
-          {{$mensajeNAV}}
+          <?php
+            if(isset($mensajeNAV))
+            {
+              echo $mensajeNAV;
+            }else{
+              echo "sin Mensaje NAV";
+            }
+            ?>
         </a>
       </li>
     </ul>
@@ -247,7 +254,7 @@
 <script src="{{ asset('plugins/datatables-buttons/js/buttons.colVis.min.js'); }}"></script>
 <!-- AdminLTE App -->
 <script src="{{ asset('dist/js/adminlte.js'); }}"></script>
-<script src="{{ asset('js/arbol.js');}}"></script>sw
+<script src="{{ asset('js/arbol.js');}}"></script>
 <script src="{{ asset('js/funcionesvarias.js') }}"></script>
 <!-- SweetAlert2 -->
 <script src="{{ asset('plugins/sweetalert2/sweetalert2.min.js');}}"></script>
