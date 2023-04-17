@@ -336,6 +336,8 @@ class LupController extends Controller
             'Mnemo'=>$request->Mnemo,
             'FechaAlta'=>$request->FA,
         ]);
+        session(['CUE'=>$request->CUE]);
+        session(['CUEa'=>$request->CUEa]);
         //actualizo el correo en el usuario
         UsuarioModel::where('idUsuario', session('idUsuario'))
         ->update([
