@@ -235,8 +235,8 @@
                                             <div class="col-4">
                                                 <label for="Vive">Vive: </label>
                                                 <select class="form-control" name="Vive" id="Vive">
-                                                    <option value="SI">SI</option>
-                                                    <option value="NO">NO</option>
+                                                    <option value="S">SI</option>
+                                                    <option value="N">NO</option>
                                                 </select>
                                             </div>
                                         </div>
