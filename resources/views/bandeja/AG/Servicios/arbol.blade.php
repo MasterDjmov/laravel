@@ -282,9 +282,9 @@
                           <tr>
                             <td>
                               @if ($o->Nombres != "")
-                                <label id="DescripcionNombreAgente" class="mb-0">({{$o->idNodo}}){{$o->Nombres}} </label>
+                                <label id="DescripcionNombreAgente" class="mb-0">({{$o->idNodo}})<b class="text-success">{{$o->Nombres}}</b></label>
                               @else
-                                <label id="DescripcionNombreAgente" class="mb-0">({{$o->idNodo}})<b>VACANTE</b> </label>
+                                <label id="DescripcionNombreAgente" class="mb-0">({{$o->idNodo}})<b class="text-danger">VACANTE</b> </label>
                               @endif
                               <input type="hidden" name="idAgente" id="idAgente2" value="{{$o->idAgente}}">
                             </td>
@@ -299,7 +299,7 @@
                               <p class="mb-0"><label for="DescripcionEspCur" id="DescripcionEspCur">{{$o->nomAsignatura}}</label>
                               <input type="hidden" id="idEspCur2" name="idEspCur" value="{{$o->idAsignatura}}">
                             </td>
-                            <td  class="bg-{{$o->nomSitRev}}">
+                            <td  class="bg-{{$o->nomSitRev}}" title="Detalle: {{$o->Observaciones}}">
                               <p class="mb-0">
                                 @foreach ($SituacionDeRevista as $sr)
                                   @if ($sr->idSituacionRevista == $o->idSituacionRevista)

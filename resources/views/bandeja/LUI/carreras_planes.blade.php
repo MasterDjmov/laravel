@@ -59,8 +59,8 @@
                                                         <thead>
                                                             <tr>
                                                                 <th>ID</th>
-                                                                <th>LOCALIDAD</th>
-                                                                <th>PROVINCIA</th>
+                                                                <th>DESCRIPCION</th>
+                                                                <th>TITULO</th>
                                                                 <th>OPCION</th>
                                                             </tr>
                                                         </thead>
