@@ -9,12 +9,24 @@ use Illuminate\Support\Facades\DB;
 class LoginController extends Controller
 {
    
-    public function index(){
-        $datos=array(
-            'mensajeError'=>"Bloqueado"
-        );
-        return view('login.index',$datos);
+    public function index(Request $request){
+        
+        if ($request->session()->has('Usuario') == false) {
+            //dd($request->session()->has('Usuario'));
+            $datos=array(
+                'mensajeError'=>"Bloqueado"
+            );
+            return view('login.index',$datos);
+        
+        }else{
+            session(['Validar' => '']);
+            $datos=array(
+                'mensajeError'=>"Bloqueado"
+            );
+            return view('login.index',$datos);
+        }
     }
+        
 
     public function validar(Request $request){
         

@@ -17,6 +17,7 @@ use App\Models\PlazasModel;
 use App\Models\SubOrganizacionesModel;
 use App\Models\TurnosRelSubOrgModel;
 use App\Models\UsuarioModel;
+use Illuminate\Support\Carbon;
 
 class LupController extends Controller
 {
@@ -261,6 +262,8 @@ class LupController extends Controller
           $o->EstadoCivil = $request->EstadoCivil;
           $o->Nacionalidad = $request->Nacionalidad;
           $o->Email = $request->Correo;
+          //agregado en abril
+          $o->FechaCarga = Carbon::now();
         $o->save();
           
 
