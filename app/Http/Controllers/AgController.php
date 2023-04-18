@@ -548,6 +548,7 @@ class AgController extends Controller
             'tb_asignaturas.Descripcion as nomAsignatura',
             'tb_cargossalariales.idCargo',
             'tb_cargossalariales.Cargo as nomCargo',
+            'tb_cargossalariales.Codigo as nomCodigo',
             'tb_situacionrevista.idSituacionRevista',
             'tb_situacionrevista.Descripcion as nomSitRev',
             'tb_divisiones.idDivision',
@@ -600,12 +601,105 @@ class AgController extends Controller
                     'CargosSalariales'=>$CargosSalariales,
                     'DiasSemana'=>$DiasSemana,
                     'Nodo'=>$idNodo,
-                    'mensajeNAV'=>'Panel de Configuración de Agente'
+                    'mensajeNAV'=>'Panel de Configuración de Agente',
+                    'idBack'=>$infoNodos[0]->PosicionAnterior
                 );
        
         return view('bandeja.AG.Servicios.actualizar_nodo',$datos);       
     }
+    // public function ActualizarNodoAgenteSiguiente($idNodo){
+    //     //dd($idBack);
+    //     //obtengo el usuario que es la escuela a trabajar
+    //     $idReparticion = session('idReparticion');
+    //     //consulto a reparticiones
+    //     $reparticion = DB::table('tb_reparticiones')
+    //     ->where('tb_reparticiones.idReparticion',$idReparticion)
+    //     ->get();
+    //     //dd($reparticion[0]->Organizacion);
+        
+    //     //traigo todo de suborganizacion pasada
+    //     $subOrganizacion=DB::table('tb_suborganizaciones')
+    //     ->where('tb_suborganizaciones.idsuborganizacion',$reparticion[0]->subOrganizacion)
+    //     ->select('*')
+    //     ->get();
+        
+    //     //traigo los nodos
+    //     $infoNodos=DB::table('tb_nodos')
+    //     ->where('tb_suborganizaciones.idSubOrganizacion',$reparticion[0]->subOrganizacion)
+    //     ->where('tb_nodos.idNodo',$idNodo)
+    //     ->leftjoin('tb_suborganizaciones', 'tb_suborganizaciones.cuecompleto', 'tb_nodos.CUE')
+    //     ->leftjoin('tb_agentes', 'tb_agentes.idAgente', 'tb_nodos.Agente')
+    //     ->leftjoin('tb_asignaturas', 'tb_asignaturas.idAsignatura', 'tb_nodos.Asignatura')
+    //     ->leftjoin('tb_cargossalariales', 'tb_cargossalariales.idCargo', 'tb_nodos.CargoSalarial')
+    //     ->leftjoin('tb_situacionrevista', 'tb_situacionrevista.idSituacionRevista', 'tb_nodos.SitRev')
+    //     ->leftjoin('tb_divisiones', 'tb_divisiones.idDivision', 'tb_nodos.Division')
+    //     ->select(
+    //         'tb_agentes.*',
+    //         'tb_nodos.*',
+    //         'tb_asignaturas.idAsignatura',
+    //         'tb_asignaturas.Descripcion as nomAsignatura',
+    //         'tb_cargossalariales.idCargo',
+    //         'tb_cargossalariales.Cargo as nomCargo',
+    //         'tb_cargossalariales.Codigo as nomCodigo',
+    //         'tb_situacionrevista.idSituacionRevista',
+    //         'tb_situacionrevista.Descripcion as nomSitRev',
+    //         'tb_divisiones.idDivision',
+    //         'tb_divisiones.Descripcion as nomDivision'
+    //     )
+    //     ->get();
+    //     //dd($infoNodos);
+    //     //dd($infoNodos[0]->PosicionAnterior);
+    //     //traemos otros array
+    //     $SituacionRevista = DB::table('tb_situacionrevista')->get();
+        
+        
+    //     $Divisiones = DB::table('tb_divisiones')
+    //             ->where('tb_divisiones.idSubOrg',session('idSubOrganizacion'))
+    //             ->join('tb_cursos','tb_cursos.idCurso', '=', 'tb_divisiones.Curso')
+    //             ->join('tb_division','tb_division.idDivisionU', '=', 'tb_divisiones.Division')
+    //             ->join('tb_turnos', 'tb_turnos.idTurno', '=', 'tb_divisiones.Turno')
+    //             ->select(
+    //                 'tb_divisiones.*',
+    //                 'tb_cursos.*',
+    //                 'tb_division.*',
+    //                 'tb_turnos.Descripcion as DescripcionTurno',
+    //                 'tb_turnos.idTurno',
+    //             )
+    //             ->orderBy('tb_cursos.DescripcionCurso','ASC')
+    //             ->get();
 
+    //             $EspaciosCurriculares = DB::table('tb_espacioscurriculares')
+    //             ->where('tb_espacioscurriculares.SubOrg',session('idSubOrganizacion'))
+    //             ->join('tb_asignaturas','tb_asignaturas.idAsignatura', 'tb_espacioscurriculares.Asignatura')
+    //             ->select(
+    //                 'tb_espacioscurriculares.*',
+    //                 'tb_asignaturas.*'
+    //             )
+    //             //->orderBy('tb_asignaturas.DescripcionCurso','ASC')
+    //             ->get();
+
+    //             $CargosSalariales = DB::table('tb_cargossalariales')->get();
+    //             $DiasSemana = DB::table('tb_diassemana')->get();
+    //             $datos=array(
+    //                 'mensajeError'=>"",
+    //                 'CueOrg'=>$subOrganizacion[0]->cuecompleto,
+    //                 'nombreSubOrg'=>$subOrganizacion[0]->Descripcion,
+    //                 'infoSubOrganizaciones'=>$subOrganizacion,
+    //                 'idSubOrg'=>$reparticion[0]->subOrganizacion, 
+    //                 'infoNodos'=>$infoNodos,
+    //                 'SituacionDeRevista'=>$SituacionRevista,
+    //                 'Divisiones'=>$Divisiones,
+    //                 'EspaciosCurriculares'=>$EspaciosCurriculares,
+    //                 'CargosSalariales'=>$CargosSalariales,
+    //                 'DiasSemana'=>$DiasSemana,
+    //                 'Nodo'=>$idNodo,
+    //                 'mensajeNAV'=>'Panel de Configuración de Agente',
+    //                 'idBack'=>$infoNodos[0]->PosicionAnterior
+                    
+    //             );
+       
+    //     return view('bandeja.AG.Servicios.actualizar_nodo_siguiente',$datos);       
+    // }
 
     public function formularioActualizarAgente(Request $request){
         //echo $request->Agente." ".session('CUE') ;
@@ -733,23 +827,32 @@ class AgController extends Controller
         $nodo =  Nodo::where('idNodo', $idNodo)->first();
 
         //verifico si ese nodo a borrar tiene alguna relacion o siguiente
-        if($nodo->PosicionSiguiente != "")
-        {
-            return redirect("/verArbolServicio")->with('ConfirmarBorradoNodoAnulado','OK');
-        }
+        // if($nodo->PosicionSiguiente != "")
+        // {
+        //     return redirect("/verArbolServicio")->with('ConfirmarBorradoNodoAnulado','OK');
+        // }
         //dd($nodo->PosicionAnterior);
-        
+        $nodoAnteriorPos =$nodo->PosicionAnterior;
         //obtengo su nodo anterior y lo actualizo a null
             $nodoAnterior =  Nodo::where('idNodo', $nodo->PosicionAnterior)->first();
             $nodoAnterior->PosicionSiguiente = null;
             $nodoAnterior->Usuario = session('idUsuario');
             $nodoAnterior->save();
         
+            //dd($nodoAnterior);
         //ahora puedo borrarlo al creado
         DB::table('tb_nodos')
             ->where('idNodo', $idNodo)
             ->delete();
+        
+            //si tiene alguien lo llevo a seguir editando
+        if($nodoAnteriorPos == ""){
             return redirect("/verArbolServicio")->with('ConfirmarBorradoNodo','OK');
+        }else{
+            
+            return redirect()->route('ActualizarNodoAgente', $nodoAnteriorPos)->with('ConfirmarBorradoNodo','OK');
+        }
+        
     }
 
     public function retornarNodo($idNodo){
