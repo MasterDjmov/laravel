@@ -7,8 +7,6 @@
   <section id="container">
     <section id="main-content">
       <section class="content-wrapper">
-        <h5 class="mt-4 mb-2">POF(Planta Organica Funcional) - Prueba</h5>
-
         <div class="row">
           <div class="col-12">
             <!-- Custom Tabs -->
@@ -201,7 +199,7 @@
                           <div class="modal-header">
                             <div class="modal-title">
                               <h4 class="modal-title">Buscar Agente</h4>
-                              <h6 class="">CUE:<b>{{ session('CUE') }}</b></h6>
+                              <h6 class="">CUE:<b>{{ session('CUEa') }}</b></h6>
                             </div>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
@@ -252,32 +250,7 @@
                   <div class="tab-pane" id="tab_2">
                     {{-- Agente info Inicio--}}
                     <h3>Organizacion: {{$nombreSubOrg}} - CUE: {{ $CueOrg }}</h3>
-                    <nav class="main-header navbar navbar-expand navbar-white navbar-light">
-                      <!-- Right navbar links -->
-                      <ul class="navbar-nav ml-auto">
-                        <!-- Navbar Search -->
-                        <li class="nav-item">
-                          <a class="nav-link" data-widget="navbar-search" href="#" role="button">
-                            <i class="fas fa-search"></i>
-                          </a>
-                          <div class="navbar-search-block">
-                            <form class="form-inline">
-                              <div class="input-group input-group-sm">
-                                <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search" id="FilterNodo" onkeyup="getFilterNodes()">
-                                <div class="input-group-append">
-                                  <button class="btn btn-navbar" type="submit">
-                                    <i class="fas fa-search"></i>
-                                  </button>
-                                  <button class="btn btn-navbar" type="button" data-widget="navbar-search">
-                                    <i class="fas fa-times"></i>
-                                  </button>
-                                </div>
-                              </div>
-                            </form>
-                          </div>
-                        </li>
-                      </ul>
-                    </nav>
+                    
                     <div class="row" id="contenidoNodos">
                       @php
                         if(session('infoNodos')){
@@ -285,187 +258,98 @@
                         }
                       @endphp
                     </div>
-                    {{-- RepNodos --}}
-                    <div class="card card-solid">
-                      <div class="card-body">
-                        <div class="row">
-                          <form method="POST" action="" class="row">
-                            @foreach ($infoNodos as $key => $o)
-                              @csrf
-                              <div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch flex-column">
-                                <div class="card d-flex flex-fill">
-                                  <div class="card-header bg-{{$o->nomSitRev}}">
-                                    @if ($o->Nombres != "")
-                                      <h5 id="DescripcionNombreAgente" class="mb-0">({{$o->idNodo}})Docente: {{$o->Nombres}} </h5>
-                                    @else
-                                      <h5 id="DescripcionNombreAgente" class="mb-0">({{$o->idNodo}})Docente: <b>VACANTE</b> </h5>
-                                    @endif
-                                      <input type="hidden" name="idAgente" id="idAgente2" value="{{$o->idAgente}}">
-                                  </div>
-                                  <div class="card-body">
-                                    <label class="">Cargo/Función: <label for="cargo" id="DescripcionCargo">{{$o->nomCargo}} - ({{$o->nomCodigo}})</label>
-                                      <input type="hidden" id="CargoSal2" name="CargoSal" value="{{$o->idCargo}}">
-                                    </label>
-                                    <p class="mb-0">Esp. Curricular: <label for="DescripcionEspCur" id="DescripcionEspCur">{{$o->nomAsignatura}}</label>
-                                      <input type="hidden" id="idEspCur2" name="idEspCur" value="{{$o->idAsignatura}}">
-                                    </p>
-
-                                    <p class="mb-0">Sit.Rev: 
-                                      @foreach ($SituacionDeRevista as $sr)
-                                        @if ($sr->idSituacionRevista == $o->idSituacionRevista)
-                                          <label for="SituacionDeRevista" id="SituacionDeRevista">{{$sr->Descripcion}}</label>
-                                        @endif
-                                      @endforeach
-                                    </p>
-                                      
-                                    <p class="mb-0">Sala/Division/Año: 
-                                        @foreach($Divisiones as $key => $d)
-                                          @if ($d->idDivision == $o->idDivision)
-                                            <label for="idDivision" id="idDivision">{{$d->Descripcion}} - {{$d->DescripcionTurno}}</label>
-                                          @endif 
-                                        @endforeach
-                                    </p>
-                                    <p class="mb-0">Horas: <label for="CantidadHoras" id="CantidadHoras">{{$o->CantidadHoras}}</label></p>
-                                    <p class="mb-0">Fecha de Alta(Res): <label for="Fa" id="Fa">{{ \Carbon\Carbon::parse($o->FechaDeAlta)->format('d-m-Y')}}</label></p>
-                                  </div>
-                                  <div class="card-footer">
-                                    {{-- <a type="button" href="#" class="btn mx-1" data-toggle="tooltip" data-placement="top" title="Licencia">
-                                          <span class="material-symbols-outlined pt-1">medical_services</span>
-                                        </a> --}}
-                                        <a  href="{{route('ActualizarNodoAgente',$o->idNodo)}}" class="btn mx-1 "  data-placement="top" title="Actualizar Docente"  >
-                                          <span class="material-symbols-outlined pt-1" >edit_square</span>
-                                        </a>
-
-                                        <!--boton PRUEBA modal historial plaza-->
-                                        @if ($o->PosicionSiguiente != "")
-                                        <buttom type="buttom" data-toggle="modal" data-target="#modal-{{$o->PosicionSiguiente}}" class="btn mx-1 " >
-                                          <span class="material-symbols-outlined pt-1" >history</span>
-                                        </buttom>
-                                        @else
-                                          
-                                        @endif
-
-                                        {{-- @if ($o->PosicionSiguiente == "")
-                                          <a href="{{route('agregaNodo',$o->idNodo)}}" class="btn mx-1 Vincular">
-                                          <span class="material-symbols-outlined pt-1" data-toggle="tooltip" data-placement="top" title="Vincular">compare_arrows</span>
-                                        </a>
-                                        @endif --}}
-                                  </div>
-                                </div>
-                              </div>
-                              @if($o->PosicionSiguiente != "")
-                                @php
-                                  //traigo los nodos
-                                  $infoNodoSiguiente=DB::table('tb_nodos')
-                                  ->where('tb_nodos.idNodo',$o->PosicionSiguiente)
-                                  ->leftjoin('tb_suborganizaciones', 'tb_suborganizaciones.cuecompleto', 'tb_nodos.CUE')
-                                  ->leftjoin('tb_agentes', 'tb_agentes.idAgente', 'tb_nodos.Agente')
-                                  ->leftjoin('tb_asignaturas', 'tb_asignaturas.idAsignatura', 'tb_nodos.Asignatura')
-                                  ->leftjoin('tb_cargossalariales', 'tb_cargossalariales.idCargo', 'tb_nodos.CargoSalarial')
-                                  ->leftjoin('tb_situacionrevista', 'tb_situacionrevista.idSituacionRevista', 'tb_nodos.SitRev')
-                                  ->leftjoin('tb_divisiones', 'tb_divisiones.idDivision', 'tb_nodos.Division')
-                                  ->select(
-                                      'tb_agentes.*',
-                                      'tb_nodos.*',
-                                      'tb_asignaturas.idAsignatura',
-                                      'tb_asignaturas.Descripcion as nomAsignatura',
-                                      'tb_cargossalariales.idCargo',
-                                      'tb_cargossalariales.Cargo as nomCargo',
-                                      'tb_cargossalariales.Codigo as nomCodigo',
-                                      'tb_situacionrevista.idSituacionRevista',
-                                      'tb_situacionrevista.Descripcion as nomSitRev',
-                                      'tb_divisiones.idDivision',
-                                      'tb_divisiones.Descripcion as nomDivision',
-                                  )
-                                  ->get();
-                                @endphp
-                                <!--<div class="d-flex align-self-center ml-2 mb-4">
-                                  <div class="align-items-center st0"></div>
-                                  <div class="align-items-center st2"></div>
-                                </div>-->
-
-                                @foreach ($infoNodoSiguiente as $sig)
-                                  <!--PRUEBA modal historial plaza-->
-                                  <div class="modal fade" id="modal-{{$o->PosicionSiguiente}}">
-                                    <div class="modal-dialog modal-lg">
-                                      <div class="modal-content">
-                                        <div class="modal-header">
-                                          <h4 class="modal-title">HISTORIAL</h4>
-                                          <buttom type="buttom" class="close" data-dismiss="modal" aria-label="close">
-                                            <span area-hidden="true">x</span>
-                                          </buttom>
-                                        </div>
-                                        <div class="modal-body">
-                                          <div class="card-body">
-                                            <div id="accordion">
-                                              <div class="card">
-                                                <div class="card-header bg-{{$infoNodoSiguiente[0]->nomSitRev}}">
-                                                  <h4 class="card-title w-100">
-                                                    <a class="d-block w-100 text-dark" data-toggle="collapse" href="#colapseEjemplo1">
-                                                      @if ($sig->Nombres != "")
-                                                        <h5 id="DescripcionNombreAgente" class="mb-0">({{$sig->idNodo}})-Docenteee: {{strtoupper($sig->Nombres)}} <span class="material-symbols-outlined text-danger">history</span></h5>
-                                                      @else
-                                                        <h5 id="DescripcionNombreAgente" class="mb-0">({{$sig->idNodo}})Docente: <b>VACANTE</b> </h5>
-                                                      @endif
-                                                    </a>
-                                                  </h4>
-                                                </div>
-                                                <div id="colapseEjemplo1" class="collapse" data-parent="#accordion">
-                                                  <div class="card-body">
-                                                    <p class="mb-0">Cargo/Función: <label for="cargo" id="DescripcionCargo">{{$sig->nomCargo}} - ({{$sig->nomCodigo}})</label>
-                                                    <input type="hidden" id="CargoSal2" name="CargoSal" value="{{$sig->idCargo}}">
-                                                    </p>
-                                                    <p class="mb-0">Esp. Curricular: <label for="DescripcionEspCur" id="DescripcionEspCur">{{$sig->nomAsignatura}}</label>
-                                                    <input type="hidden" id="idEspCur2" name="idEspCur" value="{{$sig->idAsignatura}}">
-                                                    </p>
-                                                    <p class="mb-0">Sit.Rev: 
-                                                    
-                                                      @foreach ($SituacionDeRevista as $sr)
-                                                        @if ($sr->idSituacionRevista == $sig->idSituacionRevista)
-                                                          <label for="SituacionDeRevista" id="SituacionDeRevista">{{$sr->Descripcion}}</label>
-                                                        @endif
-                                                      @endforeach
-                                                      
-                                                    </p>
-                                                    
-                                                    <p class="mb-0">Sala/Division/Año: 
-                                                        @foreach($Divisiones as $key => $d)
-                                                          @if ($d->idDivision == $sig->idDivision)
-                                                            <label for="idDivision" id="idDivision">{{$d->Descripcion}} - {{$d->DescripcionTurno}}</label>
-                                                          @endif 
-                                                        @endforeach
-                                                        
-                                                    </p>
-                                                    <p class="mb-0">Horas: <label for="CantidadHoras" id="CantidadHoras">{{$sig->CantidadHoras}}</label></p>
-                                                    <p class="mb-0">Fecha de Alta(Res): <label for="Fa" id="Fa">{{ \Carbon\Carbon::parse($sig->FechaDeAlta)->format('d-m-Y')}}</label></p>
-                                                  </div>
-                                                  <div class="card-footer">
-                                                    {{-- <a type="button" href="#" class="btn mx-1" data-toggle="tooltip" data-placement="top" title="Licencia">
-                                                          <span class="material-symbols-outlined pt-1">medical_services</span>
-                                                        </a> --}}
-
-                                                    <a  href="{{route('ActualizarNodoAgente',$sig->idNodo)}}" class="btn mx-1 "  data-placement="top" title="Actualizar Docente"  >
-                                                      <span class="material-symbols-outlined pt-1" >edit_square</span>
-                                                    </a>
-                                                    {{-- <a href="{{route('agregaNodo',$o->idNodo)}}" class="btn mx-1">
-                                                          <span class="material-symbols-outlined pt-1" data-toggle="tooltip" data-placement="top" title="Vincular">compare_arrows</span>
-                                                        </a> --}}
-                                                  </div>
-                                                </div>
-                                              </div>
-                                            </div>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <!--Fin Modal Prueba historial plaza-->
-                                @endforeach
-                              @endif
-                              @endforeach
-                          </form>
-                        </div>
+                    <div class="card">
+                      <div class="card-header">
+                        <h3 class="card-title">Agentes</h3>
                       </div>
+                      <!-- /.card-header -->
+                      <div class="card-body">
+                        <table id="example1" class="table table-bordered table-striped">
+                          <thead>
+                          <tr>
+                            <th>Agente</th>
+                            <th>Cargo</th>
+                            <th>Horas</th>
+                            <th>Esp.Cur</th>
+                            <th>S.R.</th>
+                            <th>F.Alta(Res)</th>
+                            <th>Sala/Div</th>
+                            <th>Opciones</th>
+                          </tr>
+                          </thead>
+                          <tbody>
+                          @foreach ($infoNodos as $key => $o)
+                          <tr>
+                            <td>
+                              @if ($o->Nombres != "")
+                                <label id="DescripcionNombreAgente" class="mb-0">({{$o->idNodo}}){{$o->Nombres}} </label>
+                              @else
+                                <label id="DescripcionNombreAgente" class="mb-0">({{$o->idNodo}})<b>VACANTE</b> </label>
+                              @endif
+                              <input type="hidden" name="idAgente" id="idAgente2" value="{{$o->idAgente}}">
+                            </td>
+                            <td>
+                              <p class=""><label for="cargo" id="DescripcionCargo">{{$o->nomCargo}} - ({{$o->nomCodigo}})</p>
+                              <input type="hidden" id="CargoSal2" name="CargoSal" value="{{$o->idCargo}}">
+                            </td>
+                            <td>
+                              <p class="mb-0"><label for="CantidadHoras" id="CantidadHoras">{{$o->CantidadHoras}}</label></p>
+                            </td>
+                            <td>
+                              <p class="mb-0"><label for="DescripcionEspCur" id="DescripcionEspCur">{{$o->nomAsignatura}}</label>
+                              <input type="hidden" id="idEspCur2" name="idEspCur" value="{{$o->idAsignatura}}">
+                            </td>
+                            <td  class="bg-{{$o->nomSitRev}}">
+                              <p class="mb-0">
+                                @foreach ($SituacionDeRevista as $sr)
+                                  @if ($sr->idSituacionRevista == $o->idSituacionRevista)
+                                    <label for="SituacionDeRevista" id="SituacionDeRevista">{{$sr->Descripcion}}</label>
+                                  @endif
+                                @endforeach
+                              </p>
+                            </td>
+                            <td>
+                              <p class="mb-0"><label for="Fa" id="Fa">{{ \Carbon\Carbon::parse($o->FechaDeAlta)->format('d-m-Y')}}</label></p>
+                            </td>
+                            <td>
+                              <p class="mb-0"> 
+                                @foreach($Divisiones as $key => $d)
+                                  @if ($d->idDivision == $o->idDivision)
+                                    <label for="idDivision" id="idDivision">{{$d->Descripcion}}<br>T: {{$d->DescripcionTurno}}</label>
+                                  @endif 
+                                @endforeach
+                              </p>
+                            </td>
+                            <td>
+                              {{-- <a type="button" href="#" class="btn mx-1" data-toggle="tooltip" data-placement="top" title="Licencia">
+                                <span class="material-symbols-outlined pt-1">medical_services</span>
+                              </a> --}}
+                              <a  href="{{route('ActualizarNodoAgente',$o->idNodo)}}" class="btn mx-1 "  data-placement="top" title="Actualizar Docente"  >
+                                <span class="material-symbols-outlined pt-1" >edit_square</span>
+                              </a>
+
+                              <!--boton PRUEBA modal historial plaza-->
+                                {{-- @if ($o->PosicionSiguiente != "")
+                                  <button type="button" data-toggle="modal" data-target="#modal-{{$o->PosicionSiguiente}}" class="btn mx-1 " >
+                                    <span class="material-symbols-outlined pt-1" >history</span>
+                                  </button>
+                                @else
+                                                  
+                                @endif --}}
+
+                                {{-- @if ($o->PosicionSiguiente == "")
+                                  <a href="{{route('agregaNodo',$o->idNodo)}}" class="btn mx-1 Vincular">
+                                    <span class="material-symbols-outlined pt-1" data-toggle="tooltip" data-placement="top" title="Vincular">compare_arrows</span>
+                                  </a>
+                                @endif --}}                    
+                            </td>
+                          </tr>
+                          @endforeach
+                          </tbody>
+                          
+                        </table>
+                      </div>
+                      <!-- /.card-body -->
                     </div>
                   </div>
                   {{-- Agente info Fin --}}

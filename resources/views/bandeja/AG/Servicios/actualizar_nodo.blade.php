@@ -99,7 +99,7 @@
                                     <select class="form-control" name="Division" id="Division">
                                         @foreach($Divisiones as $key => $o)
                                             @if ($o->idDivision == $infoNodos[0]->Division)
-                                                <option value="{{$o->idDivision}}" selected="selected">{{$o->Descripcion}} - {{$o->DescripcionTurno}}</option>
+                                                <option value="{{$o->idDivision}}" selected="selected">{{$o->Descripcion}} - Turno: {{$o->DescripcionTurno}}</option>
                                             @else
                                                 <option value="{{$o->idDivision}}">{{$o->Descripcion}} - {{$o->DescripcionTurno}}</option>
                                             @endif
@@ -114,6 +114,11 @@
                                     <label for="FA">Fecha de Alta</label>
                                     <input type="date" class="form-control" id="FA" name="FA" placeholder="Ingrese Fecha de Alta" value="{{ \Carbon\Carbon::parse($infoNodos[0]->FechaDeAlta)->format('Y-m-d')}}">
                                     <input type="hidden" name="nodo" value="{{$infoNodos[0]->idNodo}}">
+                                </div>
+                                <div class="form-group">
+                                    <label for="Observacion">Observación</label><br>
+                                    <textarea class="form-control" name="Observaciones" rows="5" cols="100%">{{trim($infoNodos[0]->Observaciones)}}
+                                    </textarea>
                                 </div>
                             </div>
                             <div class="card-footer bg-transparent d-flex justify-content-end">

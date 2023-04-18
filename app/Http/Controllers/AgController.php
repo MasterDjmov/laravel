@@ -619,6 +619,7 @@ class AgController extends Controller
         "CantidadHoras" => "10"
         "FA" => "2001-01-01"
         "nodo" => "55"
+        "Observaciones"--->llega 18 de abril en adelante--agregar a bd
         ]
         */
         $EspCur=DB::table('tb_espacioscurriculares')
@@ -636,6 +637,7 @@ class AgController extends Controller
         $nodo->FechaDeAlta = $request->FA;              //listo
         $nodo->SitRev = $request->SitRev;               //listo
         $nodo->Asignatura = $idAsig;
+        $nodo->Observaciones = $request->Observaciones; //listo 18 de abril
         $nodo->Usuario = session('idUsuario');
         $nodo->save();
         
