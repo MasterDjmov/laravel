@@ -276,6 +276,61 @@
                         </div>
                     <!-- /.row -->
                 </div><!-- /.container-fluid -->
+            <div class="row d-flex justify-content-center">
+                <!-- left column -->
+                <div class="col-md-10">
+                    <div class="card card-lightblue">
+                    <div class="card-header">
+                        <h3 class="card-title">Agentes y No Agentes agregados por la Institución</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table id="example1" class="table table-bordered table-striped">
+                        <thead>
+                        <tr>
+                            <th>COD</th>
+                            <th>Apellido y Nombre</th>
+                            <th>Tipo Documento</th>
+                            <th>Tipo Agente</th>
+                            <th>Correo Electronico</th>
+                            <th>Fecha de Carga</th>
+                            <th>Habilitado?</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($RelSubOrgAgente as $nag)
+                            <tr>
+                                <td>{{$nag->idAgente}}</td>
+                                <td>{{$nag->Nombres}}</td>
+                                <td>{{$nag->Documento}}</td>
+                                <td>{{$nag->Descripcion}}</td>
+                                <td>{{$nag->Email}}</td>
+                                <td>{{$nag->FechaAlta}}</td>
+                                <td style="background-color:#74bf9d">
+                                    @if ($nag->Confirmado == "SI")
+                                        <i class="fa fa-thumbs-up" style="color:green"></i> {{$nag->Confirmado}}
+                                    @endif
+                                    @if ($nag->Confirmado == "NO")
+                                        <i class="fa fa-thumbs-down" style="color:red"></i> {{$nag->Confirmado}}
+                                    @endif
+                                    @if ($nag->Confirmado == "VERIFICANDO")
+                                        <i class="fa fa-hourglass-start" style="color:yellow"></i> {{$nag->Confirmado}}
+                                    @endif
+                                    
+                                </td>
+                            </tr> 
+                            @endforeach
+                        
+                        
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                    </div>
+                </div>
+            </div>    
+
+
+                
             </section>
             <!-- /.content -->
         </section>

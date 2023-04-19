@@ -14,6 +14,7 @@ use App\Models\EspacioCurricularModel;
 use App\Models\NivelesEnsenanzaRelSubOrgModel;
 use App\Models\PlanesRelSubOrgModel;
 use App\Models\PlazasModel;
+use App\Models\SubOrgAgenteModel;
 use App\Models\SubOrganizacionesModel;
 use App\Models\TurnosRelSubOrgModel;
 use App\Models\UsuarioModel;
@@ -206,7 +207,20 @@ class LupController extends Controller
         $Sexos = DB::table('tb_sexo')->get();
         $EstadosCiviles = DB::table('tb_estadosciviles')->get();
         $Nacionalidades = DB::table('tb_nacionalidad')->get();
-
+        //se agrego el 18 abril
+        $RelSubOrgAgente = DB::table('tb_suborg_agente')
+        ->join('tb_agentes', 'tb_agentes.idAgente', '=', 'tb_suborg_agente.idAgente')
+        ->join('tb_tiposdeagente', 'tb_tiposdeagente.idTipoAgente', '=', 'tb_agentes.TipoAgente')
+        ->join('tb_suborganizaciones', 'tb_suborganizaciones.idSubOrganizacion', '=', 'tb_suborg_agente.idSubOrg')
+        ->where('tb_suborg_agente.idSubOrg', session('idSubOrganizacion'))
+        ->select(
+            'tb_agentes.*',
+            'tb_suborganizaciones.*',
+            'tb_tiposdeagente.*',
+            'tb_suborg_agente.*'
+        )
+        ->get();
+        //dd($RelSubOrgAgente);
         $datos=array(
             'mensajeError'=>"",
             'TipoDeDocumento' => $TiposDeDocumentos,
@@ -214,7 +228,8 @@ class LupController extends Controller
             'Sexos' => $Sexos,
             'EstadosCiviles' => $EstadosCiviles,
             'Nacionalidades' => $Nacionalidades,
-            'mensajeNAV'=>'Panel de Configuración de Agentes / No Agentes'
+            'mensajeNAV'=>'Panel de Configuración de Agentes / No Agentes',
+            'RelSubOrgAgente'=>$RelSubOrgAgente
         );
         //dd($infoPlaza);
         return view('bandeja.LUP.nuevo_agente',$datos);
@@ -266,7 +281,12 @@ class LupController extends Controller
           $o->FechaCarga = Carbon::now();
         $o->save();
           
-
+        //agrego al docente en la tabla relacionada suborg y agente
+        $ag = new SubOrgAgenteModel();
+        $ag->idSubOrg = session('idSubOrganizacion');
+        $ag->idAgente = $o->idAgente;
+        $ag->Confirmado = "VERIFICANDO";
+        $ag->save();
          return redirect("/nuevoAgente")->with('ConfirmarNuevoAgente','OK');
          //LuiController::PlazaNueva($request->idSurOrg);
 
