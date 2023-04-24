@@ -47,11 +47,7 @@
                                         <option value="{{$o->idTurno}}">{{$o->Descripcion}}</option>
                                     @endforeach
                                     </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="FA">Fecha de Alta</label>
-                                    <input type="date" class="form-control" id="FA" name="FA" placeholder="Ingrese Fecha de Alta" value="{{$FechaActual}}">
-                                </div>
+                                </div> 
                             </div>
                             <div class="card-footer bg-transparent">
                                 <button type="submit" class="btn btn-primary">Agregar</button>

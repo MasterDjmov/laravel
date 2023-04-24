@@ -78,10 +78,10 @@
                                         <span class="material-symbols-outlined pt-1" data-toggle="modal" data-placement="top" title="Traslado/Afectación">transfer_within_a_station</span>
                                       </a> --}}
                                       <button type="submit" name="btnAgregarAgenteNuevo" class="btn mx-1">
-                                      {{-- <a href="#" > --}}
                                         <span class="material-symbols-outlined pt-1" data-toggle="tooltip" data-placement="top" title="Confirmar">done</span>
-                                      {{-- </a> --}}
                                       </button>
+
+                          
                                       {{-- <a href="{{route('agregaNodo',1)}}" class="btn mx-1">
                                         <span class="material-symbols-outlined pt-1" data-toggle="tooltip" data-placement="top" title="Vincular">compare_arrows</span>
                                       </a> --}}

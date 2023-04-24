@@ -281,7 +281,8 @@
                 <div class="col-md-10">
                     <div class="card card-lightblue">
                     <div class="card-header">
-                        <h3 class="card-title">Agentes y No Agentes agregados por la Institución</h3>
+                        <h3 class="card-title">Agentes y No Agentes agregados por la Institución</h3>&nbsp; 
+                        <span class="text-danger"><b>(Estos datos no se borran y quedan como registro)</b></span>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">

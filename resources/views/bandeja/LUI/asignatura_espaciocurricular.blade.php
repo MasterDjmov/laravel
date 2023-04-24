@@ -13,7 +13,7 @@
                     <div class="alert alert-warning alert-dismissible">
                         <h5><i class="icon fas fa-exclamation-triangle"></i> Importante!</h5>
                         Antes de agregar una nueva Asignatura, primero consulte en la lista si ya existe<br>
-                        Ejemplo: <b>Nivel Inicial debe usar Asignatura Generica</b>
+                        Ejemplo: <b>Jardines debe usar Asignatura Generica</b>
                     </div>
                     <div class="card card-lightblue">
                         <div class="card-header ">
@@ -81,7 +81,7 @@
                     <div class="alert alert-warning alert-dismissible">
                         <h5><i class="icon fas fa-exclamation-triangle"></i> Alerta!</h5>
                         No todos los niveles educativos requieren Esp. Curriculares, pero Inicial debe agregar minimo uno<br>
-                        Ejemplo: <b>Nivel Inicial NO requiere de Espacios Curriculares</b>
+                        Ejemplo: <b>Jardines, NO requiere de Espacios Curriculares</b>
                     </div>
                     <div class="card card-lightblue">
                         <div class="card-header">

@@ -5,10 +5,15 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\LuiController;
 use App\Http\Controllers\LupController;
 use App\Http\Controllers\AgController;
+use App\Http\Controllers\PruebaController;
 use App\Http\Controllers\SistemaController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
 
+
+//mail
+use Illuminate\Support\Facades\Mail;
+use App\Mail\EjemploMail;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -26,7 +31,7 @@ Route::post('/servicio/guardar',[ServicioGeneralController::class,'guardar'])->n
 
 //Inicio y bandeja
 
-
+Route::get('/correo',[PruebaController::class,'index'])->name('Correo');
 
 
 Route::get('/',[LoginController::class,'index'])->name('Autenticar');

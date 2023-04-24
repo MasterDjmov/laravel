@@ -34,11 +34,21 @@
                             @csrf
                                 <div class="card-body">
                                     <div class="form-group">
-                                        <label for="CUE">CUE BASE</label>
+                                        <label for="CUE">CUE BASE</label> 
+                                            <span class="text-danger">
+                                                @if ($SubOrganizacion[0]->cue_confirmada == 1)
+                                                    (CUE Base confirmada, no se puede modificar)
+                                                @endif
+                                            </span>
                                         <input type="text" class="form-control" id="CUE" name="CUE" placeholder="Ingrese CUE Base" value="{{$SubOrganizacion[0]->CUE}}">
                                     </div>
                                     <div class="form-group">
                                         <label for="CUEa">CUE Anexo</label>
+                                        <span class="text-danger">
+                                                @if ($SubOrganizacion[0]->cue_confirmada == 1)
+                                                    (CUE Anexo confirmada, no se puede modificar)
+                                                @endif
+                                            </span>
                                         <input type="text" class="form-control" id="CUEa" name="CUEa" placeholder="Ingrese CUE con Anexo" value="{{$SubOrganizacion[0]->cuecompleto}}">
                                     </div>
                                     <div class="form-group">
@@ -121,13 +131,6 @@
                                         <label for="Observacion">Observación</label><br>
                                         <textarea class="form-control" name="Observaciones" rows="5" cols="100%">{{$SubOrganizacion[0]->Observaciones}}</textarea>
                                     </div>
-                                    
-                                    <hr>
-                                    <div class="form-group">
-                                        <label for="FA">Fecha de Alta</label>
-                                        <input type="date" class="form-control" id="FA" name="FA" placeholder="Ingrese Fecha de Alta" value="{{$FechaAlta}}">
-                                    </div>
-                                    
                                 </div>
                                 <!-- /.card-body -->      
                         </div>

@@ -342,25 +342,52 @@ class LupController extends Controller
         "Observaciones" => "prueba de actualizacion"
         "FA" => "2021-02-04"
         */
+        $infoSub=DB::table('tb_suborganizaciones')
+            ->where('idSubOrganizacion', session('idSubOrganizacion'))
+            ->get();
+        //dd($infoSub[0]->cue_confirmada);
+
+        //valido la primera vez para evitar que me ingresen otro cue
+        //tambien aqui pondremos seguimiento
+        if($infoSub[0]->cue_confirmada == 0){
+            $actualizar = SubOrganizacionesModel::where('idSubOrganizacion', session('idSubOrganizacion'))
+            ->update([
+                'CUE'=>$request->CUE,
+                'cuecompleto'=>$request->CUEa,
+                'Descripcion'=>$request->Descripcion,
+                'Telefono'=>$request->Telefono,
+                'EsPropia'=>$request->EsPropia,
+                'EsPrivada'=>$request->EsPrivada,
+                'Categoria'=>$request->Categoria,
+                'Modalidad'=>$request->Modalidad,
+                'Jornada'=>$request->Jornada,
+                'Observaciones'=>$request->Observaciones,
+                'CorreoElectronico'=>$request->CorreoElectronico,
+                'Mnemo'=>$request->Mnemo,
+                'FechaAlta'=>Carbon::now(),
+                'cue_confirmada'=>1
+            ]);
+            //actualizo las cue por si cambiaron
+            session(['CUE'=>$request->CUE]);
+            session(['CUEa'=>$request->CUEa]);
+        }else{
+            $actualizar = SubOrganizacionesModel::where('idSubOrganizacion', session('idSubOrganizacion'))
+            ->update([
+                'Descripcion'=>$request->Descripcion,
+                'Telefono'=>$request->Telefono,
+                'EsPropia'=>$request->EsPropia,
+                'EsPrivada'=>$request->EsPrivada,
+                'Categoria'=>$request->Categoria,
+                'Modalidad'=>$request->Modalidad,
+                'Jornada'=>$request->Jornada,
+                'Observaciones'=>$request->Observaciones,
+                'CorreoElectronico'=>$request->CorreoElectronico,
+                'Mnemo'=>$request->Mnemo,
+                'FechaAlta'=>$request->FA
+            ]);
+        }
         
-        $actualizar = SubOrganizacionesModel::where('idSubOrganizacion', session('idSubOrganizacion'))
-        ->update([
-            'CUE'=>$request->CUE,
-            'cuecompleto'=>$request->CUEa,
-            'Descripcion'=>$request->Descripcion,
-            'Telefono'=>$request->Telefono,
-            'EsPropia'=>$request->EsPropia,
-            'EsPrivada'=>$request->EsPrivada,
-            'Categoria'=>$request->Categoria,
-            'Modalidad'=>$request->Modalidad,
-            'Jornada'=>$request->Jornada,
-            'Observaciones'=>$request->Observaciones,
-            'CorreoElectronico'=>$request->CorreoElectronico,
-            'Mnemo'=>$request->Mnemo,
-            'FechaAlta'=>$request->FA,
-        ]);
-        session(['CUE'=>$request->CUE]);
-        session(['CUEa'=>$request->CUEa]);
+        
         //actualizo el correo en el usuario
         UsuarioModel::where('idUsuario', session('idUsuario'))
         ->update([
@@ -386,7 +413,7 @@ class LupController extends Controller
         $Divisiones->Curso = $request->Curso;
         $Divisiones->Division = $request->Division;
         $Divisiones->Turno = $request->Turno;
-        $Divisiones->FechaAlta = $request->FA;
+        $Divisiones->FechaAlta = Carbon::now();
         $Divisiones->idSubOrg = session('idSubOrganizacion');
         $Divisiones->save();
 
