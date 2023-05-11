@@ -405,3 +405,55 @@ function getFilterNodes(){
     document.getElementById('CargoSal').value=$idCargo;
     $('#modalCargoFuncion').modal('hide');
 }
+
+function prueba(){
+    var data = $("#formularioNuevoAgenteNodo").serialize();
+    var formData = new FormData($("#formularioNuevoAgenteNodo")[0]);
+    console.log(data)
+    $.ajax({
+        type: "POST",
+        url: "/verDatos",
+        data: formData,
+        processData: false,
+        contentType: false,
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr("content")
+        },
+        success: function (response) {
+            console.log(response);
+            
+            Swal.fire(
+                'Genial',
+                'Regreso',
+                'success'
+                    )           
+        }
+    });
+}
+$("#BtnPruebaAgregar").click(function() {
+    var data = $("#formularioNuevoAgenteNodo").serialize();
+    var formData = new FormData($("#formularioNuevoAgenteNodo")[0]);
+    console.log(data)
+    $.ajax({
+        type: "POST",
+        url: "/verDatos",
+        data: formData,
+        processData: false,
+        contentType: false,
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr("content")
+        },
+        success: function (response) {
+            console.log(response);
+            
+            Swal.fire(
+                'Genial',
+                'Regreso',
+                'success'
+                    )           
+        }
+    });
+    
+});
+
+

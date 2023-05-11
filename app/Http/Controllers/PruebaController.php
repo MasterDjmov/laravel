@@ -17,4 +17,9 @@ class PruebaController extends Controller
         Mail::to('djmov666@gmail.com')->send(new EjemploMail($mensaje));
         return "Enviado";
     }
+
+    public function verDatos(Request $request){
+
+        return response()->json(array('status' => 200, 'msg' => "Guardado Correctamente: $request->cant_horas"), 200);
+    }
 }

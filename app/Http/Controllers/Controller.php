@@ -10,4 +10,10 @@ use Illuminate\Routing\Controller as BaseController;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+
+    //creo una funcion para obligar a todos a entrar en rutas que no existan
+    public function show404()
+    {
+        return view('errors.404');
+    }
 }

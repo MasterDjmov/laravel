@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Controller;
 use App\Http\Controllers\BandejaController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\LuiController;
@@ -29,9 +30,12 @@ Route::get('/servicio/ver/{id}',[ServicioGeneralController::class,'ver'])->name(
 Route::post('/servicio/guardar',[ServicioGeneralController::class,'guardar'])->name('guardar');
 */
 
+//controla las rutas de errores
+Route::fallback([Controller::class, 'show404']);
 //Inicio y bandeja
 
 Route::get('/correo',[PruebaController::class,'index'])->name('Correo');
+Route::post('/verDatos',[PruebaController::class,'verDatos'])->name('verDatos');
 
 
 Route::get('/',[LoginController::class,'index'])->name('Autenticar');

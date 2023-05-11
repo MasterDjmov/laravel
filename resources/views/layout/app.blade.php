@@ -42,7 +42,7 @@
   <link href="{{ asset('css/app.css'); }}" rel="stylesheet">
   <link rel="stylesheet" href="{{ asset('css/style_vincular.css'); }}">
   @yield('LinkCSS')
-
+  <meta name="csrf-token" content="{{csrf_token()}}">
 </head>
 <!--BODY-->
 @if(session('Validar') !="")
