@@ -81,9 +81,9 @@
                                         <span class="material-symbols-outlined pt-1" data-toggle="tooltip" data-placement="top" title="Confirmar">done</span>
                                       </button>
                                       
-                                      <button type="submit" name="btnAgregarAgenteNuevo2"  class="btn mx-1">
+                                      {{-- <button type="submit" name="btnAgregarAgenteNuevo2"  class="btn mx-1">
                                         <span class="material-symbols-outlined pt-1" data-toggle="tooltip" data-placement="top" title="Confirmar">done</span>probar
-                                      </button>
+                                      </button> --}}
                           
                                       {{-- <a href="{{route('agregaNodo',1)}}" class="btn mx-1">
                                         <span class="material-symbols-outlined pt-1" data-toggle="tooltip" data-placement="top" title="Vincular">compare_arrows</span>
