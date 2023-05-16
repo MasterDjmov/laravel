@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\BandejaController;
 use App\Http\Controllers\LoginController;
@@ -108,7 +109,14 @@ Route::get('/getFiltrandoNodos/{idNodo}',[AgController::class,'getFiltrandoNodos
 Route::get('/retornarNodo/{idNodo}',[AgController::class,'retornarNodo'])->name('retornarNodo');
 
 
+//ADMIN
+Route::get('/nuevoUsuario',[AdminController::class,'nuevoUsuario'])->name('nuevoUsuario');
+Route::get('/editarUsuario/{idUsuario}',[AdminController::class,'editarUsuario'])->name('editarUsuario');
 
+Route::post('/FormNuevoUsuario',[AdminController::class,'FormNuevoUsuario'])->name('FormNuevoUsuario');
+Route::post('/FormActualizarUsuario',[AdminController::class,'FormActualizarUsuario'])->name('FormActualizarUsuario');
+
+Route::get('/usuariosLista',[AdminController::class,'usuariosLista'])->name('usuariosLista');
 
 Route::get('/salir',[BandejaController::class,'salir'])->name('Salir');
 

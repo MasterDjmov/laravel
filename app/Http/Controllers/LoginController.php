@@ -41,7 +41,7 @@ class LoginController extends Controller
                 session(['idUsuario'=>$usuario[0]->idUsuario]);
                 session(['idReparticion'=>$usuario[0]->idReparticion]); //unico por escuela o cueanexo
                 session(['UsuarioEmail'=>$usuario[0]->email]);
-
+                session(['Modo'=>$usuario[0]->Modo]);
                 //obtengo el usuario que es la escuela a trabajar
                 $idReparticion = session('idReparticion');
                 //consulto a reparticiones

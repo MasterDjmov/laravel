@@ -80,7 +80,7 @@
     <!-- Brand Logo -->
     <a href="{{route('Bandeja')}}" class="brand-link">
       <img src="{{ asset('dist/img/AdminLTELogo.png')}}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-      <span class="brand-text font-weight-light">SAGE 2.0 - Prueba</span>
+      <span class="brand-text font-weight-light">SAGE</span>
     </a>
 
     <!-- Sidebar -->
@@ -108,7 +108,8 @@
               </p>
             </a>
           </li>
-          <li class="nav-item">
+        @if (session('Modo')==2)
+          <li class="nav-item menu-is-opening menu-open">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-copy"></i>
               <p>
@@ -151,7 +152,7 @@
               
             </ul>
           </li>
-          <li class="nav-item">
+          <li class="nav-item menu-is-opening menu-open">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-copy"></i>
               <p>
@@ -176,7 +177,68 @@
               
             </ul>
           </li>
-          <li class="nav-header">EXAMPLES</li>
+        @endif
+      
+        @if (session('Modo')==1)
+        {{-- admin --}}
+        
+          <li class="nav-item menu-is-opening menu-open">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-copy"></i>
+              <p>
+                Panel del Administrador
+                <i class="fas fa-angle-left right"></i>
+                <span class="badge badge-info right"><!--aqui algo--></span>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{{route('nuevoUsuario')}}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Nuevo Usuario</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{route('usuariosLista')}}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Buscar y Administrar Usuarios</p>
+                </a>
+              </li>
+              
+            </ul>
+          </li>          
+        @endif
+
+        @if (session('Modo')==3)
+        {{-- admin Jr --}}
+        
+          <li class="nav-item menu-is-opening menu-open">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-copy"></i>
+              <p>
+                Panel de Técnicos
+                <i class="fas fa-angle-left right"></i>
+                <span class="badge badge-info right"><!--aqui algo--></span>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{{route('nuevoUsuario')}}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Controlar Nuevos Agentes</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{route('nuevoUsuario')}}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Ver Instituciones / Datos</p>
+                </a>
+              </li>
+              
+            </ul>
+          </li>          
+        @endif 
+          <li class="nav-header">Opciones</li>
           <li class="nav-item">
             <a href="{{route('Salir')}}" class="nav-link">
               <i class="nav-icon far fa-calendar-alt"></i>
@@ -186,6 +248,7 @@
               </p>
             </a>
           </li>
+
         </ul>
       </nav>
       <!-- /.sidebar-menu -->

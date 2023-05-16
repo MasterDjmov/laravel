@@ -1,6 +1,6 @@
 @extends('layout.app')
 
-@section('Titulo', 'Sage2.0 - Movimientos')
+@section('Titulo', 'Sage2.0 - Institución')
 
 @section('LinkCSS')
 @if ($SubOrganizaciones[0]->imagen_escuela != "")

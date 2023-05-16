@@ -1,6 +1,6 @@
 @extends('layout.app')
 
-@section('Titulo', 'Sage2.0 - Movimientos')
+@section('Titulo', 'Sage2.0 - Información')
 
 @section('ContenidoPrincipal')
 <section id="container" >
