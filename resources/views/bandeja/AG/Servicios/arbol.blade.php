@@ -25,7 +25,7 @@
                   <div class="tab-pane active" id="tab_1">
                     <h3>Configurar Nuevo Agente / Docente:</h3>
                     <div class="container mt-3 d-block">
-                      <form method="POST" action="{{ route('agregarAgenteEscuela') }}" class="formularioNuevoAgenteNodo" id="formularioNuevoAgenteNodo">
+                      <form method="POST" action="{{ route('agregarAgenteEscuela') }}" class="formularioNuevoAgenteNodo" id="formularioNuevoAgenteNodoxxx">
                           @csrf
                         <div class="row">
                           <!--primera Card-->
@@ -446,8 +446,8 @@
             confirmButtonText: 'Si, crear el registro!'
           }).then((result) => {
             if (result.isConfirmed) {
-              //this.submit();
-              prueba();
+              this.submit();
+              //prueba();
             }
           })
       }

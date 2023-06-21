@@ -370,6 +370,7 @@ class LupController extends Controller
             //actualizo las cue por si cambiaron
             session(['CUE'=>$request->CUE]);
             session(['CUEa'=>$request->CUEa]);
+            session(['UsuarioEmail'=>$request->CorreoElectronico]);
         }else{
             $actualizar = SubOrganizacionesModel::where('idSubOrganizacion', session('idSubOrganizacion'))
             ->update([
@@ -385,6 +386,7 @@ class LupController extends Controller
                 'Mnemo'=>$request->Mnemo,
                 'FechaAlta'=>$request->FA
             ]);
+            session(['UsuarioEmail'=>$request->CorreoElectronico]);
         }
         
         

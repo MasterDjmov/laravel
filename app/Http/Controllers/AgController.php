@@ -94,10 +94,10 @@ class AgController extends Controller
         ->where('tb_suborganizaciones.idSubOrganizacion',$reparticion[0]->subOrganizacion)
         ->join('tb_suborganizaciones', 'tb_suborganizaciones.cuecompleto', 'tb_nodos.CUE')
         ->leftjoin('tb_agentes', 'tb_agentes.idAgente', 'tb_nodos.Agente')
-        ->join('tb_asignaturas', 'tb_asignaturas.idAsignatura', 'tb_nodos.Asignatura')
-        ->join('tb_cargossalariales', 'tb_cargossalariales.idCargo', 'tb_nodos.CargoSalarial')
-        ->join('tb_situacionrevista', 'tb_situacionrevista.idSituacionRevista', 'tb_nodos.SitRev')
-        ->join('tb_divisiones', 'tb_divisiones.idDivision', 'tb_nodos.Division')
+        ->leftjoin('tb_asignaturas', 'tb_asignaturas.idAsignatura', 'tb_nodos.Asignatura')
+        ->leftjoin('tb_cargossalariales', 'tb_cargossalariales.idCargo', 'tb_nodos.CargoSalarial')
+        ->leftjoin('tb_situacionrevista', 'tb_situacionrevista.idSituacionRevista', 'tb_nodos.SitRev')
+        ->leftjoin('tb_divisiones', 'tb_divisiones.idDivision', 'tb_nodos.Division')
         ->select(
             'tb_agentes.*',
             'tb_nodos.*',
