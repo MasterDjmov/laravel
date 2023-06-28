@@ -58,7 +58,7 @@
                                     </select>
                                 </p>
                                 <p class="mb-0">Horas: <input type="number" id="cant_horas" class="form-control-sm border-0" name="cant_horas" style="width:50px" value=""></p>
-                                <p class="mb-0">Fecha de Alta(Res): <input type="date" id="FechaAltaN" class="form-control-sm border-0" name="FechaAltaN" style="width:125px" value=""></p>
+                                <p class="mb-0">Fecha de Ingreso: <input type="date" id="FechaAltaN" class="form-control-sm border-0" name="FechaAltaN" style="width:125px" value=""></p>
                               </div>
                               <div class="card-footer d-flex justify-content-center">
                                 {{-- <a type="button" href="#" class="btn mx-1" data-toggle="tooltip" data-placement="top" title="Licencia">

@@ -132,7 +132,7 @@ class AgController extends Controller
                     'tb_turnos.Descripcion as DescripcionTurno',
                     'tb_turnos.idTurno',
                 )
-                ->orderBy('tb_cursos.DescripcionCurso','ASC')
+                ->orderBy('tb_cursos.idCurso','ASC')
                 ->get();
 
             $EspaciosCurriculares = DB::table('tb_espacioscurriculares')
