@@ -30,6 +30,7 @@ Route::get('/servicio',[ServicioGeneralController::class,'index'])->name('servic
 Route::get('/servicio/ver/{id}',[ServicioGeneralController::class,'ver'])->name('ver');
 Route::post('/servicio/guardar',[ServicioGeneralController::class,'guardar'])->name('guardar');
 */
+//cambios nuevos
 
 //controla las rutas de errores
 Route::fallback([Controller::class, 'show404']);
