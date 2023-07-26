@@ -100,7 +100,7 @@ Route::get('/getLocalidades/{localidad}',[AgController::class,'getLocalidades'])
 Route::get('/getLocalidadesInstitucion/{localidad}',[AgController::class,'getLocalidadesInstitucion'])->name('getLocalidadesInstitucion');
 Route::get('/getDepartamentos/{departamento}',[AgController::class,'getDepartamentos'])->name('getDepartamentos');
 Route::get('/agregaNodo/{nodo}',[AgController::class,'agregaNodo'])->name('agregaNodo');
-Route::get('/agregaNodoLic/{nodo}',[AgController::class,'agregaNodoLic'])->name('agregaNodoLic');
+Route::get('/agregaLic/{nodo}',[AgController::class,'agregaLic'])->name('agregaLic');
 Route::get('/regresarNodo/{nodo}',[AgController::class,'regresarNodo'])->name('regresarNodo');
 
 Route::post('/agregarDatoANodo',[AgController::class,'agregarDatoANodo'])->name('agregarDatoANodo');

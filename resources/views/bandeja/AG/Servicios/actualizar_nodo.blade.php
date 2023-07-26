@@ -32,13 +32,13 @@
                 <div class="card-body">
                     <p>Aqui ponemos alguna ayuda para los que editan la info</p>
                     
-                    <a href="{{route('agregaNodoLic',$infoNodos[0]->idNodo)}}" class="btn btn-app bg-info Vincular">
+                    <a href="{{route('agregaLic',$infoNodos[0]->idNodo)}}" class="btn btn-app bg-info Vincular">
                       <i class="fas fa-stethoscope"></i> Crear Vacante x Licencia (izquierda)
                     </a>
                    
 
                     @if ($infoNodos[0]->PosicionSiguiente == "")
-                        <a href="{{route('agregaNodo',$infoNodos[0]->idNodo)}}" class="btn btn-app bg-info Vincular">
+                        <a href="{{route('agregaNodo',$infoNodos[0]->idNodo)}}" class="btn btn-app bg-info VincularDer">
                         <i class="fas fa-stethoscope"></i> Crear Vacante (derecha)
                     </a>
                     @endif
@@ -588,6 +588,25 @@
           }).then((result) => {
             if (result.isConfirmed) {
               window.location.href = $('.Vincular').attr('href');
+            }else{
+                return false;
+            }
+          })
+    })
+
+    $('.VincularDer').click(function(e){
+       e.preventDefault(); 
+        Swal.fire({
+            title: 'Esta seguro de querer crear una vacante vacia?',
+            text: "Recuerde colocar datos verdaderos",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si, guardo el registro!'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              window.location.href = $('.VincularDer').attr('href');
             }else{
                 return false;
             }

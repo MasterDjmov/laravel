@@ -633,7 +633,7 @@ class AgController extends Controller
         return redirect()->back()->with('ConfirmarNuevoNodo','OK');
     }
 
-    public function agregaNodoLic($idNodo){
+    public function agregaLic($idNodo){
         //aqui voy a verificar si es titular/interino u otra clase que requiera nodo anterior
         //por ahora no verificar a volante, tenerlo en cuenta luego
         //obtengo el agente actual(nodo actual)
