@@ -55,7 +55,7 @@ class AgController extends Controller
         )
         ->orderBy('tb_agentes.idAgente','ASC')
         ->get();
-*/
+        */
         //por ahora traigo las plazas de una determina SubOrganizacion
        /* $plazas = DB::table('tb_plazas')
         ->where('tb_plazas.SubOrganizacion',$idSubOrg)
@@ -68,8 +68,8 @@ class AgController extends Controller
         )
         ->orderBy('tb_plazas.idPlaza','DESC')
         ->get();
-*/
- /*       $turnos = DB::table('tb_turnos')->get();
+        */
+        /*       $turnos = DB::table('tb_turnos')->get();
         $regimen_laboral = DB::table('tb_regimenlaboral')->get();
         $fuentesDelFinanciamiento = DB::table('tb_fuentesdefinanciamiento')->get();
         $tiposDeFuncion = DB::table('tb_tiposdefuncion')->get();
@@ -88,10 +88,11 @@ class AgController extends Controller
             'Asignaturas'=>$Asignaturas,
             'tiposDeFuncion'=>$tiposDeFuncion,
         );
-*/
-        //traigo los nodos
+
+        //respaldo de infonodos julio 2023
         $infoNodos=DB::table('tb_nodos')
         ->where('tb_suborganizaciones.idSubOrganizacion',$reparticion[0]->subOrganizacion)
+        // ->whereNotNull('tb_nodos.PosicionAnterior')
         ->join('tb_suborganizaciones', 'tb_suborganizaciones.cuecompleto', 'tb_nodos.CUE')
         ->leftjoin('tb_agentes', 'tb_agentes.idAgente', 'tb_nodos.Agente')
         ->leftjoin('tb_asignaturas', 'tb_asignaturas.idAsignatura', 'tb_nodos.Asignatura')
@@ -112,6 +113,17 @@ class AgController extends Controller
             'tb_divisiones.Descripcion as nomDivision',
         )
         ->orderBy('PosicionAnterior','ASC')
+        ->get();
+        */
+        //traigo los nodos
+        $infoNodos=DB::table('tb_nodos')
+        ->where('tb_suborganizaciones.idSubOrganizacion',$reparticion[0]->subOrganizacion)
+        // ->whereNotNull('tb_nodos.PosicionAnterior')
+        ->join('tb_suborganizaciones', 'tb_suborganizaciones.cuecompleto', 'tb_nodos.CUE')
+        ->select(
+            'tb_nodos.*'
+        )
+        ->orderBy('tb_nodos.idNodo','ASC')
         ->get();
         //dd($infoNodos);
 
@@ -164,7 +176,169 @@ class AgController extends Controller
         //dd($plazas);
         return view('bandeja.AG.Servicios.arbol',$datos);
     }
+    public function verArbolServicio2(){
 
+        //obtengo el usuario que es la escuela a trabajar
+        $idReparticion = session('idReparticion');
+        //consulto a reparticiones
+        $reparticion = DB::table('tb_reparticiones')
+        ->where('tb_reparticiones.idReparticion',$idReparticion)
+        ->get();
+        //dd($reparticion[0]->Organizacion);
+        
+        //traigo todo de suborganizacion pasada
+        $subOrganizacion=DB::table('tb_suborganizaciones')
+        ->where('tb_suborganizaciones.idsuborganizacion',$reparticion[0]->subOrganizacion)
+        ->select('*')
+        ->get();
+        /*
+            [
+                {
+                "org": 807
+                }
+            ]
+                si lo llamo db:table me devuelve asi, leerlo como array primero objeto[0]->clave
+        */
+       
+        //funcion previa, luego la desecho porque la idea es que use NODO en su lugar
+        /*$suborganizaciones = DB::table('tb_suborganizaciones')
+        ->where('tb_suborganizaciones.idSubOrganizacion',session('idSubOrg'))
+        ->join('tb_plazas', 'tb_plazas.Suborganizacion', '=', 'tb_suborganizaciones.idSubOrganizacion')
+        ->join('tb_agentes', 'tb_agentes.idAgente', '=', 'tb_plazas.DuenoActual')  
+        ->join('tb_asignaturas', 'tb_asignaturas.idAsignatura', '=', 'tb_plazas.Asignatura')
+        ->join('tb_situacionrevista', 'tb_situacionrevista.idSituacionRevista', '=', 'tb_plazas.SitRevDuenoActual')
+        ->join('tb_espacioscurriculares', 'tb_espacioscurriculares.idEspacioCurricular', '=', 'tb_plazas.EspacioCurricular')
+        ->select(
+            'tb_suborganizaciones.*',
+            'tb_plazas.*',
+            'tb_agentes.*',
+            'tb_asignaturas.Descripcion as DesAsc',
+            'tb_situacionrevista.Descripcion as SR',
+            'tb_espacioscurriculares.Horas as CargaHoraria',
+        )
+        ->orderBy('tb_agentes.idAgente','ASC')
+        ->get();
+        */
+        //por ahora traigo las plazas de una determina SubOrganizacion
+       /* $plazas = DB::table('tb_plazas')
+        ->where('tb_plazas.SubOrganizacion',$idSubOrg)
+        ->leftJoin('tb_agentes', 'tb_agentes.idAgente', '=', 'tb_plazas.DuenoActual')
+        ->select(
+            'tb_plazas.*',
+            'tb_agentes.Nombres',
+            'tb_agentes.Documento',
+
+        )
+        ->orderBy('tb_plazas.idPlaza','DESC')
+        ->get();
+        */
+        /*       $turnos = DB::table('tb_turnos')->get();
+        $regimen_laboral = DB::table('tb_regimenlaboral')->get();
+        $fuentesDelFinanciamiento = DB::table('tb_fuentesdefinanciamiento')->get();
+        $tiposDeFuncion = DB::table('tb_tiposdefuncion')->get();
+        $Asignaturas = DB::table('tb_asignaturas')->get();
+        $CargosSalariales = DB::table('tb_cargossalariales')->get();
+        */
+       /* $datos=array(
+            'mensajeError'=>"",
+            'idOrg'=>$organizacion[0]->Org,
+            'NombreOrg'=>$organizacion[0]->Descripcion,
+            'CueOrg'=>$organizacion[0]->CUE,
+            'infoSubOrganizaciones'=>$suborganizaciones,
+            'idSubOrg'=>$idSubOrg,  //la roto para pasarla a otras ventanas y saber donde volver
+            'infoPlazas'=>$plazas,
+            'CargosSalariales'=>$CargosSalariales,
+            'Asignaturas'=>$Asignaturas,
+            'tiposDeFuncion'=>$tiposDeFuncion,
+        );
+
+        //respaldo de infonodos julio 2023
+        $infoNodos=DB::table('tb_nodos')
+        ->where('tb_suborganizaciones.idSubOrganizacion',$reparticion[0]->subOrganizacion)
+        // ->whereNotNull('tb_nodos.PosicionAnterior')
+        ->join('tb_suborganizaciones', 'tb_suborganizaciones.cuecompleto', 'tb_nodos.CUE')
+        ->leftjoin('tb_agentes', 'tb_agentes.idAgente', 'tb_nodos.Agente')
+        ->leftjoin('tb_asignaturas', 'tb_asignaturas.idAsignatura', 'tb_nodos.Asignatura')
+        ->leftjoin('tb_cargossalariales', 'tb_cargossalariales.idCargo', 'tb_nodos.CargoSalarial')
+        ->leftjoin('tb_situacionrevista', 'tb_situacionrevista.idSituacionRevista', 'tb_nodos.SitRev')
+        ->leftjoin('tb_divisiones', 'tb_divisiones.idDivision', 'tb_nodos.Division')
+        ->select(
+            'tb_agentes.*',
+            'tb_nodos.*',
+            'tb_asignaturas.idAsignatura',
+            'tb_asignaturas.Descripcion as nomAsignatura',
+            'tb_cargossalariales.idCargo',
+            'tb_cargossalariales.Cargo as nomCargo',
+            'tb_cargossalariales.Codigo as nomCodigo',
+            'tb_situacionrevista.idSituacionRevista',
+            'tb_situacionrevista.Descripcion as nomSitRev',
+            'tb_divisiones.idDivision',
+            'tb_divisiones.Descripcion as nomDivision',
+        )
+        ->orderBy('PosicionAnterior','ASC')
+        ->get();
+        */
+        //traigo los nodos
+        $infoNodos=DB::table('tb_nodos')
+        ->where('tb_suborganizaciones.idSubOrganizacion',$reparticion[0]->subOrganizacion)
+        // ->whereNotNull('tb_nodos.PosicionAnterior')
+        ->join('tb_suborganizaciones', 'tb_suborganizaciones.cuecompleto', 'tb_nodos.CUE')
+        ->select(
+            'tb_nodos.*'
+        )
+        ->orderBy('tb_nodos.idNodo','ASC')
+        ->get();
+        //dd($infoNodos);
+
+        //traemos otros array
+        $SituacionRevista = DB::table('tb_situacionrevista')->get();
+        $CargosInicial=DB::table('tb_asignaturas')
+        ->orWhere('Descripcion', 'like', '%Cargo -%')->get();
+        
+        $Divisiones = DB::table('tb_divisiones')
+                ->where('tb_divisiones.idSubOrg',session('idSubOrganizacion'))
+                ->join('tb_cursos','tb_cursos.idCurso', '=', 'tb_divisiones.Curso')
+                ->join('tb_division','tb_division.idDivisionU', '=', 'tb_divisiones.Division')
+                ->join('tb_turnos', 'tb_turnos.idTurno', '=', 'tb_divisiones.Turno')
+                ->select(
+                    'tb_divisiones.*',
+                    'tb_cursos.*',
+                    'tb_division.*',
+                    'tb_turnos.Descripcion as DescripcionTurno',
+                    'tb_turnos.idTurno',
+                )
+                ->orderBy('tb_cursos.idCurso','ASC')
+                ->get();
+
+            $EspaciosCurriculares = DB::table('tb_espacioscurriculares')
+                ->where('tb_espacioscurriculares.SubOrg',session('idSubOrganizacion'))
+                ->join('tb_asignaturas','tb_asignaturas.idAsignatura', 'tb_espacioscurriculares.Asignatura')
+                ->select(
+                    'tb_espacioscurriculares.*',
+                    'tb_asignaturas.*'
+                )
+                //->orderBy('tb_asignaturas.DescripcionCurso','ASC')
+                ->get();
+        $datos=array(
+            'mensajeError'=>"",
+            'CueOrg'=>$subOrganizacion[0]->cuecompleto,
+            'nombreSubOrg'=>$subOrganizacion[0]->Descripcion,
+            'infoSubOrganizaciones'=>$subOrganizacion,
+            'idSubOrg'=>$reparticion[0]->subOrganizacion, 
+            'infoNodos'=>$infoNodos,
+            'CargosInicial'=>$CargosInicial,
+            'SituacionDeRevista'=>$SituacionRevista,
+            'Divisiones'=>$Divisiones,
+            'EspaciosCurriculares'=>$EspaciosCurriculares,
+            'mensajeNAV'=>'Panel de Configuración de POF(Planta Orgánica Funcional)'
+        );
+        //lo guardo para controlar a las personas de una determinada cue/suborg
+        session(['CUE'=>$subOrganizacion[0]->CUE]);
+        
+        session(['idSubOrg'=>$reparticion[0]->subOrganizacion]);
+        //dd($plazas);
+        return view('bandeja.AG.Servicios.arbol2',$datos);
+    }
     public function getAgentes($DNI){
         //traigo todos los agentes que coincidan con su DNI
         $Agentes = DB::table('tb_agentes')
@@ -451,6 +625,96 @@ class AgController extends Controller
             $nodo->PosicionSiguiente = $Nuevo->idNodo;
             $nodo->save();
        // }
+        
+
+        
+        
+
+        return redirect()->back()->with('ConfirmarNuevoNodo','OK');
+    }
+
+    public function agregaNodoLic($idNodo){
+        //aqui voy a verificar si es titular/interino u otra clase que requiera nodo anterior
+        //por ahora no verificar a volante, tenerlo en cuenta luego
+        //obtengo el agente actual(nodo actual)
+        $nodoActual = Nodo::where('idNodo', $idNodo)->first();
+        /*
+        
+        
+        if($nodo->SitRev == 1 || $nodo->sitRev == 2){
+            //aqui crea atras
+            $Nuevo = new Nodo;
+            $Nuevo->Agente = null;
+            $Nuevo->EspacioCurricular = $Nuevo->EspacioCurricular;
+            $Nuevo->CargoSalarial = $Nuevo->CargoSalarial;
+            $Nuevo->CantidadHoras = $Nuevo->CantidadHoras;
+            $Nuevo->FechaDeAlta = $Nuevo->FechaDeAlta;
+            $Nuevo->Division =  $Nuevo->Division;
+            $Nuevo->SitRev = 4;
+            $Nuevo->Asignatura = $Nuevo->Asignatura;
+            $Nuevo->Usuario = session('idUsuario');
+            $Nuevo->CUE = session('CUEa');
+            $Nuevo->PosicionSiguiente = $nodoActual;
+            $Nuevo->save();
+            
+            //obtengo el id y lo guardo relacionando al anterior que recibo por parametro
+            $Nuevo->idNodo;
+            $nodo = Nodo::where('idNodo', $nodoActual)->first();
+            $nodo->PosicionAnterior = $Nuevo->idNodo;
+            $nodo->save();
+        }else{*/
+            //aqui es suplente crea adelante
+            
+            //creo el nodo anterior o intermedio segun criterio
+            //1-si es raiz
+            //2-si se pide entre dos nodos -suplente de suplente de titular/interino etc
+        
+            //1 si es raiz
+        if($nodoActual->PosicionAnterior==null || $nodoActual->PosicionAnterior==""){
+            $Nuevo = new Nodo;
+            $Nuevo->Agente = null;
+            $Nuevo->EspacioCurricular = null;
+            $Nuevo->CargoSalarial = null;
+            $Nuevo->CantidadHoras = null;
+            $Nuevo->FechaDeAlta = null;
+            $Nuevo->Division = null;
+            $Nuevo->SitRev = null;
+            $Nuevo->Asignatura = null;
+            $Nuevo->Usuario = session('idUsuario');
+            $Nuevo->CUE = session('CUEa');
+            $Nuevo->PosicionAnterior = null;
+            $Nuevo->PosicionSiguiente = $nodoActual->idNodo;
+            $Nuevo->save();
+
+            $nodoActual->PosicionAnterior=$Nuevo->idNodo;
+            $nodoActual->save();
+        }else{
+            //2-valor entre nodos
+            $nodoAnterior =Nodo::where('idNodo', $nodoActual->PosicionAnterior)->first();
+            
+            //nuevo nodo intermedio
+            $Nuevo = new Nodo;
+            $Nuevo->Agente = null;
+            $Nuevo->EspacioCurricular = null;
+            $Nuevo->CargoSalarial = null;
+            $Nuevo->CantidadHoras = null;
+            $Nuevo->FechaDeAlta = null;
+            $Nuevo->Division = null;
+            $Nuevo->SitRev = null;
+            $Nuevo->Asignatura = null;
+            $Nuevo->Usuario = session('idUsuario');
+            $Nuevo->CUE = session('CUEa');
+            $Nuevo->PosicionAnterior = $nodoAnterior->idNodo;
+            $Nuevo->PosicionSiguiente = $nodoActual->idNodo;
+            $Nuevo->save();
+
+            //modifico anterior y actual apuntando a nuevo nodo
+            $nodoActual->PosicionAnterior=$Nuevo->idNodo;
+            $nodoActual->save(); 
+
+            $nodoAnterior->PosicionSiguiente=$Nuevo->idNodo;
+            $nodoAnterior->save();           
+        }
         
 
         
@@ -855,30 +1119,48 @@ class AgController extends Controller
         
     }
 
-    public function retornarNodo($idNodo){
+    public function regresarNodo($idNodo){
         //al retornar mantendremos la info del nodo, horarios queda como esta
-        /*
+        $nodoSiguiente=null;
         //antes de borrar debo verificar su anterior
-        $nodo =  Nodo::where('idNodo', $idNodo)->first();
-
-        //verifico si ese nodo a borrar tiene alguna relacion o siguiente
-        if($nodo->PosicionSiguiente != "")
+        $nodoActual =  Nodo::where('idNodo', $idNodo)->first();
+        $nodoAnterior =  Nodo::where('idNodo', $nodoActual->PosicionAnterior)->first();
+        //verifico si su derecha es nulla total por nuevo nodo
+        if($nodoActual->PosicionSiguiente=="" || $nodoActual->PosicionSiguiente==null)
         {
-            return redirect("/verArbolServicio")->with('ConfirmarBorradoNodoAnulado','OK');
+            $nodoSiguiente=null;
+            //2- actualizar la posicion de A--> C
+            $nodoAnterior->PosicionSiguiente = $nodoSiguiente;
+        }else{
+            $nodoSiguiente =  Nodo::where('idNodo', $nodoActual->PosicionSiguiente)->first();
+            //1- actualizar la posicion de A <--C
+            $nodoSiguiente->PosicionAnterior = $nodoAnterior->idNodo;
+            $nodoSiguiente->save();
+
+            //2- actualizar la posicion de A--> C
+            $nodoAnterior->PosicionSiguiente = $nodoSiguiente->idNodo;
         }
-        //dd($nodo->PosicionAnterior);
         
         //obtengo su nodo anterior y lo actualizo a null
-            $nodoAnterior =  Nodo::where('idNodo', $nodo->PosicionAnterior)->first();
-            $nodoAnterior->PosicionSiguiente = null;
-            $nodoAnterior->Usuario = session('idUsuario');
-            $nodoAnterior->save();
+        //aqui luego hay que informar la salida de la persona que cubre
         
-        //ahora puedo borrarlo al creado
+        
+        
+        //3- actualizar el agente de B--> A
+        $nodoAnterior->Agente = $nodoActual->Agente;
+        $nodoAnterior->FechaDeAlta = $nodoActual->FechaDeAlta;
+        $nodoAnterior->EspacioCurricular = $nodoActual->EspacioCurricular;
+        $nodoAnterior->SitRev = $nodoActual->SitRev;
+        $nodoAnterior->CargoSalarial = $nodoActual->CargoSalarial;
+        $nodoAnterior->Observaciones = $nodoActual->Observaciones;
+        $nodoAnterior->Usuario = session('idUsuario');
+        $nodoAnterior->save();
+        //4- eliminar nodo B con sus datos(todos + lic + horario)
+        //ahora puedo borrarlo
         DB::table('tb_nodos')
-            ->where('idNodo', $idNodo)
-            ->delete();*/
-            return redirect("/verArbolServicio")->with('ConfirmarRegresoNodo','OK');
+            ->where('idNodo', $nodoActual->idNodo)
+            ->delete();
+            return redirect("/verArbolServicio2")->with('ConfirmarRegresoNodo','OK');
     }
     public function getFiltrandoNodos($valorBuscado){
         $CargosInicial=DB::table('tb_asignaturas')

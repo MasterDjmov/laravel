@@ -8,14 +8,14 @@
         <section class="content-wrapper">
             <!-- Inicio Selectores -->
             @if ($infoNodos[0]->PosicionAnterior == "" && $infoNodos[0]->PosicionSiguiente == "")
-            <a  href="/verArbolServicio#tab_2" class="btn btn-outline-info"  title="Volver a Servicio"  >
+            <a  href="/verArbolServicio2" class="btn btn-outline-info"  title="Volver a Servicio"  >
                 <span class="material-symbols-outlined">
                     reply_all
                 </span> VOLVER A Directorio Docente
             </a>
             @else
                 @if ($infoNodos[0]->PosicionAnterior == "" && $infoNodos[0]->PosicionSiguiente != "")
-                    <a  href="/verArbolServicio#tab_2" class="btn btn-outline-info"  title="Volver a Servicio"  >
+                    <a  href="/verArbolServicio2" class="btn btn-outline-info"  title="Volver a Servicio"  >
                         <span class="material-symbols-outlined">
                             reply_all
                         </span> VOLVER A Directorio Docente
@@ -31,16 +31,32 @@
             <div class="row">
                 <div class="card-body">
                     <p>Aqui ponemos alguna ayuda para los que editan la info</p>
+                    
+                    <a href="{{route('agregaNodoLic',$infoNodos[0]->idNodo)}}" class="btn btn-app bg-info Vincular">
+                      <i class="fas fa-stethoscope"></i> Crear Vacante x Licencia (izquierda)
+                    </a>
+                   
+
                     @if ($infoNodos[0]->PosicionSiguiente == "")
                         <a href="{{route('agregaNodo',$infoNodos[0]->idNodo)}}" class="btn btn-app bg-info Vincular">
-                        <i class="fas fa-stethoscope"></i> Vincular
+                        <i class="fas fa-stethoscope"></i> Crear Vacante (derecha)
                     </a>
                     @endif
+
                     
-                    @if ($infoNodos[0]->PosicionAnterior != "" && $infoNodos[0]->PosicionSiguiente == "")
+
+                    @if ($infoNodos[0]->PosicionAnterior != "" && 
+                         $infoNodos[0]->PosicionSiguiente == "" && 
+                         $infoNodos[0]->Agente == "")
                         <a href="{{route('eliminarNodo',$infoNodos[0]->idNodo)}}" id="EliminarNodo" class="btn btn-app bg-danger">
-                            <i class="fas fa-eraser"></i> Eliminar Nodo
+                            <i class="fas fa-eraser"></i> Desvincular
                         </a>
+                    @else
+                          @if($infoNodos[0]->PosicionAnterior != "")
+                            <a href="{{route('regresarNodo',$infoNodos[0]->idNodo)}}" id="RetornarNodo" class="btn btn-app bg-info">
+                                <i class="fas fa-undo"></i> Regresar de Licencia
+                            </a>
+                          @endif
                     @endif
                     {{-- <a href="{{route('retornarNodo',$infoNodos[0]->idNodo)}}" id="RetornarNodo" class="btn btn-app bg-info">
                         <i class="fas fa-undo"></i> Regresar
@@ -548,6 +564,16 @@
                     )
             </script>
         @endif
+
+         @if (session('ConfirmarRegresoNodo')=='OK')
+            <script>
+            Swal.fire(
+                'Registro guardado',
+                'Se actualizo correctamente el regreso del Agente a su posicion anterior',
+                'success'
+                    )
+            </script>
+        @endif
     <script>
     $('.Vincular').click(function(e){
        e.preventDefault(); 
@@ -661,6 +687,7 @@
             </script>
         @endif
     <script>
+
 
     $('.formularioActualizarHorario').submit(function(e){
         e.preventDefault();

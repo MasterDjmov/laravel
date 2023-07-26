@@ -90,6 +90,8 @@ Route::post('/FormNuevoAgente',[LupController::class,'FormNuevoAgente'])->name('
 
 //Servicio General
 Route::get('/verArbolServicio',[AgController::class,'verArbolServicio'])->name('verArbolServicio');
+Route::get('/verArbolServicio2',[AgController::class,'verArbolServicio2'])->name('verArbolServicio2');
+
 Route::get('/getAgentes/{DNI}',[AgController::class,'getAgentes'])->name('getAgentes');
 Route::get('/getBuscarAgente/{DNI}',[AgController::class,'getBuscarAgente'])->name('getBuscarAgente');
 Route::get('/getAgentesRel/{DNI}',[AgController::class,'getAgentesRel'])->name('getAgentesRel');
@@ -98,6 +100,9 @@ Route::get('/getLocalidades/{localidad}',[AgController::class,'getLocalidades'])
 Route::get('/getLocalidadesInstitucion/{localidad}',[AgController::class,'getLocalidadesInstitucion'])->name('getLocalidadesInstitucion');
 Route::get('/getDepartamentos/{departamento}',[AgController::class,'getDepartamentos'])->name('getDepartamentos');
 Route::get('/agregaNodo/{nodo}',[AgController::class,'agregaNodo'])->name('agregaNodo');
+Route::get('/agregaNodoLic/{nodo}',[AgController::class,'agregaNodoLic'])->name('agregaNodoLic');
+Route::get('/regresarNodo/{nodo}',[AgController::class,'regresarNodo'])->name('regresarNodo');
+
 Route::post('/agregarDatoANodo',[AgController::class,'agregarDatoANodo'])->name('agregarDatoANodo');
 Route::get('/getCargosFunciones/{nomCargoFuncionCodigo}',[AgController::class,'getCargosFunciones'])->name('getCargosFunciones');
 Route::get('/ActualizarNodoAgente/{idNodo}',[AgController::class,'ActualizarNodoAgente'])->name('ActualizarNodoAgente');

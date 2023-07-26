@@ -165,16 +165,21 @@
               <li class="nav-item">
                 <a href="{{route('nuevoAgente')}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Nuevo Agente</p>
+                  <p>Crear Agente Nuevo</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="{{route('verArbolServicio')}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>POF</p>
+                  <p>Conf. Agente</p>
                 </a>
               </li>
-              
+              <li class="nav-item">
+                <a href="{{route('verArbolServicio2')}}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Lista de Agentes</p>
+                </a>
+              </li>
             </ul>
           </li>
         @endif
@@ -195,7 +200,7 @@
               <li class="nav-item">
                 <a href="{{route('nuevoUsuario')}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Nuevo Usuario</p>
+                  <p>Crear Agente Nuevo</p>
                 </a>
               </li>
               <li class="nav-item">

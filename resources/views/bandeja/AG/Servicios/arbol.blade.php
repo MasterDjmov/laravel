@@ -1,7 +1,6 @@
 @extends('layout.app')
 
 @section('Titulo', 'Sage2.0 - Movimientos')
-
 @section('ContenidoPrincipal')
   
   <section id="container">
@@ -13,15 +12,10 @@
             <div class="card card-lightblue">
               <div class="card-header d-flex p-0">
                 <h3 class="card-title p-3">Panel de Control POF - CUE COMPLETO: {{session('CUEa')}}</h3>
-                <ul class="nav nav-tabs ml-auto p-2">
-                  <li class="ml-2"><a class="btn btn-outline-light active" href="#tab_1" data-toggle="tab">Agregar Agente</a></li>
-                  <li class="ml-2"><a class="btn btn-outline-light" href="#tab_2" data-toggle="tab">Ver Agentes</a></li>
-                  <li class="ml-2"><a class="btn btn-outline-light" href="#tab_3" data-toggle="tab">Extras</a></li> 
-                </ul>
               </div><!-- /.card-header -->
 
               <div class="card-body">
-                <div class="tab-content">
+                <div class="">
                   <div class="tab-pane active" id="tab_1">
                     <h3>Configurar Nuevo Agente / Docente:</h3>
                     <div class="container mt-3 d-block">
@@ -250,118 +244,7 @@
                     <!-- /.modal -->
                   </div>
                   <!-- /.tab-pane -->
-                  <div class="tab-pane" id="tab_2">
-                    {{-- Agente info Inicio--}}
-                    <h3>Organizacion: {{$nombreSubOrg}} - CUE: {{ $CueOrg }}</h3>
-                    
-                    <div class="row" id="contenidoNodos">
-                      @php
-                        if(session('infoNodos')){
-                          $infoNodos = session('infoNodos');
-                        }
-                      @endphp
-                    </div>
-                    <div class="card">
-                      <div class="card-header">
-                        <h3 class="card-title">Agentes</h3>
-                      </div>
-                      <!-- /.card-header -->
-                      <div class="card-body">
-                        <table id="example1" class="table table-bordered table-striped">
-                          <thead>
-                          <tr>
-                            <th>Agente</th>
-                            <th>Cargo</th>
-                            <th>Horas</th>
-                            <th>Esp.Cur</th>
-                            <th>S.R.</th>
-                            <th>F.Alta(Res)</th>
-                            <th>Sala/Div</th>
-                            <th>Opciones</th>
-                          </tr>
-                          </thead>
-                          <tbody>
-                          @foreach ($infoNodos as $key => $o)
-                          <tr>
-                            <td>
-                              @if ($o->Nombres != "")
-                                <label id="DescripcionNombreAgente" class="mb-0">({{$o->idNodo}})<b class="text-success">{{$o->Nombres}}</b></label>
-                              @else
-                                <label id="DescripcionNombreAgente" class="mb-0">({{$o->idNodo}})<b class="text-danger">VACANTE</b> </label>
-                              @endif
-                              <input type="hidden" name="idAgente" id="idAgente2" value="{{$o->idAgente}}">
-                            </td>
-                            <td>
-                              <p class=""><label for="cargo" id="DescripcionCargo">{{$o->nomCargo}} - ({{$o->nomCodigo}})</p>
-                              <input type="hidden" id="CargoSal2" name="CargoSal" value="{{$o->idCargo}}">
-                            </td>
-                            <td>
-                              <p class="mb-0"><label for="CantidadHoras" id="CantidadHoras">{{$o->CantidadHoras}}</label></p>
-                            </td>
-                            <td>
-                              <p class="mb-0"><label for="DescripcionEspCur" id="DescripcionEspCur">{{$o->nomAsignatura}}</label>
-                              <input type="hidden" id="idEspCur2" name="idEspCur" value="{{$o->idAsignatura}}">
-                            </td>
-                            <td  class="bg-{{$o->nomSitRev}}" title="Detalle: {{$o->Observaciones}}">
-                              <p class="mb-0">
-                                @foreach ($SituacionDeRevista as $sr)
-                                  @if ($sr->idSituacionRevista == $o->idSituacionRevista)
-                                    <label for="SituacionDeRevista" id="SituacionDeRevista">{{$sr->Descripcion}}</label>
-                                  @endif
-                                @endforeach
-                              </p>
-                            </td>
-                            <td>
-                              <p class="mb-0"><label for="Fa" id="Fa">{{ \Carbon\Carbon::parse($o->FechaDeAlta)->format('d-m-Y')}}</label></p>
-                            </td>
-                            <td>
-                              <p class="mb-0"> 
-                                @foreach($Divisiones as $key => $d)
-                                  @if ($d->idDivision == $o->idDivision)
-                                    <label for="idDivision" id="idDivision">{{$d->Descripcion}}<br>T: {{$d->DescripcionTurno}}</label>
-                                  @endif 
-                                @endforeach
-                              </p>
-                            </td>
-                            <td>
-                              {{-- <a type="button" href="#" class="btn mx-1" data-toggle="tooltip" data-placement="top" title="Licencia">
-                                <span class="material-symbols-outlined pt-1">medical_services</span>
-                              </a> --}}
-                              <a  href="{{route('ActualizarNodoAgente',$o->idNodo)}}" class="btn mx-1 "  data-placement="top" title="Actualizar Docente"  >
-                                <span class="material-symbols-outlined pt-1" >edit_square</span>
-                              </a>
 
-                              <!--boton PRUEBA modal historial plaza-->
-                                {{-- @if ($o->PosicionSiguiente != "")
-                                  <button type="button" data-toggle="modal" data-target="#modal-{{$o->PosicionSiguiente}}" class="btn mx-1 " >
-                                    <span class="material-symbols-outlined pt-1" >history</span>
-                                  </button>
-                                @else
-                                                  
-                                @endif --}}
-
-                                {{-- @if ($o->PosicionSiguiente == "")
-                                  <a href="{{route('agregaNodo',$o->idNodo)}}" class="btn mx-1 Vincular">
-                                    <span class="material-symbols-outlined pt-1" data-toggle="tooltip" data-placement="top" title="Vincular">compare_arrows</span>
-                                  </a>
-                                @endif --}}                    
-                            </td>
-                          </tr>
-                          @endforeach
-                          </tbody>
-                          
-                        </table>
-                      </div>
-                      <!-- /.card-body -->
-                    </div>
-                  </div>
-                  {{-- Agente info Fin --}}
-                  
-                  <!-- /.tab-pane -->
-                  <div class="tab-pane" id="tab_3">
-                    opcion3
-                  </div>
-                  <!-- /.tab-pane -->
                 </div>
                 <!-- /.tab-content -->
               </div><!-- /.card-body -->
@@ -473,4 +356,164 @@
 </script>
 @endsection
 
+<?php
+  function recursiva($nodo) {
+    //variables a usar
+    $Agente="";
+    $idAgente="";
+    $SitRev="";
+    $CargoSalarial="";
+    $nomSitRev="";
+    $Nombres="";
+    $nomCargo="";
+    $nomCodigo="";
+    $idCargo="";
+    $Descripcion="";
+    $DescripcionTurno="";
+    $Asignatura="";
+    $idAsignatura="";
+
+    $recNodo=DB::table('tb_nodos')
+      ->where('tb_nodos.idNodo',$nodo)
+      ->select('tb_nodos.*')
+      ->get();
+
+    if($recNodo[0]->Agente==null){
+      $idAgente="";
+      $Nombres="VACANTE";
+    }else{
+     $iAgente = DB::table('tb_agentes')
+      ->where('tb_agentes.idAgente',$recNodo[0]->Agente)
+      ->select('*')
+      ->get();
+      $idAgente=$iAgente[0]->idAgente;
+      $Nombres=$iAgente[0]->Nombres;
+    }
+
+    //busco los datos
+    if($recNodo[0]->SitRev==null){
+      $nomSitRev="SR";
+    }else{
+      $SituacionRevista = DB::table('tb_situacionrevista')
+        ->where('tb_situacionrevista.idSituacionRevista',$recNodo[0]->SitRev)
+        ->select(
+          'tb_situacionrevista.idSituacionRevista',
+          'tb_situacionrevista.Descripcion as nomSitRev',
+                )
+        ->get();
+        $nomSitRev=$SituacionRevista[0]->nomSitRev;
+    }
+     
+    if($recNodo[0]->CargoSalarial==null){
+      $nomCargo="Cargo";
+      $nomCodigo="Cod";
+      $idCargo="";
+    }else{
+      $iCargo = DB::table('tb_cargossalariales')
+            ->where('tb_cargossalariales.idCargo',$recNodo[0]->CargoSalarial)
+            ->select(
+                  'tb_cargossalariales.idCargo',
+                  'tb_cargossalariales.Cargo as nomCargo',
+                  'tb_cargossalariales.Codigo as nomCodigo'
+                  )
+            ->get();
+      $nomCargo=$iCargo[0]->nomCargo;
+      $nomCodigo=$iCargo[0]->nomCodigo;
+      $idCargo=$iCargo[0]->idCargo;
+    }
+
+    if($recNodo[0]->Division==null){
+      $Descripcion="";
+      $DescripcionTurno="";
+    }else{
+      $iDivTur = DB::table('tb_divisiones')
+            ->where('tb_divisiones.idDivision',$recNodo[0]->Division)
+            ->join('tb_turnos', 'tb_turnos.idTurno', 'tb_divisiones.Turno')
+            ->select(
+                  'tb_divisiones.Descripcion as Descripcion',
+                  'tb_turnos.Descripcion as DescripcionTurno'
+                  )
+            ->get();
+      $Descripcion=$iDivTur[0]->Descripcion;
+      $DescripcionTurno=$iDivTur[0]->DescripcionTurno;
+      
+    }   
+
+    if($recNodo[0]->Asignatura==null){
+      $Asignatura="";
+      $idAsignatura="";
+    }else{
+      $iAsignatura = DB::table('tb_asignaturas')
+            ->where('tb_asignaturas.idAsignatura',$recNodo[0]->Asignatura)
+            ->select(
+                  'tb_asignaturas.Descripcion as Descripcion',
+                  'tb_asignaturas.idAsignatura',
+                  )
+            ->get();
+      $Asignatura=$iAsignatura[0]->Descripcion; 
+      $idAsignatura=$iAsignatura[0]->idAsignatura;     
+    } 
+    // dd($SituacionRevista[0]->nomSitRev); 
+?>
+    <!--primera Card-->
+    <div class="ml-1">
+      <div class="card shadow-lg bg-{{$nomSitRev}}">
+        <div class="card-title mt-4 d-flex justify-content-center">
+          {{-- $o->Nombres sale de agente--}}
+          @if (1)
+            <h5 id="DescripcionNombreAgente" class="mb-0">({{$recNodo[0]->idNodo}}) {{$Nombres}} </h5>
+          @else
+            <h5 id="DescripcionNombreAgente" class="mb-0">({{$recNodo[0]->idNodo}}) <b>VACANTE</b> </h5>
+          @endif
+                                            
+          <input type="hidden" name="idAgente" id="idAgente2" value="{{$idAgente}}">
+        </div>
+        <div class="card-body">
+          <p class="mb-0">Cargo: <label for="cargo" id="DescripcionCargo">{{$nomCargo}} - ({{$nomCodigo}})</label>
+            <input type="hidden" id="CargoSal2" name="CargoSal" value="{{$idCargo}}">
+          </p>
+          <p class="mb-0">E.C: <label for="DescripcionEspCur" id="DescripcionEspCur">{{$Asignatura}}</label>
+            <input type="hidden" id="idEspCur2" name="idEspCur" value="{{$idAsignatura}}">
+          </p>
+          <p class="mb-0">S.R:<b>{{$nomSitRev}}</b> (<b>{{$Descripcion}} - {{$DescripcionTurno}} </b>)</p>
+          
+          <p class="mb-0">
+            Cant. Horas: <label for="CantidadHoras" id="CantidadHoras">{{$recNodo[0]->CantidadHoras}}</label> - 
+            F.Alta: <label for="Fa" id="Fa">{{ \Carbon\Carbon::parse($recNodo[0]->FechaDeAlta)->format('d-m-Y')}}</label>
+            </p>
+        </div>
+        <div class="card-footer">
+          {{-- <a type="button" href="#" class="btn mx-1" data-toggle="tooltip" data-placement="top" title="Licencia">
+            <span class="material-symbols-outlined pt-1">medical_services</span>
+            </a> --}}
+          <a  href="{{route('ActualizarNodoAgente',$recNodo[0]->idNodo)}}" class="btn mx-1 "  data-placement="top" title="Actualizar Docente"  >
+            <span class="material-symbols-outlined pt-1" >edit_square</span>
+          </a>
+          {{-- @if ($o->PosicionSiguiente == "")
+            <a href="{{route('agregaNodo',$o->idNodo)}}" class="btn mx-1 Vincular">
+              <span class="material-symbols-outlined pt-1" data-toggle="tooltip" data-placement="top" title="Vincular">compare_arrows</span>
+            </a>
+          @endif --}}
+        </div>
+      </div>
+    </div>
+  <!--Fin primera Card-->
+<?php
+        if ($recNodo[0]->PosicionSiguiente==null || $recNodo[0]->PosicionSiguiente=="") {
+            return 1;
+        } else {
+          //armo el proceso de flecha antes de irse a buscar otro nodo
+?>
+        <!--Flechita-->
+        <div class="d-flex align-self-center ml-2 mb-4">
+          <div class="align-items-center st0"></div>
+          <div class="align-items-center st2"></div>
+        </div>
+<?php
+    
+        
+          return recursiva($recNodo[0]->PosicionSiguiente);//envio el nodo a analizar
+        }
+    }
+?>
 
