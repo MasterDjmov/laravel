@@ -264,10 +264,10 @@
       <div class="card shadow-lg bg-{{$nomSitRev}}">
         <div class="card-title mt-4 d-flex justify-content-center">
           {{-- $o->Nombres sale de agente--}}
-          @if (1)
+          @if ($recNodo[0]->Agente != null)
             <h5 id="DescripcionNombreAgente" class="mb-0">({{$recNodo[0]->idNodo}}) {{$Nombres}} </h5>
           @else
-            <h5 id="DescripcionNombreAgente" class="mb-0">({{$recNodo[0]->idNodo}}) <b>VACANTE</b> </h5>
+            <h5 id="DescripcionNombreAgente" class="mb-0">({{$recNodo[0]->idNodo}}) <b class="text-danger">VACANTE</b> </h5>
           @endif
                                             
           <input type="hidden" name="idAgente" id="idAgente2" value="{{$idAgente}}">

@@ -2,13 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AgenteModel;
 use App\Models\AsignaturaModel;
 use App\Models\EspacioCurricularModel;
 use App\Models\HorariosModel;
 use App\Models\Nodo;
+use App\Models\NovedadesModel;
 use Illuminate\Http\Request;
 use App\Models\OrganizacionesModel;
 use App\Models\PlazasModel;
+use DateTime;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class AgController extends Controller
@@ -469,12 +473,30 @@ class AgController extends Controller
         $nodo->FechaDeAlta = $request->FechaAltaN;
         $nodo->SitRev = $request->SituacionDeRevista;
         $nodo->Asignatura = $idAsig;
+        $nodo->Activo = 1;  //es nuevo y esta activo
         $nodo->Usuario = session('idUsuario');
         $nodo->CUE = session('CUEa');
         $nodo->save();
         
+        /*
+        //cargo la novedad de ingreso nuevo
+        $novedad = new NovedadesModel();
+        $novedad->Agente = $nodo->Agente;
+        $novedad->CUE = session('CUEa');
+        $novedad->CargoSalarial = $request->CargoSal;
+        $novedad->Caracter = $request->SituacionDeRevista;
+        $novedad->Division = $request->idDivision;
+        $novedad->FechaDesde = Carbon::parse(Carbon::now())->format('Y-m-d');
+        $novedad->TotalDias = 1;
+        $novedad->Mes = date('m');
+        $novedad->Anio = date('Y');
+        $novedad->Motivo = 1;   //en este caso es vacante
+        $novedad->Observaciones = "Agregar Observaciones";
+        $novedad->Estado = 1;   //activo tiene novedad sin fecha hasta
+        $novedad->save();
+        */
         return redirect()->back()->with('ConfirmarNuevoAgente','OK');
-        
+      
     }
 
     public function getBuscarAgente($DNI){
@@ -633,14 +655,48 @@ class AgController extends Controller
         return redirect()->back()->with('ConfirmarNuevoNodo','OK');
     }
 
-    public function agregaLic($idNodo){
+    public function agregaLic(Request $request){
         //aqui voy a verificar si es titular/interino u otra clase que requiera nodo anterior
         //por ahora no verificar a volante, tenerlo en cuenta luego
         //obtengo el agente actual(nodo actual)
-        $nodoActual = Nodo::where('idNodo', $idNodo)->first();
+        $nodoActual = Nodo::where('idNodo', $request->idNodo)->first();
+       
         /*
+        //agrego la novedad antes que cambie su situacion
+        //cargo la novedad de licencia izquierda o derecha
+        $novedad = new NovedadesModel();
+        $novedad->Agente = $nodoActual->Agente;
+        $novedad->CUE = session('CUEa');
+        $novedad->CargoSalarial = $nodoActual->CargoSalarial;
+        $novedad->Caracter = $nodoActual->SitRev;
+        $novedad->Division = $nodoActual->Division;
+        $novedad->FechaDesde = Carbon::parse(Carbon::now())->format('Y-m-d');
+        $novedad->FechaHasta = $request->FechaHasta;
+        //calculo fecha desde-hasta
+        // Fecha inicial y final en formato YYYY-MM-DD
+        $fechaInicial = '2023-07-15';
+        $fechaFinal = '2023-08-02';
+
+        // Crear objetos DateTime
+        $fechaInicialObj = new DateTime($novedad->FechaDesde);
+        $fechaFinalObj = new DateTime($request->FechaHasta);
+
+        // Calcular la diferencia entre las dos fechas
+        $intervalo = $fechaInicialObj->diff($fechaFinalObj);
+
+        // Obtener la cantidad de días
+        $cantidadDias = $intervalo->days;
         
-        
+        $novedad->TotalDias = $cantidadDias;
+        $novedad->Mes = date('m');
+        $novedad->Anio = date('Y');
+        $novedad->Motivo = $request->TipoLicencia;   //en este caso 4 articulo de licencia, luego se puede editar
+        $novedad->Observaciones = $request->Observaciones;
+        $novedad->Estado = 1;   //activo tiene novedad sin fecha hasta
+        $novedad->save();
+       */
+
+        /*
         if($nodo->SitRev == 1 || $nodo->sitRev == 2){
             //aqui crea atras
             $Nuevo = new Nodo;
@@ -673,17 +729,18 @@ class AgController extends Controller
         if($nodoActual->PosicionAnterior==null || $nodoActual->PosicionAnterior==""){
             $Nuevo = new Nodo;
             $Nuevo->Agente = null;
-            $Nuevo->EspacioCurricular = null;
+            $Nuevo->EspacioCurricular = $nodoActual->EspacioCurricular;
             $Nuevo->CargoSalarial = null;
-            $Nuevo->CantidadHoras = null;
-            $Nuevo->FechaDeAlta = null;
-            $Nuevo->Division = null;
+            $Nuevo->CantidadHoras = $nodoActual->CantidadHoras;
+            $Nuevo->FechaDeAlta = null; //cuando se cargue el agente nuevo
+            $Nuevo->Division = $nodoActual->Division;
             $Nuevo->SitRev = null;
-            $Nuevo->Asignatura = null;
+            $Nuevo->Asignatura = $nodoActual->Asignatura;
             $Nuevo->Usuario = session('idUsuario');
             $Nuevo->CUE = session('CUEa');
             $Nuevo->PosicionAnterior = null;
             $Nuevo->PosicionSiguiente = $nodoActual->idNodo;
+            $Nuevo->Activo = 0; //vacio vacante
             $Nuevo->save();
 
             $nodoActual->PosicionAnterior=$Nuevo->idNodo;
@@ -695,17 +752,18 @@ class AgController extends Controller
             //nuevo nodo intermedio
             $Nuevo = new Nodo;
             $Nuevo->Agente = null;
-            $Nuevo->EspacioCurricular = null;
+            $Nuevo->EspacioCurricular = $nodoActual->EspacioCurricular;
             $Nuevo->CargoSalarial = null;
-            $Nuevo->CantidadHoras = null;
-            $Nuevo->FechaDeAlta = null;
-            $Nuevo->Division = null;
+            $Nuevo->CantidadHoras = $nodoActual->CantidadHoras;
+            $Nuevo->FechaDeAlta = null; //cuando se agregue el nuevo agente
+            $Nuevo->Division = $nodoActual->Division;
             $Nuevo->SitRev = null;
-            $Nuevo->Asignatura = null;
+            $Nuevo->Asignatura = $nodoActual->Asignatura;
             $Nuevo->Usuario = session('idUsuario');
             $Nuevo->CUE = session('CUEa');
             $Nuevo->PosicionAnterior = $nodoAnterior->idNodo;
             $Nuevo->PosicionSiguiente = $nodoActual->idNodo;
+            $Nuevo->Activo = 0; //vacio vacante
             $Nuevo->save();
 
             //modifico anterior y actual apuntando a nuevo nodo
@@ -823,7 +881,7 @@ class AgController extends Controller
 
         //traemos otros array
         $SituacionRevista = DB::table('tb_situacionrevista')->get();
-        
+        $TipoMotivo = DB::table('tb_motivos')->get();
         
         $Divisiones = DB::table('tb_divisiones')
                 ->where('tb_divisiones.idSubOrg',session('idSubOrganizacion'))
@@ -866,7 +924,8 @@ class AgController extends Controller
                     'DiasSemana'=>$DiasSemana,
                     'Nodo'=>$idNodo,
                     'mensajeNAV'=>'Panel de Configuración de Agente',
-                    'idBack'=>$infoNodos[0]->PosicionAnterior
+                    'idBack'=>$infoNodos[0]->PosicionAnterior,
+                    'TipoMotivos'=>$TipoMotivo
                 );
        
         return view('bandeja.AG.Servicios.actualizar_nodo',$datos);       
@@ -995,10 +1054,28 @@ class AgController extends Controller
         $nodo->FechaDeAlta = $request->FA;              //listo
         $nodo->SitRev = $request->SitRev;               //listo
         $nodo->Asignatura = $idAsig;
+        $nodo->Activo = 1;  //ingreso un agente
         $nodo->Observaciones = $request->Observaciones; //listo 18 de abril
         $nodo->Usuario = session('idUsuario');
         $nodo->save();
         
+        /*
+         //cargo la novedad de ingreso nuevo suplente
+         $novedad = new NovedadesModel();
+         $novedad->Agente = $nodo->Agente;
+         $novedad->CUE = session('CUEa');
+         $novedad->CargoSalarial = $nodo->CargoSalarial;
+         $novedad->Caracter = $nodo->SitRev;
+         $novedad->Division = $nodo->Division;
+         $novedad->FechaDesde = Carbon::parse(Carbon::now())->format('Y-m-d');
+         $novedad->TotalDias = 1;
+         $novedad->Mes = date('m');
+         $novedad->Anio = date('Y');
+         $novedad->Motivo = 2;   //en este caso es suplente
+         $novedad->Observaciones = "Cubre vacante";
+         $novedad->Estado = 1;   //activo tiene novedad sin fecha hasta
+         $novedad->save();
+         */
         return redirect()->back()->with('ConfirmarActualizarAgente','OK');
     }
 
@@ -1007,6 +1084,7 @@ class AgController extends Controller
         //dd($idNodo);
         $nodo =  Nodo::where('idNodo', $idNodo)->first();;
         $nodo->Agente = null;
+        $nodo->Activo = 0;  //quito un agente
         $nodo->Usuario = session('idUsuario');
         $nodo->save();
         
@@ -1138,23 +1216,66 @@ class AgController extends Controller
             $nodoSiguiente->save();
 
             //2- actualizar la posicion de A--> C
-            $nodoAnterior->PosicionSiguiente = $nodoSiguiente->idNodo;
+            $nodoAnterior->PosicionSiguiente = $nodoSiguiente->idNodo;  
         }
+        if($nodoAnterior->Activo == 1){
+          
+            //obtengo su nodo anterior y lo actualizo a null
+            //traigo info del agente que sera reemplazado
+            $AgenteQueRetorna = AgenteModel::where('idAgente', $nodoAnterior->Agente)->first();
+            
+            /*
+            //agrego la novedad antes que cambie su situacion de la persona que cubre
+            $novedad = NovedadesModel::where('Agente', $nodoAnterior->Agente)
+            ->where('tb_novedades.CUE',session('CUEa'))
+            ->first();
+            $novedad->Agente = $nodoAnterior->Agente;
+            $novedad->CUE = session('CUEa');
+            $novedad->CargoSalarial = $nodoAnterior->CargoSalarial;
+            $novedad->Caracter = $nodoAnterior->SitRev;
+            $novedad->Division = $nodoAnterior->Division;
+            //$novedad->FechaDesde = Carbon::parse(Carbon::now())->format('Y-m-d');
+            $novedad->FechaHasta = Carbon::parse(Carbon::now())->format('Y-m-d');
+            //calculo fecha desde-hasta
+            // Fecha inicial y final en formato YYYY-MM-DD
+            $fechaInicial = '2023-07-15';
+            $fechaFinal = '2023-08-02';
+
+            // Crear objetos DateTime
+            $fechaInicialObj = new DateTime($novedad->FechaDesde);
+            $fechaFinalObj = new DateTime($novedad->FechaHasta);
+            // Calcular la diferencia entre las dos fechas
+            $intervalo = $fechaInicialObj->diff($fechaFinalObj);
+            // Obtener la cantidad de días
+            $cantidadDias = $intervalo->days;
+            
+            $novedad->TotalDias = $cantidadDias;
+            $novedad->Mes = date('m');
+            $novedad->Anio = date('Y');
+            $novedad->Motivo = 11;
+            //$novedad->Motivo = $request->TipoLicencia;   //a evaluar
+            $novedad->Observaciones = "Baja por Retorno del Agente al Servicio - DNI del Agente que retorno: ".$AgenteQueRetorna->Documento." /Nombre: ".$AgenteQueRetorna->Nombres;
+            $novedad->Estado = 1;   //activo tiene novedad sin fecha hasta
+            $novedad->save();
+            */
+            
+        }
+            //solo con ativo cero entra
+            //3- actualizar el agente de B--> A
+            $nodoAnterior->Agente = $nodoActual->Agente;
+            $nodoAnterior->FechaDeAlta = $nodoActual->FechaDeAlta;
+            $nodoAnterior->EspacioCurricular = $nodoActual->EspacioCurricular;
+            $nodoAnterior->SitRev = $nodoActual->SitRev;
+            $nodoAnterior->CantidadHoras = $nodoActual->CantidadHoras;
+            $nodoAnterior->CargoSalarial = $nodoActual->CargoSalarial;
+            $nodoAnterior->Observaciones = $nodoActual->Observaciones;
+            $nodoAnterior->FechaDeAlta = $nodoActual->FechaDeAlta;
+            $nodoAnterior->Activo = $nodoActual->Activo;
+            $nodoAnterior->Usuario = session('idUsuario');
+            $nodoAnterior->save();
+            
         
-        //obtengo su nodo anterior y lo actualizo a null
-        //aqui luego hay que informar la salida de la persona que cubre
         
-        
-        
-        //3- actualizar el agente de B--> A
-        $nodoAnterior->Agente = $nodoActual->Agente;
-        $nodoAnterior->FechaDeAlta = $nodoActual->FechaDeAlta;
-        $nodoAnterior->EspacioCurricular = $nodoActual->EspacioCurricular;
-        $nodoAnterior->SitRev = $nodoActual->SitRev;
-        $nodoAnterior->CargoSalarial = $nodoActual->CargoSalarial;
-        $nodoAnterior->Observaciones = $nodoActual->Observaciones;
-        $nodoAnterior->Usuario = session('idUsuario');
-        $nodoAnterior->save();
         //4- eliminar nodo B con sus datos(todos + lic + horario)
         //ahora puedo borrarlo
         DB::table('tb_nodos')
@@ -1203,5 +1324,240 @@ class AgController extends Controller
         session(['infoNodos'=>$infoNodos]);
     }
 
+    public function ver_novedades_altas(){
+             //obtengo el usuario que es la escuela a trabajar
+             $idReparticion = session('idReparticion');
+             //consulto a reparticiones
+             $reparticion = DB::table('tb_reparticiones')
+             ->where('tb_reparticiones.idReparticion',$idReparticion)
+             ->get();
+             //dd($reparticion[0]->Organizacion);
+     
+             //traigo el edificio de una suborg
+             $SubOrg = DB::table('tb_suborganizaciones')
+             ->where('tb_suborganizaciones.idSubOrganizacion',$reparticion[0]->subOrganizacion)
+             ->get();
+     
+             
+             
+             $TiposDeEspacioCurricular = DB::table('tb_tiposespacioscurriculares')->get();
+             $Cursos = DB::table('tb_cursos')->get();
+             $Division = DB::table('tb_division')->get();
+             $Cursos = DB::table('tb_cursos')->get();
+             $TiposHora = DB::table('tb_tiposhora')->get();
+             $RegimenDictado = DB::table('tb_pof_regimendictado')->get();
+             $Divisiones = DB::table('tb_divisiones')
+             ->where('tb_divisiones.idSubOrg',session('idSubOrganizacion'))
+             ->join('tb_cursos','tb_cursos.idCurso', '=', 'tb_divisiones.Curso')
+             //->join('tb_division','tb_division.idDivisionU', '=', 'tb_divisiones.Division')
+             //->join('tb_turnos', 'tb_turnos.idTurno', '=', 'tb_divisiones.Turno')
+             ->select(
+                 //'tb_divisiones.idDivision',
+                 'tb_divisiones.Curso',
+                 //'tb_cursos.*',
+                 //'tb_division.*',
+                 //'tb_turnos.Descripcion as DescripcionTurno',
+                // 'tb_turnos.idTurno',
+             )
+             //->orderBy('tb_cursos.DescripcionCurso','ASC')
+             ->groupBy('tb_divisiones.Curso')
+             ->get();
+
+             $Novedades = DB::table('tb_novedades')
+             ->where('tb_novedades.CUE',session('CUEa'))    //lo busco por su anexo
+             //->whereIn('tb_novedades.Motivo',[1, 3])    //lo busco por su anexo
+             ->where(function ($query) {
+                $query->where('tb_novedades.Motivo', 1)
+                      ->orWhere('tb_novedades.Motivo', 2)
+                      ->orWhere('tb_novedades.Motivo', 3);
+            })
+             ->join('tb_agentes','tb_agentes.idAgente', 'tb_novedades.Agente')
+             ->join('tb_cargossalariales','tb_cargossalariales.idCargo', 'tb_novedades.CargoSalarial')
+             ->join('tb_situacionrevista','tb_situacionrevista.idSituacionRevista', 'tb_novedades.Caracter')
+             ->join('tb_divisiones','tb_divisiones.idDivision', 'tb_novedades.Division')
+             ->join('tb_turnos', 'tb_turnos.idTurno', 'tb_divisiones.Turno')
+             ->join('tb_motivos', 'tb_motivos.idMotivo', 'tb_novedades.Motivo')
+             ->select(
+                'tb_novedades.*',
+                'tb_novedades.Observaciones as nomObservaciones',
+                'tb_agentes.*',
+                'tb_cargossalariales.*',
+                'tb_motivos.*',
+                'tb_situacionrevista.Descripcion as SitRev',
+                'tb_divisiones.Descripcion as nomDivision',
+                'tb_turnos.Descripcion as DescripcionTurno',
+             )
+             ->get();
+
+             $datos=array(
+                 'mensajeError'=>"",
+                 'Novedades'=>$Novedades,
+                 'FechaActual'=>$FechaAlta = Carbon::parse(Carbon::now())->format('Y-m-d'),
+                 'mensajeNAV'=>'Panel de Novedades - Altas'
+     
+     
+             );
+        return view('bandeja.AG.Servicios.novedades_altas',$datos);
+    }
+
+    public function ver_novedades_bajas(){
+        //obtengo el usuario que es la escuela a trabajar
+        $idReparticion = session('idReparticion');
+        //consulto a reparticiones
+        $reparticion = DB::table('tb_reparticiones')
+        ->where('tb_reparticiones.idReparticion',$idReparticion)
+        ->get();
+        //dd($reparticion[0]->Organizacion);
+
+        //traigo el edificio de una suborg
+        $SubOrg = DB::table('tb_suborganizaciones')
+        ->where('tb_suborganizaciones.idSubOrganizacion',$reparticion[0]->subOrganizacion)
+        ->get();
+
+        
+        
+        $TiposDeEspacioCurricular = DB::table('tb_tiposespacioscurriculares')->get();
+        $Cursos = DB::table('tb_cursos')->get();
+        $Division = DB::table('tb_division')->get();
+        $Cursos = DB::table('tb_cursos')->get();
+        $TiposHora = DB::table('tb_tiposhora')->get();
+        $RegimenDictado = DB::table('tb_pof_regimendictado')->get();
+        $Divisiones = DB::table('tb_divisiones')
+        ->where('tb_divisiones.idSubOrg',session('idSubOrganizacion'))
+        ->join('tb_cursos','tb_cursos.idCurso', '=', 'tb_divisiones.Curso')
+        //->join('tb_division','tb_division.idDivisionU', '=', 'tb_divisiones.Division')
+        //->join('tb_turnos', 'tb_turnos.idTurno', '=', 'tb_divisiones.Turno')
+        ->select(
+            //'tb_divisiones.idDivision',
+            'tb_divisiones.Curso',
+            //'tb_cursos.*',
+            //'tb_division.*',
+            //'tb_turnos.Descripcion as DescripcionTurno',
+           // 'tb_turnos.idTurno',
+        )
+        //->orderBy('tb_cursos.DescripcionCurso','ASC')
+        ->groupBy('tb_divisiones.Curso')
+        ->get();
+
+        $Novedades = DB::table('tb_novedades')
+        ->where('tb_novedades.CUE',session('CUEa'))    //lo busco por su anexo
+        //->whereIn('tb_novedades.Motivo',[1, 3])    //lo busco por su anexo
+        ->where('tb_novedades.Motivo', 11)
+        ->join('tb_agentes','tb_agentes.idAgente', 'tb_novedades.Agente')
+        ->join('tb_cargossalariales','tb_cargossalariales.idCargo', 'tb_novedades.CargoSalarial')
+        ->join('tb_situacionrevista','tb_situacionrevista.idSituacionRevista', 'tb_novedades.Caracter')
+        ->join('tb_divisiones','tb_divisiones.idDivision', 'tb_novedades.Division')
+        ->join('tb_turnos', 'tb_turnos.idTurno', 'tb_divisiones.Turno')
+        ->join('tb_motivos', 'tb_motivos.idMotivo', 'tb_novedades.Motivo')
+        ->select(
+           'tb_novedades.*',
+           'tb_novedades.Observaciones as nomObservaciones',
+           'tb_agentes.*',
+           'tb_cargossalariales.*',
+           'tb_motivos.*',
+           'tb_situacionrevista.Descripcion as SitRev',
+           'tb_divisiones.Descripcion as nomDivision',
+           'tb_turnos.Descripcion as DescripcionTurno',
+        )
+        ->get();
+
+        $datos=array(
+            'mensajeError'=>"",
+            'Novedades'=>$Novedades,
+            'FechaActual'=>$FechaAlta = Carbon::parse(Carbon::now())->format('Y-m-d'),
+            'mensajeNAV'=>'Panel de Novedades - Bajas'
+
+
+        );
+        return view('bandeja.AG.Servicios.novedades_bajas',$datos);
+    }
+    public function ver_novedades_licencias(){
+        //obtengo el usuario que es la escuela a trabajar
+        $idReparticion = session('idReparticion');
+        //consulto a reparticiones
+        $reparticion = DB::table('tb_reparticiones')
+        ->where('tb_reparticiones.idReparticion',$idReparticion)
+        ->get();
+        //dd($reparticion[0]->Organizacion);
+
+        //traigo el edificio de una suborg
+        $SubOrg = DB::table('tb_suborganizaciones')
+        ->where('tb_suborganizaciones.idSubOrganizacion',$reparticion[0]->subOrganizacion)
+        ->get();
+
+        
+        
+        $TiposDeEspacioCurricular = DB::table('tb_tiposespacioscurriculares')->get();
+        $Cursos = DB::table('tb_cursos')->get();
+        $Division = DB::table('tb_division')->get();
+        $Cursos = DB::table('tb_cursos')->get();
+        $TiposHora = DB::table('tb_tiposhora')->get();
+        $RegimenDictado = DB::table('tb_pof_regimendictado')->get();
+        $Divisiones = DB::table('tb_divisiones')
+        ->where('tb_divisiones.idSubOrg',session('idSubOrganizacion'))
+        ->join('tb_cursos','tb_cursos.idCurso', '=', 'tb_divisiones.Curso')
+        //->join('tb_division','tb_division.idDivisionU', '=', 'tb_divisiones.Division')
+        //->join('tb_turnos', 'tb_turnos.idTurno', '=', 'tb_divisiones.Turno')
+        ->select(
+            //'tb_divisiones.idDivision',
+            'tb_divisiones.Curso',
+            //'tb_cursos.*',
+            //'tb_division.*',
+            //'tb_turnos.Descripcion as DescripcionTurno',
+           // 'tb_turnos.idTurno',
+        )
+        //->orderBy('tb_cursos.DescripcionCurso','ASC')
+        ->groupBy('tb_divisiones.Curso')
+        ->get();
+
+        $Novedades = DB::table('tb_novedades')
+        ->where('tb_novedades.CUE',session('CUEa'))    //lo busco por su anexo
+        ->where('tb_novedades.Motivo',[4])    //lo busco por su anexo
+        ->join('tb_agentes','tb_agentes.idAgente', 'tb_novedades.Agente')
+        ->join('tb_cargossalariales','tb_cargossalariales.idCargo', 'tb_novedades.CargoSalarial')
+        ->join('tb_situacionrevista','tb_situacionrevista.idSituacionRevista', 'tb_novedades.Caracter')
+        ->join('tb_divisiones','tb_divisiones.idDivision', 'tb_novedades.Division')
+        ->join('tb_turnos', 'tb_turnos.idTurno', 'tb_divisiones.Turno')
+        ->join('tb_motivos', 'tb_motivos.idMotivo', 'tb_novedades.Motivo')
+        ->select(
+           'tb_novedades.*',
+           'tb_novedades.Observaciones as novObservaciones',
+           'tb_agentes.*',
+           'tb_cargossalariales.*',
+           'tb_motivos.*',
+           'tb_situacionrevista.Descripcion as SitRev',
+           'tb_divisiones.Descripcion as nomDivision',
+           'tb_turnos.Descripcion as DescripcionTurno',
+        )
+        ->get();
+
+        $datos=array(
+            'mensajeError'=>"",
+            'Novedades'=>$Novedades,
+            'FechaActual'=>$FechaAlta = Carbon::parse(Carbon::now())->format('Y-m-d'),
+            'mensajeNAV'=>'Panel de Novedades - Licencias'
+
+
+        );
+   return view('bandeja.AG.Servicios.novedades_licencias',$datos);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     //algo que poner
 }
+

@@ -32,15 +32,19 @@
                 <div class="card-body">
                     <p>Aqui ponemos alguna ayuda para los que editan la info</p>
                     
-                    <a href="{{route('agregaLic',$infoNodos[0]->idNodo)}}" class="btn btn-app bg-info Vincular">
-                      <i class="fas fa-stethoscope"></i> Crear Vacante x Licencia (izquierda)
-                    </a>
-                   
+                    {{-- <a href="{{route('agregaLic',$infoNodos[0]->idNodo)}}" class="btn btn-app bg-info Vincular">
+                      <i class="fas fa-stethoscope"></i> Crear Vacante x Licencia (izquierda) SIN MODAL
+                    </a> --}}
+                    
+                      <a href="#modalDatosExtras" class="btn btn-app bg-info"  data-toggle="modal" data-placement="top" title="Agregar Datos de Licencia"  data-target="#modalDatosExtras">
+                        <i class="fas fa-stethoscope"></i> Crear Vacante x Licencia (izquierda)
+                      </a>
+                    
 
                     @if ($infoNodos[0]->PosicionSiguiente == "")
                         <a href="{{route('agregaNodo',$infoNodos[0]->idNodo)}}" class="btn btn-app bg-info VincularDer">
                         <i class="fas fa-stethoscope"></i> Crear Vacante (derecha)
-                    </a>
+                      </a>
                     @endif
 
                     
@@ -530,7 +534,57 @@
         </div>
         <!-- /.modal-dialog -->
     </div>
-
+<!-- /.modal -->
+    <div class="modal fade" id="modalDatosExtras">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Panel de control - Licencia</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="card card-olive">
+              <div class="card-header">
+                <h3 class="card-title">Agregar datos de Licencia: </h3>
+              </div>
+                <!-- /.card-header -->
+                  <div class="card-body">
+                    <form method="POST" action="{{ route('agregaLic') }}" class="agregaLic" id="agregaLic">
+                      @csrf
+                      <input type="hidden" name="idNodo" value="{{$infoNodos[0]->idNodo}}">
+                      <div class="form-group">
+                        <label for="FechaHasta">Fecha Hasta</label>
+                        <input type="date" class="form-control" id="FechaHasta" name="FechaHasta" placeholder="Fecha Hasta">
+                      </div>
+                      <div class="form-group">
+                        <label for="TL">Tipo de Licencia</label>
+                        <select name="TipoLicencia" class="form-control">
+                          @foreach ($TipoMotivos as $tm)
+                            <option value='{{$tm->idMotivo}}'>{{$tm->Nombre_Motivo}}</option>
+                          @endforeach
+                        </select>
+                      </div>
+                      <div class="form-group">
+                        <label for="Observacion">Observación</label><br>
+                        <textarea class="form-control" name="Observaciones" rows="5" cols="100%"></textarea>
+                      </div>
+                      <button type="submit" name="btnCargarLic" class="btn btn-primary Vincular">Cargar Licencia</button>
+                    </form>
+                  </div>
+                <!-- /.card-body -->
+            </div>
+          </div>
+          <div class="modal-footer justify-content-end">
+            <button type="button" class="btn bg-olive"  data-dismiss="modal">Salir</button>
+          </div>
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
 
 @endsection
 
@@ -575,7 +629,7 @@
             </script>
         @endif
     <script>
-    $('.Vincular').click(function(e){
+    $('.agregaLic').submit(function(e){
        e.preventDefault(); 
         Swal.fire({
             title: 'Esta seguro de querer crear una vinculacion/licencia con otro agente?',
@@ -587,7 +641,8 @@
             confirmButtonText: 'Si, guardo el registro!'
           }).then((result) => {
             if (result.isConfirmed) {
-              window.location.href = $('.Vincular').attr('href');
+              //window.location.href = $('.Vincular').attr('href');
+              this.submit();
             }else{
                 return false;
             }
