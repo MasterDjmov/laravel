@@ -91,6 +91,40 @@ class AdminController extends Controller
 
     }
 
+    public function FormNuevoUsuario_CUE(Request $request){
+        //voy a omitir por ahora la comprobacion de agentes por DNI
+
+        
+        //dd($request);
+        /*
+        "_token" => "G5AVlsqRW6m7v9FRCDo5mrKgYy6o5Fef3Oh5XhPY"
+      "Nombre" => "Leo Loyola"              listo
+      "Activo" => "S"                       listo
+      "Usuario" => "Jardin Semillita"       listo
+      "Clave" => "semillita"                listo
+      "Correo" => "semillita@gmail.com"     listo
+      "CUE" => "4600233"
+        */
+       
+        $o = new UsuarioModel();
+          $o->Nombre = strtoupper($request->Nombre);
+          $o->Clave = $request->Clave;
+          $o->Usuario = $request->Usuario;
+          $o->Activo = $request->Activo;
+          $o->Email = $request->Correo;
+          $o->idReparticion = 1;
+          $o->Nivel = 119;
+          $o->Modo = 2;     //3 es menos que admin, 2 es para las escuelas  y 1 para admin
+          $o->Dependencia = 1;
+          $o->CUE = $request->CUE;
+        $o->save();
+
+        $CUE=$request->CUE;
+          //cargarInfoUsuario/4600233
+         return redirect("/cargarInfoUsuario/$CUE/")->with('ConfirmarNuevoUsuario','OK');
+         //LuiController::PlazaNueva($request->idSurOrg);
+
+    }
     public function usuariosLista(){
         //extras a enviar
         $Usuarios = DB::table('tb_usuarios')

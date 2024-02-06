@@ -30,7 +30,12 @@
                 
         </form>
       </div>
+      
     </div>
+    <br>
+      <div class="card text-center bg-op-1">
+        <p>Si no tiene asignado un Usuario, haga <a href="{{ route('pedirUsuario') }}">Click AQUI</a> para solicitarlo</p>
+      </div>
   </div>
 </body>
 @endsection

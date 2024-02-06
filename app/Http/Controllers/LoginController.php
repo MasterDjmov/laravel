@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\InstitucionModel;
 use App\Models\UsuarioModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -81,6 +82,53 @@ class LoginController extends Controller
             return view('login.index',$datos);
         }
         
+    }
+
+    public function pedirUsuario(){
+        $infoCue= InstitucionModel::where('CUE',99999999999)
+        ->get();
+        $datos=array(
+            'mensajeError'=>"",
+            'mensajeNAV'=>'Bandeja Principal',
+            'infoCue'=>$infoCue
+            );
+        return view('login.solicitarUsuario',$datos);
+    }
+    public function buscarCUE(Request $request){
+        if($request->cue==""){
+            $infoCue= InstitucionModel::where('CUE',9999999999)
+            ->get();
+            //dd($infoCue);
+            $datos=array(
+                'mensajeError'=>"Debe escribir una CUE validad",
+                'mensajeNAV'=>'Bandeja Principal',
+                'infoCue'=>$infoCue
+                );
+            return view('login.solicitarUsuario',$datos);
+        }else{
+            $infoCue= InstitucionModel::where('CUE',$request->cue)
+            ->get();
+            //dd($infoCue);
+            $datos=array(
+                'mensajeError'=>"",
+                'mensajeNAV'=>'Bandeja Principal',
+                'infoCue'=>$infoCue
+                );
+            return view('login.solicitarUsuario',$datos);
+        }
+        
+    }
+
+    public function cargarInfoUsuario($CUE){
+        $infoInstitucion = InstitucionModel::where('CUE',$CUE)
+            ->get();
+           //yodd($infoInstitucion);
+            $datos=array(
+                'mensajeError'=>"",
+                'mensajeNAV'=>'Bandeja Principal',
+                'infoInstitucion'=>$infoInstitucion
+                );
+            return view('login.cargaInfoPedido',$datos);
     }
     
 }

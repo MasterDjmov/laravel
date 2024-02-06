@@ -39,6 +39,11 @@ Route::fallback([Controller::class, 'show404']);
 Route::get('/correo',[PruebaController::class,'index'])->name('Correo');
 Route::post('/verDatos',[PruebaController::class,'verDatos'])->name('verDatos');
 
+//crear cuenta segun cue
+Route::get('/pedirUsuario',[LoginController::class,'pedirUsuario'])->name('pedirUsuario');
+Route::post('/buscarCUE',[LoginController::class,'buscarCUE'])->name('buscarCUE');
+Route::get('/cargarInfoUsuario/{CUE}',[LoginController::class,'cargarInfoUsuario'])->name('cargarInfoUsuario');
+
 
 Route::get('/',[LoginController::class,'index'])->name('Autenticar');
 Route::post('/login',[LoginController::class,'validar'])->name('login');
@@ -124,6 +129,8 @@ Route::get('/nuevoUsuario',[AdminController::class,'nuevoUsuario'])->name('nuevo
 Route::get('/editarUsuario/{idUsuario}',[AdminController::class,'editarUsuario'])->name('editarUsuario');
 
 Route::post('/FormNuevoUsuario',[AdminController::class,'FormNuevoUsuario'])->name('FormNuevoUsuario');
+Route::post('/FormNuevoUsuario_CUE',[AdminController::class,'FormNuevoUsuario_CUE'])->name('FormNuevoUsuario_CUE');
+
 Route::post('/FormActualizarUsuario',[AdminController::class,'FormActualizarUsuario'])->name('FormActualizarUsuario');
 
 Route::get('/usuariosLista',[AdminController::class,'usuariosLista'])->name('usuariosLista');
