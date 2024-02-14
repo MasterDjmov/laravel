@@ -39,25 +39,32 @@ class LoginController extends Controller
             if($cantidadEncontrados){   
                  //creo la session para que cargue el menu
                 session(['Usuario'=>$usuario[0]->Nombre]);
+                session(['NombreInstitucion'=>$usuario[0]->Usuario]);
                 session(['idUsuario'=>$usuario[0]->idUsuario]);
-                session(['idReparticion'=>$usuario[0]->idReparticion]); //unico por escuela o cueanexo
+                //session(['idReparticion'=>$usuario[0]->idReparticion]); //ya no lo uso, ahora el cue esta en la misma tabla usuario
                 session(['UsuarioEmail'=>$usuario[0]->email]);
+                session(['UsuarioCUE'=>$usuario[0]->CUE]);
                 session(['Modo'=>$usuario[0]->Modo]);
                 //obtengo el usuario que es la escuela a trabajar
-                $idReparticion = session('idReparticion');
+               // $idReparticion = session('idReparticion');
                 //consulto a reparticiones
-                $reparticion = DB::table('tb_reparticiones')
-                ->where('tb_reparticiones.idReparticion',$idReparticion)
-                ->get();
+                //$reparticion = DB::table('tb_reparticiones')
+                //->where('tb_reparticiones.idReparticion',$idReparticion)
+                //->get();
                 //dd($reparticion[0]->Organizacion);
                 
-                $subOrganizacion=DB::table('tb_suborganizaciones')
+                /*$subOrganizacion=DB::table('tb_suborganizaciones')
                 ->where('tb_suborganizaciones.idsuborganizacion',$reparticion[0]->subOrganizacion)
                 ->select('*')
                 ->get();
-                session(['CUE'=>$subOrganizacion[0]->CUE]);
-                session(['CUEa'=>$subOrganizacion[0]->cuecompleto]);
-                session(['idSubOrganizacion'=>$reparticion[0]->subOrganizacion]);     
+                */
+                $institucion=DB::table('tb_institucion')
+                ->where('tb_institucion.CUE',$usuario[0]->CUE)
+                ->get();
+
+                session(['CUE'=>$institucion[0]->CUE]);     //en esta version nueva usare el CUE, tengo que ver si usare el CUEa
+                session(['CUEa'=>$institucion[0]->CUECOMPLETO]);
+                session(['idInstitucion'=>$institucion[0]->idInstitucion]);     
                 session(['Validar' => 'ok']);
                 
                 $datos=array(

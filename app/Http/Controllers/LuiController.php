@@ -82,45 +82,50 @@ class LuiController extends Controller
 
     public function getOpcionesOrg(){
          //obtengo el usuario que es la escuela a trabajar
-         $idReparticion = session('idReparticion');
+        // $idReparticion = session('idReparticion');
          //consulto a reparticiones
-         $reparticion = DB::table('tb_reparticiones')
+         /*$reparticion = DB::table('tb_reparticiones')
          ->where('tb_reparticiones.idReparticion',$idReparticion)
-         ->get();
+         ->get();*/
          //dd($reparticion[0]->Organizacion);
  
          //traigo el edificio de una suborg
-         $SubOrg = DB::table('tb_suborganizaciones')
+         /*$SubOrg = DB::table('tb_suborganizaciones')
          ->where('tb_suborganizaciones.idSubOrganizacion',$reparticion[0]->subOrganizacion)
-         ->get();
+         ->get();*/
 
-         $FechaAlta = Carbon::parse($SubOrg[0]->FechaAlta)->format('Y-m-d');
+        //traigo info de la institucion completa
+        $institucion=DB::table('tb_institucion')
+        ->where('tb_institucion.CUE',session('CUE'))
+        ->get();
+
+         //$FechaAlta = Carbon::parse($SubOrg[0]->FechaAlta)->format('Y-m-d');
 
          //traigo el edificio de una suborg
-         $Edificio = DB::table('tb_edificios')
+         /*$Edificio = DB::table('tb_edificios')
          ->where('tb_edificios.idEdificio',$SubOrg[0]->Edificio)
-         ->get();
+         ->get();*/
  
          //al panel le pasamos todo lo necesario para las opciones
          $Niveles = DB::table('tb_nivelesensenanza')->get();
          $Turnos = DB::table('tb_turnos')->get();
-         $Zonas = DB::table('tb_zonas')->get();
+         $Zonas = DB::table('tb_zonas_liq')->get();
          $ZonasSupervision = DB::table('tb_zonasupervision')->get();
          $Niveles = DB::table('tb_nivelesensenanza')->get();
-         $Modalidades = DB::table('tb_modalidadesensenanza')->get();
+         //$Modalidades = DB::table('tb_modalidadesensenanza')->get();
          $Jornadas = DB::table('tb_jornadas')->get();
-         $Categorias = DB::table('tb_categoriasdesuborganizaciones')->get();
+         $Categorias = DB::table('tb_categorias')->get();
          $datos=array(
              'mensajeError'=>"",
              'Niveles'=>$Niveles,
              'Zonas'=>$Zonas,
              'ZonasSupervision'=>$ZonasSupervision,
-             'Edificio'=>$Edificio,
+             //'Edificio'=>$Edificio,
              'Turnos'=>$Turnos,
-             'SubOrganizacion'=>$SubOrg,
-             'Modalidades'=>$Modalidades,
+             'infoInstitucion'=>$institucion,
+             //'Modalidades'=>$Modalidades,
              'Jornadas'=>$Jornadas,
-             'FechaAlta'=>$FechaAlta,
+             //'FechaAlta'=>$FechaAlta,
              'Categorias'=>$Categorias,
              'mensajeNAV'=>'Panel de Administración / Configuración'
 

@@ -91,7 +91,8 @@
           <img src="{{ asset('dist/img/user2-160x160.jpg'); }}" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block">{{session('Usuario')}}</a>
+          <a href="#" class="d-block">{{session('Usuario')}}</a><br>
+          <a href="#" class="d-block">{{session('NombreInstitucion')}}</a>
         </div>
       </div>
 
@@ -119,12 +120,12 @@
               </p>
             </a>
             <ul class="nav nav-treeview">
-              <li class="nav-item">
+              {{-- <li class="nav-item">
                 <a href="{{route('verSubOrg')}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Instituci&oacuten</p>
                 </a>
-              </li>
+              </li> --}}
               <li class="nav-item">
                 <a href="{{route('getOpcionesOrg')}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>

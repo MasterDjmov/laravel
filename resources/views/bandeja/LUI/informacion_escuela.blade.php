@@ -31,50 +31,38 @@
                         <!-- /.card-header -->
                         <div class="card-body" style="display: none;">
                             <form method="POST" action="{{ route('formularioInstitucion') }}" class="formularioInstitucion">
-                            @csrf
+                                @csrf
                                 <div class="card-body">
                                     <div class="form-group">
                                         <label for="CUE">CUE BASE</label> 
                                             <span class="text-danger">
-                                                @if ($SubOrganizacion[0]->cue_confirmada == 1)
+                                                @if ($infoInstitucion[0]->cue_confirmada == 1)
                                                     (CUE Base confirmada, no se puede modificar)
                                                 @endif
                                             </span>
-                                        <input type="text" class="form-control" id="CUE" name="CUE" placeholder="Ingrese CUE Base" value="{{$SubOrganizacion[0]->CUE}}">
+                                        <input type="text" class="form-control" id="CUE" name="CUE" placeholder="Ingrese CUE Base" value="{{$infoInstitucion[0]->CUE}}">
                                     </div>
                                     <div class="form-group">
                                         <label for="CUEa">CUE Anexo</label>
                                         <span class="text-danger">
-                                                @if ($SubOrganizacion[0]->cue_confirmada == 1)
+                                                @if ($infoInstitucion[0]->cue_confirmada == 1)
                                                     (CUE Anexo confirmada, no se puede modificar)
                                                 @endif
                                             </span>
-                                        <input type="text" class="form-control" id="CUEa" name="CUEa" placeholder="Ingrese CUE con Anexo" value="{{$SubOrganizacion[0]->cuecompleto}}">
+                                        <input type="text" class="form-control" id="CUEa" name="CUEa" placeholder="Ingrese CUE con Anexo" value="{{$infoInstitucion[0]->CUECOMPLETO}}">
                                     </div>
                                     <div class="form-group">
                                         <label for="Descripcion">Nombre de la Institucion</label>
-                                        <input type="text" class="form-control" id="Descripcion" name="Descripcion" placeholder="Nombre de la Institucion" value="{{$SubOrganizacion[0]->Descripcion}}">
+                                        <input type="text" class="form-control" id="Descripcion" name="Descripcion" placeholder="Nombre de la Institucion" value="{{$infoInstitucion[0]->Nombre_Institucion}}">
                                     </div>
                                     <div class="form-group">
                                         <label for="Telefono">Telefono</label>
-                                        <input type="text" class="form-control" id="Telefono" name="Telefono" placeholder="Nombre Telefono" value="{{$SubOrganizacion[0]->Telefono}}">
+                                        <input type="text" class="form-control" id="Telefono" name="Telefono" placeholder="Nombre Telefono" value="{{$infoInstitucion[0]->Telefono}}">
                                     </div>
-                                    <div class="form-group">
-                                        <label for="EsPropia">Es Propia</label>
-                                        <select class="form-control" name="EsPropia" id="EsPropia">
-                                            @if ($SubOrganizacion[0]->EsPropia == "S")
-                                                <option value="S" selected="true">SI</option>
-                                                <option value="N">NO</option>
-                                            @else
-                                                <option value="S">SI</option>
-                                                <option value="N" selected="true">NO</option>
-                                            @endif
-                                        </select>
-                                    </div> 
                                     <div class="form-group">
                                         <label for="EsPrivada">Es Privada</label>
                                         <select class="form-control" name="EsPrivada" id="EsPrivada">
-                                            @if ($SubOrganizacion[0]->EsPrivada == "S")
+                                            @if ($infoInstitucion[0]->EsPrivada == "S")
                                                 <option value="S" selected="true">SI</option>
                                                 <option value="N">NO</option>
                                             @else
@@ -87,22 +75,22 @@
                                         <label for="Categoria">Categoria</label>
                                         <select class="form-control" name="Categoria" id="Categoria">
                                             @foreach($Categorias as $key => $o)
-                                                @if ($o->IdCategoria == $SubOrganizacion[0]->Categoria)
-                                                    <option value="{{$o->IdCategoria}}" selected="true">{{$o->Descripcion}}</option>
+                                                @if ($o->codigoCategoria == $infoInstitucion[0]->Categoria)
+                                                    <option value="{{$o->codigoCategoria}}" selected="true">{{$o->Descripcion}} / {{$o->codigoCategoria}}</option>
                                                 @else
-                                                    <option value="{{$o->IdCategoria}}">{{$o->Descripcion}}</option>
+                                                    <option value="{{$o->codigoCategoria}}">{{$o->Descripcion}} / {{$o->codigoCategoria}}</option>
                                                 @endif
                                             @endforeach
                                         </select>
                                     </div>
                                     <div class="form-group">
-                                        <label for="Modalidad">Modalidad</label>
+                                        <label for="Modalidad">Nivel / Modalidad</label>
                                         <select class="form-control" name="Modalidad" id="Modalidad">
-                                            @foreach($Modalidades as $key => $o)
-                                                @if ($o->idModalidad == $SubOrganizacion[0]->Modalidad)
-                                                    <option value="{{$o->idModalidad}}" selected="true">{{$o->Descripcion}}</option>
+                                            @foreach($Niveles as $key => $o)
+                                                @if ($o->NivelEnsenanza == $infoInstitucion[0]->Nivel)
+                                                    <option value="{{$o->NivelEnsenanza}}" selected="true">{{$o->NivelEnsenanza}}</option>
                                                 @else
-                                                    <option value="{{$o->idModalidad}}">{{$o->Descripcion}}</option>
+                                                    <option value="{{$o->NivelEnsenanza}}">{{$o->NivelEnsenanza}}</option>
                                                 @endif
                                             @endforeach
                                         </select>
@@ -111,10 +99,10 @@
                                         <label for="Jornada">Jornada</label>
                                         <select class="form-control" name="Jornada" id="Jornada">
                                             @foreach($Jornadas as $key => $o)
-                                                @if ($o->idJornada == $SubOrganizacion[0]->Jornada)
-                                                    <option value="{{$o->idJornada}}" selected="true">{{$o->Descripcion}}</option>
+                                                @if ($o->Descripcion == $infoInstitucion[0]->Jornada)
+                                                    <option value="{{$o->Descripcion}}" selected="true">{{$o->Descripcion}}</option>
                                                 @else
-                                                    <option value="{{$o->idJornada}}">{{$o->Descripcion}}</option>
+                                                    <option value="{{$o->Descripcion}}">{{$o->Descripcion}}</option>
                                                 @endif
                                             @endforeach
                                         </select>
@@ -124,24 +112,20 @@
                                         <input type="email" class="form-control" id="CorreoElectronico" name="CorreoElectronico" placeholder="Correo Electronico" value="{{session('UsuarioEmail')}}">
                                     </div>
                                     <div class="form-group">
-                                        <label for="Mnemo">Mnemo</label>
-                                        <input type="text" class="form-control" id="Mnemo" name="Mnemo" placeholder="Ingrese Mnemo" value="{{$SubOrganizacion[0]->Mnemo}}">
-                                    </div>
-                                    <div class="form-group">
                                         <label for="Observacion">Observación</label><br>
-                                        <textarea class="form-control" name="Observaciones" rows="5" cols="100%">{{$SubOrganizacion[0]->Observaciones}}</textarea>
+                                        <textarea class="form-control" name="Observaciones" rows="5" cols="100%">{{$infoInstitucion[0]->Observaciones}}</textarea>
                                     </div>
                                 </div>
                                 <!-- /.card-body -->      
+                                <div class="card-footer bg-transparent">
+                                    <button type="submit" class="btn btn-primary">Actualizar</button>
+                                </div>
+                            </form> 
                         </div>
-                        <div class="card-footer bg-transparent">
-                            <button type="submit" class="btn btn-primary">Actualizar</button>
-                        </div>
-                    </form> 
                     </div>
+                    <!-- /.fin m6-->
+                    
                 </div>
-                <!-- /.fin m6-->
-
                 <div class="col-md-6">
                     <form method="POST" action="{{ route('formularioTurnos') }}" class="formularioTurnos">
                     @csrf
@@ -164,15 +148,16 @@
                         @endphp
                         @foreach($Turnos as $key => $o)
                             @php
-                                $TurnosRelSubOrg= DB::table('tb_turnos_suborg')
+                            //traigo los turnos de la institucion activa
+                                $TurnosRelInst= DB::table('tb_turnos_inst')
                                         ->where([
-                                            ['idSubOrganizacion',session('idSubOrganizacion')],
+                                            ['idInstitucion',session('idInstitucion')],
                                             ['idTurno',$o->idTurno]
                                         ])
                                         ->get();
                                 $contador=1;
                             @endphp 
-                                @if (count($TurnosRelSubOrg)>0)
+                                @if (count($TurnosRelInst)>0)
                                     <div class="form-group">
                                         <div class="row">
                                             <div class="col-3">
@@ -225,7 +210,7 @@
                     
                     </form>
                 </div>
-                <!-- /.fin m6-->                
+                <!-- /.fin m6-->     
             </div> 
             <!-- /.fin row -->
             <!-- Inicio Selectores -->
@@ -251,28 +236,19 @@
                                 <div class="card-body">
                                     <div class="form-group">
                                         <label for="Domicilio">Domicilio</label>
-                                        <input type="text" class="form-control" id="Domicilio" name="Domicilio" placeholder="Domicilio" value="{{$Edificio[0]->Domicilio}}">
+                                        <input type="text" class="form-control" id="Domicilio" name="Domicilio" placeholder="Domicilio" value="{{$infoInstitucion[0]->Domicilio_Institucion}}">
                                     </div>
-                                    <div class="form-group">
-                                        <label for="Barrio">Barrio</label>
-                                        <input type="text" class="form-control" id="Barrio" name="Barrio" placeholder="Ingrese Barrio" value="{{$Edificio[0]->Barrio}}">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="Referencia">Calles de Referencia</label>
-                                        <input type="text" class="form-control" id="Referencia" name="Referencia" placeholder="Calles de Referencia" value="{{$Edificio[0]->CallesReferencia}}">
-                                    </div>
-                                    
                                     <div class="form-group">
                                         <label for="localidad">Localidad</label>
                                         <div class="form-inline">
                                             @php
                                             //consulta localizada
                                             $loc = DB::table('tb_localidades')
-                                            ->where('tb_localidades.idLocalidad',$Edificio[0]->Localidad)
+                                            ->where('tb_localidades.localidad',$infoInstitucion[0]->Localidad)
                                             ->get();
                                             if(count($loc)>0){
                                                 echo' 
-                                                <input type="text" class="form-control" id="DescripcionLocalidad" name="DescripcionLocalidad" value="'.$loc[0]->localidad.'" autocomplete="off">
+                                                <input type="text" class="form-control" id="DescripcionLocalidad" name="DescripcionLocalidad" value="'.$infoInstitucion[0]->Localidad.'" autocomplete="off">
                                                 <input type="text" class="form-control" id="idLocalidad" name="idLocalidad" value="'.$loc[0]->idLocalidad.'" hidden>
                                                 ';
                                             }else{
@@ -336,41 +312,26 @@
                                         <label for="turnos">Zona</label>
                                         <select class="form-control" name="Zona" id="Zona">
                                         @foreach($Zonas as $key => $o)
-                                            @if($o->idZona == $Edificio[0]->zona)
-                                                <option value="{{$o->idZona}}" selected="Selected">{{$o->zona}}</option>
+                                            @if($o->codigo_letra == $infoInstitucion[0]->Zona)
+                                                <option value="{{$o->codigo_letra}}" selected="Selected">{{$o->codigo_letra}}</option>
                                             @else
-                                                <option value="{{$o->idZona}}">{{$o->zona}}</option>
+                                                <option value="{{$o->codigo_letra}}">{{$o->codigo_letra}}</option>
                                             @endif
                                         @endforeach
                                         </select>
                                     </div>  
-                                    <div class="form-group">
-                                        <label for="turnos">Zona de Supervision</label>
-                                        <select class="form-control" name="ZonaSupervision" id="ZonaSupervision">
-                                        @foreach($ZonasSupervision as $key => $o)
-                                            @if($o->idZonaSupervision == $Edificio[0]->ZonaSupervision)
-                                                <option value="{{$o->idZonaSupervision}}" selected="Selected">{{$o->Descripcion}}</option>
-                                            @else
-                                                <option value="{{$o->idZonaSupervision}}">{{$o->Descripcion}}</option>
-                                            @endif
-                                        @endforeach
-                                        </select>
-                                    </div> 
                                     <hr>
                                     <div class="form-group">
                                         <label for="Latitud">Latitud</label>
-                                        <input type="text" class="form-control" id="Latitud" name="Latitud" placeholder="Ingrese Latitud" value="{{$Edificio[0]->Latitud}}">
+                                        <input type="text" class="form-control" id="Latitud" name="Latitud" placeholder="Ingrese Latitud" value="{{$infoInstitucion[0]->Latitud}}">
                                     </div>
                                     <div class="form-group">
                                         <label for="Longitud">Longitud</label>
-                                        <input type="text" class="form-control" id="Longitud" name="Longitud" placeholder="Ingrese Longitud" value="{{$Edificio[0]->Longitud}}">
+                                        <input type="text" class="form-control" id="Longitud" name="Longitud" placeholder="Ingrese Longitud" value="{{$infoInstitucion[0]->Longitud}}">
                                     </div>
                                     <hr>                               
-                                    <div class="form-group">
-                                        <label for="Observacion">Observación</label><br>
-                                        <textarea class="form-control" name="Observaciones" rows="5" cols="100%">{{$Edificio[0]->Observaciones}}</textarea>
-                                    </div>
-                                    <input type="hidden" name="id" value="{{$Edificio[0]->idEdificio}}">
+                                    
+                                    <input type="hidden" name="id" value="{{$infoInstitucion[0]->idInstitucion}}">
                                 </div>
                                 <!-- /.card-body -->     
                         </div>
@@ -382,93 +343,9 @@
                 </div>
                 <!-- /.fin m6-->
 
-                <div class="col-md-6">
-                    <form method="POST" action="{{ route('formularioNiveles') }}" class="formularioNiveles">
-                    @csrf
-                    <div class="card card-lightblue collapsed-card">
-                        <div class="card-header">
-                            <h3 class="card-title">
-                            <i class="fas fa-book"></i>
-                            Panel de Control - Niveles de Enseñanza</h3>
-
-                            <div class="card-tools">
-                                <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-plus"></i>
-                                </button>
-                            </div>
-                            <!-- /.card-tools -->
-                        </div>
-                        <!-- /.card-header -->
-                        <div class="card-body" style="display: none;">
-                        @php
-                            $contador=1;
-                        @endphp
-                        @foreach($Niveles as $key => $o)
-                            @php
-                                $NivelesRelSubOrg= DB::table('tb_niveles_suborg')
-                                        ->where([
-                                            ['idSubOrganizacion',session('idSubOrganizacion')],
-                                            ['idNivelEnsenanza',$o->idNivelEnsenanza]
-                                        ])
-                                        ->get();
-                                $contador=1;
-                            @endphp 
-                                @if (count($NivelesRelSubOrg)>0)
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-3">
-                                                <label>{{$o->NivelEnsenanza}}</label>
-                                            </div>
-                                            <div class="col-8">
-                                                <div class="icheck-danger d-inline">
-                                                    <input type="radio" name="r{{$o->idNivelEnsenanza}}"  value="NO" id="radioSuccess{{$o->idNivelEnsenanza}}">
-                                                    <label for="radioSuccess{{$o->idNivelEnsenanza}}"></label>
-                                                </div>
-                                                <div class="icheck-success d-inline">
-                                                    <input type="radio" name="r{{$o->idNivelEnsenanza}}" checked="true" value="SI" id="radioSuccessx{{$o->idNivelEnsenanza}}">
-                                                    <label for="radioSuccessx{{$o->idNivelEnsenanza}}"></label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group clearfix"></div>
-                                    </div>                                        
-                                @else
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-3">
-                                                <label>{{$o->NivelEnsenanza}}</label>
-                                            </div>
-                                            <div class="col-8">
-                                                <div class="icheck-danger d-inline">
-                                                    <input type="radio" name="r{{$o->idNivelEnsenanza}}" checked="true" value="NO" id="radioSuccess{{$o->idNivelEnsenanza}}">
-                                                    <label for="radioSuccess{{$o->idNivelEnsenanza}}"></label>
-                                                </div>
-                                                <div class="icheck-success d-inline">
-                                                    <input type="radio" name="r{{$o->idNivelEnsenanza}}" value="SI" id="radioSuccessx{{$o->idNivelEnsenanza}}">
-                                                    <label for="radioSuccessx{{$o->idNivelEnsenanza}}"></label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group clearfix"></div>
-                                    </div> 
-                                @endif
-                                        
-                                        
-                           
-                                              
-                        @endforeach
-                        </div>
-                        <!-- /.card-body -->
-                        <div class="card-footer">
-                            <button type="submit" class="btn btn-primary">Actualizar</button>
-                        </div>
-                    </div>
-                    
-                    </form>
-                </div>
-                <!-- /.fin m6-->                
+                          
             </div> 
             <!-- /.fin row -->
-
             <div class="row">
                 <!-- datos logo -->
                 <div class="col-md-6">
@@ -491,11 +368,11 @@
                                 <div class="card-body">
                                     <div class="form-group">
                                         <label for="Logo">Logo</label>
-                                        @if ($SubOrganizacion[0]->imagen_logo != "")
+                                        @if ($infoInstitucion[0]->imagen_logo != "")
                                             
                                             @php
-                                                $cuecompleto = $SubOrganizacion[0]->cuecompleto;
-                                                $logo =$SubOrganizacion[0]->imagen_logo;
+                                                $cuecompleto = $infoInstitucion[0]->CUE;
+                                                $logo =$infoInstitucion[0]->imagen_logo;
                                                 $url="storage/CUE/$cuecompleto/$logo";
                                             @endphp
                                             <img src="{{asset($url)}}" style="width:150px">
@@ -536,11 +413,11 @@
                                 <div class="card-body">
                                     <div class="form-group">
                                         <label for="Logo">Logo</label>
-                                        @if ($SubOrganizacion[0]->imagen_escuela != "")
+                                        @if ($infoInstitucion[0]->imagen_escuela != "")
                                             
                                             @php
-                                                $cuecompleto = $SubOrganizacion[0]->cuecompleto;
-                                                $imagenEscuela =$SubOrganizacion[0]->imagen_escuela;
+                                                $cuecompleto = $infoInstitucion[0]->CUE;
+                                                $imagenEscuela =$infoInstitucion[0]->imagen_escuela;
                                                 $url="storage/CUE/$cuecompleto/$imagenEscuela";
                                             @endphp
                                             <img src="{{asset($url)}}" style="width:150px">
@@ -562,7 +439,6 @@
                 <!-- /.fin m6-->                
             </div> 
             <!-- /.fin row -->
-
         </section>
     </section>
 </section>
