@@ -104,6 +104,7 @@ class AdminController extends Controller
       "Clave" => "semillita"                listo
       "Correo" => "semillita@gmail.com"     listo
       "CUE" => "4600233"
+      se agrego CUEa como cue con extension 14-02-24
         */
        
         $o = new UsuarioModel();
@@ -117,6 +118,8 @@ class AdminController extends Controller
           $o->Modo = 2;     //3 es menos que admin, 2 es para las escuelas  y 1 para admin
           $o->Dependencia = 1;
           $o->CUE = $request->CUE;
+          $o->CUEa = $request->CUEa;
+          $o->CUECOMPLETO = $request->CUE.$request->CUEa;
         $o->save();
 
         $CUE=$request->CUE;

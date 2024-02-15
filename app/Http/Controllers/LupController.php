@@ -404,7 +404,7 @@ class LupController extends Controller
         $Divisiones->Division = $request->Division;
         $Divisiones->Turno = $request->Turno;
         $Divisiones->FechaAlta = Carbon::now();
-        $Divisiones->idSubOrg = session('idSubOrganizacion');
+        $Divisiones->idInstitucion = session('idInstitucion');
         $Divisiones->save();
 
         return redirect("/verDivisiones")->with('ConfirmarActualizarDivisiones','OK');

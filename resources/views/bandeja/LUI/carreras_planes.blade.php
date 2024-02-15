@@ -82,7 +82,7 @@
                         </div>                    
                     </div>   
                         <div class="card-footer bg-transparent">
-                            <button type="submit" class="btn btn-primary">Agregar</button>
+                            <button type="submit" class="btn btn-primary">Seleccionar</button>
                         </div>
                     
                     </form>

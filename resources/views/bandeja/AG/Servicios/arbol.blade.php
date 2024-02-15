@@ -11,7 +11,7 @@
             <!-- Custom Tabs -->
             <div class="card card-lightblue">
               <div class="card-header d-flex p-0">
-                <h3 class="card-title p-3">Panel de Control POF - CUE COMPLETO: {{session('CUEa')}}</h3>
+                <h3 class="card-title p-3">Panel de Control POF - CUE / CUE COMPLETO: {{session('CUE')}} / {{session('CUEa')}}</h3>
               </div><!-- /.card-header -->
 
               <div class="card-body">
@@ -33,9 +33,6 @@
                                 <p class="mb-0">Cargo/Función: <label for="cargo" id="DescripcionCargo"> Sin Selección </label>
                                 <input type="hidden" id="CargoSal" name="CargoSal" value="">
                                 </p>
-                                <p class="mb-0">Esp. Curricular: <label for="DescripcionEspCur" id="DescripcionEspCur"> Sin Selección = Horas Disponibles</label>
-                                <input type="hidden" id="idEspCur" name="idEspCur" value="">
-                                </p>
                                 <p class="mb-0 mr-1">Sit.Rev:
                                 <select class="form-control-sm border-0 mb-1" name="SituacionDeRevista" id="SituacionDeRevista">
                                   @foreach ($SituacionDeRevista as $sr)
@@ -51,7 +48,7 @@
                                     @endforeach
                                     </select>
                                 </p>
-                                <p class="mb-0">Horas: <input type="number" id="cant_horas" class="form-control-sm border-0" name="cant_horas" style="width:50px" value=""></p>
+                                <p class="mb-0" style="padding: 5px">Horas Ocupadas: <input type="number" id="cant_horas" class="form-control-sm border-0" name="cant_horas" style="width:50px" value=""></p>
                                 <p class="mb-0">Fecha de Ingreso: <input type="date" id="FechaAltaN" class="form-control-sm border-0" name="FechaAltaN" style="width:125px" value=""></p>
                               </div>
                               <div class="card-footer d-flex justify-content-center">
@@ -64,9 +61,7 @@
                                       <a  href="#modalCargoFuncion" class="btn mx-1 " data-toggle="modal" data-placement="top" title="Cargo/Funcion"  data-target="#modalCargoFuncion">
                                         <span class="material-symbols-outlined pt-1" >library_add</span>
                                       </a>
-                                      <a  href="#modalEspCur" class="btn mx-1 " data-toggle="modal" data-placement="top" title="Esp. Curricular"  data-target="#modalEspCur">
-                                        <span class="material-symbols-outlined pt-1" >view_timeline</span>
-                                      </a>
+                                     
                               
                                 {{-- <a href="#" class="btn mx-1">
                                         <span class="material-symbols-outlined pt-1" data-toggle="modal" data-placement="top" title="Traslado/Afectación">transfer_within_a_station</span>
@@ -90,60 +85,7 @@
                       </form>
                     </div>
 
-                    <!-- /.modal -->
-                    <div class="modal fade" id="modalEspCur">
-                      <div class="modal-dialog modal-lg">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                              <h4 class="modal-title">Buscar Espacios Curriculares</h4>
-                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                  <span aria-hidden="true">&times;</span>
-                              </button>
-                            </div>
-                            <div class="modal-body">
-                              <div class="card card-olive">
-                                <div class="card-header">
-                                    <h3 class="card-title">Buscar Cargos / Funciones: </h3>
-                                    {{-- <input type="text" class="form-control" id="btCargos" onkeyup="getCargosFunciones()" placeholder="Ingrese Cargo/Funcion o Codigo Salarial"> --}}
-                                </div>
-                                <!-- /.card-header -->
-                                <div class="card-body">
-                                  <table id="example" class="table table-bordered table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>Descripcion</th>
-                                            <th>Opciones</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="contenidoEspCur">
-                                    @foreach($EspaciosCurriculares as $key => $o)
-                                        <tr class="gradeX">
-                                          <td>{{$o->idEspacioCurricular}}</td>
-                                          <td>{{$o->Descripcion}}
-                                            <input type="hidden" id="nomAsignaturaAgenteModal{{$o->idEspacioCurricular}}" value="{{$o->Descripcion}}">
-                                            <input type="hidden" id="idAsignaturaAgenteModal{{$o->idEspacioCurricular}}" value="{{$o->idEspacioCurricular}}">
-                                          </td>
-                                          <td>
-                                              <button type="button" name="btnSeleccionar" onclick="seleccionarAsigAgente({{$o->idEspacioCurricular}})">Seleccionar Asignatura</button>
-                                          </td>
-                                        </tr>
-                                      @endforeach
-                                    </tbody>
-                                  </table>
-                                </div>
-                                <!-- /.card-body -->
-                              </div>
-                            </div>
-                            <div class="modal-footer justify-content-end">
-                                <button type="button" class="btn bg-olive"  data-dismiss="modal">Salir</button>
-                            </div>
-                        </div>
-                        <!-- /.modal-content -->
-                      </div>
-                      <!-- /.modal-dialog -->
-                    </div>
-                    <!-- /.modal -->
+                   
 
                     <!-- /.modal -->
                     <div class="modal fade" id="modalCargoFuncion">

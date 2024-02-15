@@ -20,18 +20,22 @@ class AgController extends Controller
     public function verArbolServicio(){
 
         //obtengo el usuario que es la escuela a trabajar
-        $idReparticion = session('idReparticion');
+        /*$idReparticion = session('idReparticion');
         //consulto a reparticiones
         $reparticion = DB::table('tb_reparticiones')
         ->where('tb_reparticiones.idReparticion',$idReparticion)
-        ->get();
+        ->get();*/
         //dd($reparticion[0]->Organizacion);
         
         //traigo todo de suborganizacion pasada
-        $subOrganizacion=DB::table('tb_suborganizaciones')
+        /*$subOrganizacion=DB::table('tb_suborganizaciones')
         ->where('tb_suborganizaciones.idsuborganizacion',$reparticion[0]->subOrganizacion)
         ->select('*')
-        ->get();
+        ->get();*/
+
+        $institucion=DB::table('tb_institucion')
+                ->where('tb_institucion.idInstitucion',session('idInstitucion'))
+                ->get();
         /*
             [
                 {
@@ -121,9 +125,9 @@ class AgController extends Controller
         */
         //traigo los nodos
         $infoNodos=DB::table('tb_nodos')
-        ->where('tb_suborganizaciones.idSubOrganizacion',$reparticion[0]->subOrganizacion)
+        //->where('tb_institucion.idInstitucion',session('idInstitucion'))
         // ->whereNotNull('tb_nodos.PosicionAnterior')
-        ->join('tb_suborganizaciones', 'tb_suborganizaciones.cuecompleto', 'tb_nodos.CUE')
+        ->join('tb_institucion', 'tb_institucion.CUE', 'tb_nodos.CUE')
         ->select(
             'tb_nodos.*'
         )
@@ -137,7 +141,7 @@ class AgController extends Controller
         ->orWhere('Descripcion', 'like', '%Cargo -%')->get();
         
         $Divisiones = DB::table('tb_divisiones')
-                ->where('tb_divisiones.idSubOrg',session('idSubOrganizacion'))
+                ->where('tb_divisiones.idInstitucion',session('idInstitucion'))
                 ->join('tb_cursos','tb_cursos.idCurso', '=', 'tb_divisiones.Curso')
                 ->join('tb_division','tb_division.idDivisionU', '=', 'tb_divisiones.Division')
                 ->join('tb_turnos', 'tb_turnos.idTurno', '=', 'tb_divisiones.Turno')
@@ -151,7 +155,7 @@ class AgController extends Controller
                 ->orderBy('tb_cursos.idCurso','ASC')
                 ->get();
 
-            $EspaciosCurriculares = DB::table('tb_espacioscurriculares')
+         /*   $EspaciosCurriculares = DB::table('tb_espacioscurriculares')
                 ->where('tb_espacioscurriculares.SubOrg',session('idSubOrganizacion'))
                 ->join('tb_asignaturas','tb_asignaturas.idAsignatura', 'tb_espacioscurriculares.Asignatura')
                 ->select(
@@ -159,24 +163,24 @@ class AgController extends Controller
                     'tb_asignaturas.*'
                 )
                 //->orderBy('tb_asignaturas.DescripcionCurso','ASC')
-                ->get();
+                ->get();*/
         $datos=array(
             'mensajeError'=>"",
-            'CueOrg'=>$subOrganizacion[0]->cuecompleto,
-            'nombreSubOrg'=>$subOrganizacion[0]->Descripcion,
-            'infoSubOrganizaciones'=>$subOrganizacion,
-            'idSubOrg'=>$reparticion[0]->subOrganizacion, 
+            'CUE'=>$institucion[0]->CUE,
+            'nombreInst'=>$institucion[0]->Nombre_Institucion,
+            'infoInstitucion'=>$institucion,
+            'idInstitucion'=>$institucion[0]->idInstitucion, 
             'infoNodos'=>$infoNodos,
             'CargosInicial'=>$CargosInicial,
             'SituacionDeRevista'=>$SituacionRevista,
             'Divisiones'=>$Divisiones,
-            'EspaciosCurriculares'=>$EspaciosCurriculares,
+            //'EspaciosCurriculares'=>$EspaciosCurriculares,
             'mensajeNAV'=>'Panel de Configuración de POF(Planta Orgánica Funcional)'
         );
         //lo guardo para controlar a las personas de una determinada cue/suborg
-        session(['CUE'=>$subOrganizacion[0]->CUE]);
+        //session(['CUE'=>$institucion[0]->CUE]);
         
-        session(['idSubOrg'=>$reparticion[0]->subOrganizacion]);
+        //session(['idInstitucion'=>$institucion[0]->idInstitucion]);
         //dd($plazas);
         return view('bandeja.AG.Servicios.arbol',$datos);
     }
@@ -345,31 +349,40 @@ class AgController extends Controller
     }
     public function getAgentes($DNI){
         //traigo todos los agentes que coincidan con su DNI
-        $Agentes = DB::table('tb_agentes')
-        ->where('tb_agentes.Documento',$DNI)
-        ->select(
-            'tb_agentes.*',
-        )
-        ->orderBy('tb_agentes.idAgente','ASC')
+        $Agentes = DB::table('tb_desglose_agentes')
+        ->where([
+            ['tb_desglose_agentes.docu', '=', $DNI],
+            ['tb_institucion.CUE', '=', session('CUE')]
+        ])
+        ->join('tb_institucion', 'tb_institucion.Unidad_Liquidacion', '=', 'tb_desglose_agentes.escu')
+        ->select('tb_desglose_agentes.*')
+        ->orderBy('tb_desglose_agentes.idDesgloseAgente', 'ASC')
         ->get();
 
        //print_r($Agentes);
         $respuesta="";
        
-        foreach($Agentes as $a){
+        //if($Agentes->isNotEmpty()){
+            foreach($Agentes as $a){
+                $respuesta=$respuesta.'
+                <tr class="gradeX">
+                    <td>'.$a->idDesgloseAgente.'</td>
+                    <td>'.$a->nomb.'<input type="hidden" id="nomAgenteModal'.$a->idDesgloseAgente.'" value="'.$a->nomb.'"</td>
+                    <td>'.$a->docu.'</td>
+                    <td>
+                        <input type="hidden" name="Agente" value="'.$a->idDesgloseAgente.'">
+                        <button type="button" name="btnAgregar" onclick="seleccionarAgentes('.$a->idDesgloseAgente.')">Agregar Agente</button>
+                    </td>
+                </tr>';
+                
+                
+            }
+       /* }else{
             $respuesta=$respuesta.'
-            <tr class="gradeX">
-                <td>'.$a->idAgente.'</td>
-                <td>'.$a->Nombres.'<input type="hidden" id="nomAgenteModal'.$a->idAgente.'" value="'.$a->Nombres.'"</td>
-                <td>'.$a->Documento.'</td>
-                <td>
-                    <input type="hidden" name="Agente" value="'.$a->idAgente.'">
-                    <button type="button" name="btnAgregar" onclick="seleccionarAgentes('.$a->idAgente.')">Agregar Agente</button>
-                </td>
-            </tr>';
-            
-            
-        }
+                <tr class="gradeX">
+                    <td colspan="4">Agente no encontrado en SAGE</td>
+                </tr>';
+        }*/
         //<button type="submit" onclick="seleccionarAgente('.$a->idAgente.')">Agregar Agente</button>
         //echo $respuesta;
         return response()->json(array('status' => 200, 'msg' => $respuesta), 200);

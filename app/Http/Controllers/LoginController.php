@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ExtensionModel;
 use App\Models\InstitucionModel;
 use App\Models\UsuarioModel;
 use Illuminate\Http\Request;
@@ -63,7 +64,7 @@ class LoginController extends Controller
                 ->get();
 
                 session(['CUE'=>$institucion[0]->CUE]);     //en esta version nueva usare el CUE, tengo que ver si usare el CUEa
-                session(['CUEa'=>$institucion[0]->CUECOMPLETO]);
+                session(['CUECOMPLETO'=>$institucion[0]->CUECOMPLETO]);
                 session(['idInstitucion'=>$institucion[0]->idInstitucion]);     
                 session(['Validar' => 'ok']);
                 
@@ -129,11 +130,19 @@ class LoginController extends Controller
     public function cargarInfoUsuario($CUE){
         $infoInstitucion = InstitucionModel::where('CUE',$CUE)
             ->get();
+        $Extensiones = DB::table('tb_extensiones')->get();
+        $infoCUECreadas = UsuarioModel::where('CUE',$CUE)
+        ->get();
+
+        //traigo todos los usuarios que tienen cue buscada
+
            //yodd($infoInstitucion);
             $datos=array(
                 'mensajeError'=>"",
                 'mensajeNAV'=>'Bandeja Principal',
-                'infoInstitucion'=>$infoInstitucion
+                'infoInstitucion'=>$infoInstitucion,
+                'Extensiones'=>$Extensiones,
+                'infoCUECreadas'=>$infoCUECreadas
                 );
             return view('login.cargaInfoPedido',$datos);
     }

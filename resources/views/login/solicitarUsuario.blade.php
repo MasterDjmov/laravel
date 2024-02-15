@@ -46,7 +46,7 @@
                         </span> VOLVER al Home
                     </a><br>
                     <div class="card-header">
-                      <h3 class="card-title">Busqueda por CUE</h3>
+                      <h3 class="card-title">Busqueda por CUE Base</h3>
                     </div>
                     <form role="form" class="form-group" method="POST" action="{{ route('buscarCUE') }}">
                         @csrf

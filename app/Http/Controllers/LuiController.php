@@ -96,7 +96,7 @@ class LuiController extends Controller
 
         //traigo info de la institucion completa
         $institucion=DB::table('tb_institucion')
-        ->where('tb_institucion.CUE',session('CUE'))
+        ->where('tb_institucion.CUECOMPLETO',session('CUECOMPLETO'))
         ->get();
 
          //$FechaAlta = Carbon::parse($SubOrg[0]->FechaAlta)->format('Y-m-d');
@@ -240,11 +240,11 @@ class LuiController extends Controller
 
     public function getCarrerasPlanes(){
         //obtengo el usuario que es la escuela a trabajar
-        $idReparticion = session('idReparticion');
+       // $idReparticion = session('idReparticion');
         //consulto a reparticiones
-        $reparticion = DB::table('tb_reparticiones')
+       /* $reparticion = DB::table('tb_reparticiones')
         ->where('tb_reparticiones.idReparticion',$idReparticion)
-        ->get();
+        ->get();*/
         //dd($reparticion[0]->Organizacion);
 
         /*$Carreras = DB::table('tb_carreras')
@@ -459,16 +459,16 @@ class LuiController extends Controller
     }
     public function verDivisiones(){
                 //obtengo el usuario que es la escuela a trabajar
-                $idReparticion = session('idReparticion');
+                /*$idReparticion = session('idReparticion');
                 //consulto a reparticiones
                 $reparticion = DB::table('tb_reparticiones')
                 ->where('tb_reparticiones.idReparticion',$idReparticion)
-                ->get();
+                ->get();*/
                 //dd($reparticion[0]->Organizacion);
         
                 //traigo el edificio de una suborg
-                $SubOrg = DB::table('tb_suborganizaciones')
-                ->where('tb_suborganizaciones.idSubOrganizacion',$reparticion[0]->subOrganizacion)
+                $institucion=DB::table('tb_institucion')
+                ->where('tb_institucion.idInstitucion',session('idInstitucion'))
                 ->get();
         
                 
@@ -476,9 +476,10 @@ class LuiController extends Controller
                 $Turnos = DB::table('tb_turnos')->get();
                 $Cursos = DB::table('tb_cursos')->get();
                 $Division = DB::table('tb_division')->get();
-                $Cursos = DB::table('tb_cursos')->get();
+                
+
                 $Divisiones = DB::table('tb_divisiones')
-                ->where('tb_divisiones.idSubOrg',session('idSubOrganizacion'))
+                ->where('tb_divisiones.idInstitucion',session('idInstitucion'))
                 ->join('tb_cursos','tb_cursos.idCurso', '=', 'tb_divisiones.Curso')
                 ->join('tb_division','tb_division.idDivisionU', '=', 'tb_divisiones.Division')
                 ->join('tb_turnos', 'tb_turnos.idTurno', '=', 'tb_divisiones.Turno')
@@ -491,13 +492,14 @@ class LuiController extends Controller
                 )
                 ->orderBy('tb_cursos.DescripcionCurso','ASC')
                 ->get();
+
                 $datos=array(
                     'mensajeError'=>"",
                     'Turnos'=>$Turnos,
                     'Cursos'=>$Cursos,
                     'Division'=>$Division,
                     'Divisiones'=>$Divisiones,
-                    'FechaActual'=>$FechaAlta = Carbon::parse(Carbon::now())->format('Y-m-d'),
+                    'FechaActual'=> Carbon::parse(Carbon::now())->format('Y-m-d'),
                     'mensajeNAV'=>'Panel de Configuración de Cursos y Divisiones'
         
                 );

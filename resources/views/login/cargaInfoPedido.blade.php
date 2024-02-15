@@ -24,17 +24,12 @@
           <!-- Main content -->
           <div class="content">
             <?php 
-                //$mostrarError==true
-                $infoUsuario= DB::table('tb_usuarios')->where('CUE',$infoInstitucion[0]->CUE)->get();
-                $cantidad = count($infoUsuario);
-                
-                if(count($infoUsuario) == 1)
                   echo'
                     <div class="alert alert-warning alert-dismissible">
                      
                       <h5><i class="icon fas fa-exclamation-triangle"></i> Alerta!</h5>
-                      Esta CUE ya solicito la creacion de una cuenta, Si no recuerda los datos, comunicarse con el Administrador<br>
-                      EMAIL: xxxxxx@xxxxxx
+                      Si no sale la Extensión  en el Selector, es porque ya fue elegido, Si no recuerda los datos, comunicarse con el Administrador<br>
+                      
                     </div>
                   ';
                 ?>
@@ -67,28 +62,52 @@
                               <!-- /.card-header -->
                               <!-- form start -->
                           
-                              <form method="POST" action="{{ route('FormNuevoUsuario_CUE') }}" class="formularioActualizarUsuario form-group">
+                              <form method="POST" action="{{ route('FormNuevoUsuario_CUE') }}" class="formularioNuevoUsuario form-group">
                               @csrf
                                   <div class="card-body" id="NuevoAgenteContenido1" style="display:visible">
                                       <!-- Fila Apellido, Nombre y Sexo -->
                                       <div class="form-group row">
                                           <div class="col-4">
-                                              <label for="Nombre">Nombre Completo: </label>
+                                              <label for="Nombre">Nombre Completo (Agente): </label>
                                               <input type="text" autocomplete="off" class="form-control" id="Nombre" name="Nombre" placeholder="Ingrese nombre" value="">
                                           </div>
                                           <div class="col-4">
                                               <label for="Sexo">Activo: </label>
                                               <select class="form-control" name="Activo" id="Activo">
-                                                  <option value="S">SI</option>
-                                                  <option value="N" selected="selected">NO</option>
+                                                  <option value="S" selected="selected">SI</option>
+                                                  <option value="N" >NO</option>
                                               </select>
                                           </div>
+                                          <div class="col-3">
+                                            <label for="Usuario">CUE Anexo(Agregar los dos digitos): </label><br>
+                                            <b>{{$infoInstitucion[0]->CUE}} - </b>
+                                            
+                                            <select class="form-control col-2" name="CUEa" id="CUEa" style="display: inline">
+                                              @foreach ($Extensiones as $e)
+                                                @php
+                                                
+                                                  $existe=false;
+                                                  $CUE=session('CUE');
+                                                @endphp
+                                                @foreach ($infoCUECreadas as $ic)
+                                                  @php
+                                                    if($ic->CUEa == $e->Descripcion){
+                                                        $existe=true;
+                                                    }
+                                                  @endphp  
+                                                @endforeach
+                                                @if ($existe ==false)
+                                                  <option value="{{$e->Descripcion}}">{{$e->Descripcion}}</option>
+                                                @endif
+                                              @endforeach
+                                          </select>
+                                        </div>
                                       </div>
 
                                       <!-- Fila CUIL, Tipo de Agente -->
                                       <div class="form-group row">
                                           <div class="col-3">
-                                              <label for="Usuario">Usuario(ALIAS): </label>
+                                              <label for="Usuario">Instituci&oacute;n (ALIAS): </label>
                                               <input type="text" autocomplete="off" class="form-control" id="Usuario" name="Usuario" placeholder="Ingrese un nombre para su ALIAS" value="">
                                           </div>
                                           <div class="col-3">
@@ -96,19 +115,14 @@
                                               <input type="text" autocomplete="off" class="form-control" id="Clave" name="Clave" placeholder="Ingrese una clave para autenficarse" value="">
                                           </div>
                                            <div class="col-3">
-                                              <label for="Correo">Correo Electronico: </label>
+                                              <label for="Correo">Correo Electronico (Agente): </label>
                                               <input type="email" autocomplete="off" class="form-control" id="Correo" name="Correo" placeholder="Ingrese Correo Electronico" value="">
                                           </div>
                                   </div>
                                   <!-- /.card-body -->
                                   <input type="hidden" name="CUE" value="{{$infoInstitucion[0]->CUE}}"/>
                                   <div class="card-footer bg-transparent" id="NuevoAgenteContenido2" style="display:visible">
-                                    @if (count($infoUsuario) == 0)
-                                      
                                     <button type="submit" class="btn btn-primary btn-block bg-success">Enviar Solicitud de Creacion</button>
-                                    
-                                    @endif
-                                    
                                   </div>
                               </form>
                           </div>
@@ -171,11 +185,24 @@
         @endif
     <script>
 
+ 
     $('.formularioNuevoUsuario').submit(function(e){
+      if($("#Nombre").val()=="" ||
+        $("#Usuario").val()=="" ||
+        $("#Correo").val()=="" ||
+        $("#Clave").val()==""){
+        console.log("error")
+         e.preventDefault();
+          Swal.fire(
+            'Error',
+            'No se pudo agregar, hay datos incompletos',
+            'error'
+                )
+      }else{
         e.preventDefault();
         Swal.fire({
-            title: 'Esta seguro de querer Crear el Usuario?',
-            text: "Este cambio no puede ser borrado luego, y debera ser validado por RRHH!",
+            title: 'Esta seguro de solicitar la clave para dicha CUE Extension?',
+            text: "Este cambio sera controlado por RRHH",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
@@ -184,9 +211,10 @@
           }).then((result) => {
             if (result.isConfirmed) {
               this.submit();
+              //prueba();
             }
           })
+      }
     })
-    
 </script>
 @endsection
