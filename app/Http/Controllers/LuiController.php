@@ -94,10 +94,10 @@ class LuiController extends Controller
          ->where('tb_suborganizaciones.idSubOrganizacion',$reparticion[0]->subOrganizacion)
          ->get();*/
 
-        //traigo info de la institucion completa
-        $institucion=DB::table('tb_institucion')
-        ->where('tb_institucion.CUECOMPLETO',session('CUECOMPLETO'))
-        ->get();
+        //traigo info de la institucion en su extension por su ide unico
+        $institucionExtension=DB::table('tb_institucion_extension')
+                ->where('tb_institucion_extension.idInstitucionExtension',session('idInstitucionExtension'))
+                ->get();
 
          //$FechaAlta = Carbon::parse($SubOrg[0]->FechaAlta)->format('Y-m-d');
 
@@ -122,7 +122,7 @@ class LuiController extends Controller
              'ZonasSupervision'=>$ZonasSupervision,
              //'Edificio'=>$Edificio,
              'Turnos'=>$Turnos,
-             'infoInstitucion'=>$institucion,
+             'infoInstitucion'=>$institucionExtension,
              //'Modalidades'=>$Modalidades,
              'Jornadas'=>$Jornadas,
              //'FechaAlta'=>$FechaAlta,

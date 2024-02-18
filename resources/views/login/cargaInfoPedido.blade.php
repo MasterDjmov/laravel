@@ -28,7 +28,7 @@
                     <div class="alert alert-warning alert-dismissible">
                      
                       <h5><i class="icon fas fa-exclamation-triangle"></i> Alerta!</h5>
-                      Si no sale la Extensión  en el Selector, es porque ya fue elegido, Si no recuerda los datos, comunicarse con el Administrador<br>
+                      Si presenta errores de carga o ya figura que se creo el registro por turno/extensio o Si no recuerda los datos, comunicarse con el Administrador<br>
                       
                     </div>
                   ';
@@ -84,24 +84,11 @@
                                             
                                             <select class="form-control col-2" name="CUEa" id="CUEa" style="display: inline">
                                               @foreach ($Extensiones as $e)
-                                                @php
-                                                
-                                                  $existe=false;
-                                                  $CUE=session('CUE');
-                                                @endphp
-                                                @foreach ($infoCUECreadas as $ic)
-                                                  @php
-                                                    if($ic->CUEa == $e->Descripcion){
-                                                        $existe=true;
-                                                    }
-                                                  @endphp  
-                                                @endforeach
-                                                @if ($existe ==false)
                                                   <option value="{{$e->Descripcion}}">{{$e->Descripcion}}</option>
-                                                @endif
                                               @endforeach
-                                          </select>
-                                        </div>
+                                            </select>
+                                          </div>
+                                          
                                       </div>
 
                                       <!-- Fila CUIL, Tipo de Agente -->
@@ -117,6 +104,14 @@
                                            <div class="col-3">
                                               <label for="Correo">Correo Electronico (Agente): </label>
                                               <input type="email" autocomplete="off" class="form-control" id="Correo" name="Correo" placeholder="Ingrese Correo Electronico" value="">
+                                          </div>
+                                          <div class="col-3">
+                                            <label for="Usuario">Turno: </label><br>
+                                            <select class="form-control" name="Turno" id="Turno" style="display: inline">
+                                              @foreach ($TurnosUsuario as $t)
+                                                    <option value="{{$t->idTurnoUsuario}}">{{$t->Descripcion}}</option>
+                                                @endforeach ()
+                                            </select>
                                           </div>
                                   </div>
                                   <!-- /.card-body -->
@@ -183,6 +178,16 @@
                     )
             </script>
         @endif
+
+        @if (session('ConfirmarNuevoUsuarioError')=='OK')
+        <script>
+        Swal.fire(
+            'Registro Cancelado',
+            'Fallo crear el registro, ya existe el turno y la extension seleccionada.',
+            'error'
+                )
+        </script>
+    @endif
     <script>
 
  
@@ -190,6 +195,7 @@
       if($("#Nombre").val()=="" ||
         $("#Usuario").val()=="" ||
         $("#Correo").val()=="" ||
+        $("#Turno").val()=="" ||
         $("#Clave").val()==""){
         console.log("error")
          e.preventDefault();

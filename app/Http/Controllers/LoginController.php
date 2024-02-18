@@ -35,6 +35,7 @@ class LoginController extends Controller
         if($request->email!="" && $request->clave!=""){
             $usuario= UsuarioModel::where('email',$request->email)
             ->where('Clave',$request->clave)
+            ->join('tb_turnos_usuario', 'tb_turnos_usuario.idTurnoUsuario', 'tb_usuarios.Turno')
             ->get();
             $cantidadEncontrados=count($usuario);
             if($cantidadEncontrados){   
@@ -46,6 +47,8 @@ class LoginController extends Controller
                 session(['UsuarioEmail'=>$usuario[0]->email]);
                 session(['UsuarioCUE'=>$usuario[0]->CUE]);
                 session(['Modo'=>$usuario[0]->Modo]);
+                session(['TurnoDescripcion'=>$usuario[0]->Descripcion]);
+                session(['idTurnoUsuario'=>$usuario[0]->Turno]);
                 //obtengo el usuario que es la escuela a trabajar
                // $idReparticion = session('idReparticion');
                 //consulto a reparticiones
@@ -59,13 +62,15 @@ class LoginController extends Controller
                 ->select('*')
                 ->get();
                 */
-                $institucion=DB::table('tb_institucion')
-                ->where('tb_institucion.CUE',$usuario[0]->CUE)
+                $institucionExtension=DB::table('tb_institucion_extension')
+                ->where('tb_institucion_extension.CUECOMPLETO',$usuario[0]->CUECOMPLETO)
+                ->where('tb_institucion_extension.idTurnoUsuario',$usuario[0]->Turno)
                 ->get();
 
-                session(['CUE'=>$institucion[0]->CUE]);     //en esta version nueva usare el CUE, tengo que ver si usare el CUEa
-                session(['CUECOMPLETO'=>$institucion[0]->CUECOMPLETO]);
-                session(['idInstitucion'=>$institucion[0]->idInstitucion]);     
+                //dd($institucionExtension);
+                session(['CUE'=>$institucionExtension[0]->CUE]);     //en esta version nueva usare el CUE, tengo que ver si usare el CUEa
+                session(['CUECOMPLETO'=>$institucionExtension[0]->CUECOMPLETO]);
+                session(['idInstitucionExtension'=>$institucionExtension[0]->idInstitucionExtension]);     
                 session(['Validar' => 'ok']);
                 
                 $datos=array(
@@ -131,6 +136,7 @@ class LoginController extends Controller
         $infoInstitucion = InstitucionModel::where('CUE',$CUE)
             ->get();
         $Extensiones = DB::table('tb_extensiones')->get();
+        $TurnosUsuario = DB::table('tb_turnos_usuario')->get();
         $infoCUECreadas = UsuarioModel::where('CUE',$CUE)
         ->get();
 
@@ -142,7 +148,8 @@ class LoginController extends Controller
                 'mensajeNAV'=>'Bandeja Principal',
                 'infoInstitucion'=>$infoInstitucion,
                 'Extensiones'=>$Extensiones,
-                'infoCUECreadas'=>$infoCUECreadas
+                'infoCUECreadas'=>$infoCUECreadas,
+                'TurnosUsuario'=>$TurnosUsuario
                 );
             return view('login.cargaInfoPedido',$datos);
     }

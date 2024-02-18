@@ -109,7 +109,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="CorreoElectronico">Correo Electronico</label>
-                                        <input type="email" class="form-control" id="CorreoElectronico" name="CorreoElectronico" placeholder="Correo Electronico" value="{{session('UsuarioEmail')}}">
+                                        <input type="email" class="form-control" id="CorreoElectronico" name="CorreoElectronico" placeholder="Correo Electronico" value="{{$infoInstitucion[0]->CorreoElectronico}}">
                                     </div>
                                     <div class="form-group">
                                         <label for="Observacion">Observación</label><br>
@@ -151,7 +151,7 @@
                             //traigo los turnos de la institucion activa
                                 $TurnosRelInst= DB::table('tb_turnos_inst')
                                         ->where([
-                                            ['idInstitucion',session('idInstitucion')],
+                                            ['idInstitucionExtension',session('idInstitucionExtension')],
                                             ['idTurno',$o->idTurno]
                                         ])
                                         ->get();
@@ -371,9 +371,11 @@
                                         @if ($infoInstitucion[0]->imagen_logo != "")
                                             
                                             @php
-                                                $cuecompleto = $infoInstitucion[0]->CUE;
+                                                $cuecompleto = $infoInstitucion[0]->CUECOMPLETO;
+                                                $turno = $infoInstitucion[0]->idTurnoUsuario;
                                                 $logo =$infoInstitucion[0]->imagen_logo;
-                                                $url="storage/CUE/$cuecompleto/$logo";
+                                                $cueconturno=$cuecompleto.$turno;
+                                                $url="storage/CUE/$cueconturno/$logo";
                                             @endphp
                                             <img src="{{asset($url)}}" style="width:150px">
                                         @else
@@ -416,9 +418,11 @@
                                         @if ($infoInstitucion[0]->imagen_escuela != "")
                                             
                                             @php
-                                                $cuecompleto = $infoInstitucion[0]->CUE;
+                                                $cuecompleto = $infoInstitucion[0]->CUECOMPLETO;
                                                 $imagenEscuela =$infoInstitucion[0]->imagen_escuela;
-                                                $url="storage/CUE/$cuecompleto/$imagenEscuela";
+                                                $turno = $infoInstitucion[0]->idTurnoUsuario;
+                                                $cueconturno=$cuecompleto.$turno;
+                                                $url="storage/CUE/$cueconturno/$imagenEscuela";
                                             @endphp
                                             <img src="{{asset($url)}}" style="width:150px">
                                         @else

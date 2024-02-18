@@ -11,6 +11,7 @@ use App\Models\CarrerasRelSubOrgModel;
 use App\Models\DivisionesModel;
 use App\Models\EdificioModel;
 use App\Models\EspacioCurricularModel;
+use App\Models\InstitucionExtensionModel;
 use App\Models\InstitucionModel;
 use App\Models\NivelesEnsenanzaRelSubOrgModel;
 use App\Models\PlanesRelSubOrgModel;
@@ -307,7 +308,7 @@ class LupController extends Controller
         "id" => "85"                                                usado
         */
         
-        $actualizar = InstitucionModel::where('idInstitucion', $request->id)
+        $actualizar = InstitucionExtensionModel::where('idInstitucionExtension', session('idInstitucionExtension'))
         ->update([
             'Domicilio_Institucion'=>$request->Domicilio,
             'Localidad'=>$request->DescripcionLocalidad,
@@ -333,15 +334,17 @@ class LupController extends Controller
             "CorreoElectronico" => "semillita@gmail.com"
             "Observaciones" => "observaciones"
         */
-        $institucion=DB::table('tb_institucion')
-                ->where('tb_institucion.CUE',$request->CUE)
+
+        //manejo a nivel de session para traer el id de la extension
+        $institucionExtension=DB::table('tb_institucion_extension')
+                ->where('tb_institucion_extension.idInstitucionExtension',session('idInstitucionExtension'))
                 ->get();
         //dd($infoSub[0]->cue_confirmada);
 
         //valido la primera vez para evitar que me ingresen otro cue
         //tambien aqui pondremos seguimiento
-        if($institucion[0]->cue_confirmada == 0){
-            $actualizar = InstitucionModel::where('idInstitucion', session('idInstitucion'))
+        if($institucionExtension[0]->cue_confirmada == 0){
+            $actualizar = InstitucionExtensionModel::where('idInstitucionExtension', session('idInstitucionExtension'))
             ->update([
                 'CUE'=>$request->CUE,
                 'CUECOMPLETO'=>$request->CUEa,
@@ -361,7 +364,7 @@ class LupController extends Controller
             session(['CUEa'=>$request->CUEa]);  //cuecompleto
             session(['UsuarioEmail'=>$request->CorreoElectronico]);
         }else{
-            $actualizar = InstitucionModel::where('idInstitucion', session('idInstitucion'))
+            $actualizar = InstitucionExtensionModel::where('idInstitucionExtension', session('idInstitucionExtension'))
             ->update([
                 'Nombre_Institucion'=>$request->Descripcion,
                 'Telefono'=>$request->Telefono,
@@ -373,7 +376,9 @@ class LupController extends Controller
                 'CorreoElectronico'=>$request->CorreoElectronico,
                 'FechaAlta'=>Carbon::now()
             ]);
-            session(['UsuarioEmail'=>$request->CorreoElectronico]);
+
+            //antes logeaba con el correo del usuario que era el mismo de la institucion, ahora los colocare diferente, usuario usuario, colegio colegio
+            //session(['UsuarioEmail'=>$request->CorreoElectronico]);
         }
         
         
@@ -618,7 +623,7 @@ class LupController extends Controller
     }
 
     public function formularioTurnos(Request $request){
-        $idInstitucion =session('idInstitucion');
+        $idInstitucion =session('idInstitucionExtension');
         //dd($request);
         /*
         "_token" => "cIBNdObN9KAjHSbmpPLyViviCJQPqmsy3S34hSV6"
@@ -635,118 +640,118 @@ class LupController extends Controller
         */
         //primero voy a borrar todos los datos de una suborg
         DB::table('tb_turnos_inst')
-            ->where('idInstitucion', $idInstitucion)
+            ->where('idInstitucionExtension', $idInstitucion)
             ->delete();
         //ahora los cargo a uno, por ahora uso este metodo simple
         if($request->r1=="SI"){
             $radio = new TurnosRelInstModel();
             $radio->idTurno = 1;
-            $radio->idInstitucion = $idInstitucion;
+            $radio->idInstitucionExtension = $idInstitucion;
             $radio->save();
            
         }
         if($request->r2=="SI"){
             $radio = new TurnosRelInstModel();
             $radio->idTurno = 2;
-            $radio->idInstitucion = $idInstitucion;
+            $radio->idInstitucionExtension = $idInstitucion;
             $radio->save();
            
         }
         if($request->r3=="SI"){
             $radio = new TurnosRelInstModel();
             $radio->idTurno = 3;
-            $radio->idInstitucion = $idInstitucion;
+            $radio->idInstitucionExtension = $idInstitucion;
             $radio->save();
            
         }
         if($request->r4=="SI"){
             $radio = new TurnosRelInstModel();
             $radio->idTurno = 4;
-            $radio->idInstitucion = $idInstitucion;
+            $radio->idInstitucionExtension = $idInstitucion;
             $radio->save();
            
         }
         if($request->r5=="SI"){
             $radio = new TurnosRelInstModel();
             $radio->idTurno = 5;
-            $radio->idInstitucion = $idInstitucion;
+            $radio->idInstitucionExtension = $idInstitucion;
             $radio->save();
            
         }
         if($request->r6=="SI"){
             $radio = new TurnosRelInstModel();
             $radio->idTurno = 6;
-            $radio->idInstitucion = $idInstitucion;
+            $radio->idInstitucionExtension = $idInstitucion;
             $radio->save();
            
         }
         if($request->r7=="SI"){
             $radio = new TurnosRelInstModel();
             $radio->idTurno = 7;
-            $radio->idInstitucion = $idInstitucion;
+            $radio->idInstitucionExtension = $idInstitucion;
             $radio->save();
            
         }
         if($request->r8=="SI"){
             $radio = new TurnosRelInstModel();
             $radio->idTurno = 8;
-            $radio->idInstitucion = $idInstitucion;
+            $radio->idInstitucionExtension = $idInstitucion;
             $radio->save();
            
         }
         if($request->r9=="SI"){
             $radio = new TurnosRelInstModel();
             $radio->idTurno = 9;
-            $radio->idInstitucion = $idInstitucion;
+            $radio->idInstituidInstitucionExtensioncion = $idInstitucion;
             $radio->save();
            
         }
         if($request->r10=="SI"){
             $radio = new TurnosRelInstModel();
             $radio->idTurno = 10;
-            $radio->idInstitucion = $idInstitucion;
+            $radio->idInstitucionExtension = $idInstitucion;
             $radio->save();
            
         }
         if($request->r11=="SI"){
             $radio = new TurnosRelInstModel();
             $radio->idTurno = 11;
-            $radio->idInstitucion = $idInstitucion;
+            $radio->idInstitucionExtension = $idInstitucion;
             $radio->save();
            
         }
         if($request->r13=="SI"){
             $radio = new TurnosRelInstModel();
             $radio->idTurno = 13;
-            $radio->idInstitucion = $idInstitucion;
+            $radio->idInstitucionExtension = $idInstitucion;
             $radio->save();
            
         }
         if($request->r15=="SI"){
             $radio = new TurnosRelInstModel();
             $radio->idTurno = 15;
-            $radio->idInstitucion = $idInstitucion;
+            $radio->idInstitucionExtension = $idInstitucion;
             $radio->save();
            
         }
         if($request->r18=="SI"){
             $radio = new TurnosRelInstModel();
             $radio->idTurno = 18;
-            $radio->idInstitucion = $idInstitucion;
+            $radio->idInstitucionExtension = $idInstitucion;
             $radio->save();
            
         }
         if($request->r19=="SI"){
             $radio = new TurnosRelInstModel();
             $radio->idTurno = 19;
-            $radio->idInstitucion = $idInstitucion;
+            $radio->idInstitucionExtension = $idInstitucion;
             $radio->save();
            
         }
         if($request->r20=="SI"){
             $radio = new TurnosRelInstModel();
             $radio->idTurno = 20;
-            $radio->idInstitucion = $idInstitucion;
+            $radio->idInstitucionExtension = $idInstitucion;
             $radio->save();
            
         }
@@ -760,14 +765,16 @@ class LupController extends Controller
             
 
             $logoimg = $request->file('logoimg');
-            $cue=session('CUE');    //
+            $cuecompleto=session('CUECOMPLETO');    //
+            $turno=session('idTurnoUsuario'); 
             //dd($logoimg->getClientOriginalName());
             //guardo en disco para pdfs
-            $path2 = $logoimg->storeAs("public/CUE/$cue/", ('logo.'.$logoimg->extension()));
+            $cueconturno=$cuecompleto.$turno;
+            $path2 = $logoimg->storeAs("public/CUE/$cueconturno/", ('logo.'.$logoimg->extension()));
 
             //inserto la foto en el server
-            $idSubOrg =session('idInstitucion');
-            $actualizar = InstitucionModel::where('idInstitucion', session('idInstitucion'))
+            $idSubOrg =session('idInstitucionExtension');
+            $actualizar = InstitucionExtensionModel::where('idInstitucionExtension', session('idInstitucionExtension'))
             ->update([
                 'imagen_logo'=>'logo.'.$logoimg->extension(),
             ]);
@@ -783,14 +790,16 @@ class LupController extends Controller
             
 
             $img = $request->file('escuelaimg');
-            $cue=session('CUE');        //ver si usamos cuea
+            $cuecompleto=session('CUECOMPLETO');        //ver si usamos cuea
+            $turno=session('idTurnoUsuario'); 
             //dd($logoimg->getClientOriginalName());
             //guardo en disco para pdfs
-            $path2 = $img->storeAs("public/CUE/$cue/", ('escuela.'.$img->extension()));
+            $cueconturno=$cuecompleto.$turno;
+            $path2 = $img->storeAs("public/CUE/$cueconturno/", ('escuela.'.$img->extension()));
 
             //inserto la foto en el server
-            $idSubOrg =session('idInstitucion');
-            $actualizar = InstitucionModel::where('idInstitucion', session('idInstitucion'))
+            $idSubOrg =session('idInstitucionExtension');
+            $actualizar = InstitucionExtensionModel::where('idInstitucionExtension', session('idInstitucionExtension'))
             ->update([
                 'imagen_escuela'=>'escuela.'.$img->extension(),
             ]);
