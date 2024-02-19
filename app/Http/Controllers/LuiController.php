@@ -467,8 +467,8 @@ class LuiController extends Controller
                 //dd($reparticion[0]->Organizacion);
         
                 //traigo el edificio de una suborg
-                $institucion=DB::table('tb_institucion')
-                ->where('tb_institucion.idInstitucion',session('idInstitucion'))
+                $institucion=DB::table('tb_institucion_extension')
+                ->where('tb_institucion_extension.idInstitucionExtension',session('idInstitucionExtension'))
                 ->get();
         
                 
@@ -479,7 +479,7 @@ class LuiController extends Controller
                 
 
                 $Divisiones = DB::table('tb_divisiones')
-                ->where('tb_divisiones.idInstitucion',session('idInstitucion'))
+                ->where('tb_divisiones.idInstitucionExtension',session('idInstitucionExtension'))
                 ->join('tb_cursos','tb_cursos.idCurso', '=', 'tb_divisiones.Curso')
                 ->join('tb_division','tb_division.idDivisionU', '=', 'tb_divisiones.Division')
                 ->join('tb_turnos', 'tb_turnos.idTurno', '=', 'tb_divisiones.Turno')
@@ -491,6 +491,7 @@ class LuiController extends Controller
                     'tb_turnos.idTurno',
                 )
                 ->orderBy('tb_cursos.DescripcionCurso','ASC')
+                //->orderBy('tb_cursos.DescripcionDivision','ASC')
                 ->get();
 
                 $datos=array(

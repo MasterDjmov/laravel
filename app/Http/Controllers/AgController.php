@@ -33,8 +33,8 @@ class AgController extends Controller
         ->select('*')
         ->get();*/
 
-        $institucion=DB::table('tb_institucion')
-                ->where('tb_institucion.idInstitucion',session('idInstitucion'))
+        $institucionExtension=DB::table('tb_institucion_extension')
+                ->where('tb_institucion_extension.idInstitucionExtension',session('idInstitucionExtension'))
                 ->get();
         /*
             [
@@ -127,7 +127,7 @@ class AgController extends Controller
         $infoNodos=DB::table('tb_nodos')
         //->where('tb_institucion.idInstitucion',session('idInstitucion'))
         // ->whereNotNull('tb_nodos.PosicionAnterior')
-        ->join('tb_institucion', 'tb_institucion.CUE', 'tb_nodos.CUE')
+        ->join('tb_institucion_extension', 'tb_institucion_extension.CUECOMPLETO', 'tb_nodos.CUECOMPLETO')
         ->select(
             'tb_nodos.*'
         )
@@ -141,7 +141,7 @@ class AgController extends Controller
         ->orWhere('Descripcion', 'like', '%Cargo -%')->get();
         
         $Divisiones = DB::table('tb_divisiones')
-                ->where('tb_divisiones.idInstitucion',session('idInstitucion'))
+                ->where('tb_divisiones.idInstitucionExtension',session('idInstitucionExtension'))
                 ->join('tb_cursos','tb_cursos.idCurso', '=', 'tb_divisiones.Curso')
                 ->join('tb_division','tb_division.idDivisionU', '=', 'tb_divisiones.Division')
                 ->join('tb_turnos', 'tb_turnos.idTurno', '=', 'tb_divisiones.Turno')
@@ -166,10 +166,11 @@ class AgController extends Controller
                 ->get();*/
         $datos=array(
             'mensajeError'=>"",
-            'CUE'=>$institucion[0]->CUE,
-            'nombreInst'=>$institucion[0]->Nombre_Institucion,
-            'infoInstitucion'=>$institucion,
-            'idInstitucion'=>$institucion[0]->idInstitucion, 
+            'CUECOMPLETO'=>$institucionExtension[0]->CUECOMPLETO,
+            'CUE'=>$institucionExtension[0]->CUE,
+            'nombreInst'=>$institucionExtension[0]->Nombre_Institucion,
+            'infoInstitucion'=>$institucionExtension,
+            'idInstitucion'=>$institucionExtension[0]->idInstitucion, 
             'infoNodos'=>$infoNodos,
             'CargosInicial'=>$CargosInicial,
             'SituacionDeRevista'=>$SituacionRevista,
@@ -187,18 +188,18 @@ class AgController extends Controller
     public function verArbolServicio2(){
 
         //obtengo el usuario que es la escuela a trabajar
-        $idReparticion = session('idReparticion');
+        //$idReparticion = session('idReparticion');
         //consulto a reparticiones
-        $reparticion = DB::table('tb_reparticiones')
+        /*$reparticion = DB::table('tb_reparticiones')
         ->where('tb_reparticiones.idReparticion',$idReparticion)
-        ->get();
+        ->get();*/
         //dd($reparticion[0]->Organizacion);
         
         //traigo todo de suborganizacion pasada
-        $subOrganizacion=DB::table('tb_suborganizaciones')
-        ->where('tb_suborganizaciones.idsuborganizacion',$reparticion[0]->subOrganizacion)
-        ->select('*')
-        ->get();
+        $institucionExtension=DB::table('tb_institucion_extension')
+                ->where('tb_institucion_extension.idInstitucionExtension',session('idInstitucionExtension'))
+                ->get();
+
         /*
             [
                 {
@@ -288,9 +289,11 @@ class AgController extends Controller
         */
         //traigo los nodos
         $infoNodos=DB::table('tb_nodos')
-        ->where('tb_suborganizaciones.idSubOrganizacion',$reparticion[0]->subOrganizacion)
+        //->where('tb_institucion_extension.idInstitucionExtension',session('idInstitucionExtension'))
+        ->where('tb_nodos.idTurnoUsuario',session('idTurnoUsuario'))
+        ->where('tb_nodos.CUECOMPLETO',session('CUECOMPLETO'))
         // ->whereNotNull('tb_nodos.PosicionAnterior')
-        ->join('tb_suborganizaciones', 'tb_suborganizaciones.cuecompleto', 'tb_nodos.CUE')
+       // ->join('tb_institucion_extension', 'tb_institucion_extension.CUECOMPLETO', 'tb_nodos.CUECOMPLETO')
         ->select(
             'tb_nodos.*'
         )
@@ -304,7 +307,7 @@ class AgController extends Controller
         ->orWhere('Descripcion', 'like', '%Cargo -%')->get();
         
         $Divisiones = DB::table('tb_divisiones')
-                ->where('tb_divisiones.idSubOrg',session('idSubOrganizacion'))
+                ->where('tb_divisiones.idInstitucionExtension',session('idInstitucionExtension'))
                 ->join('tb_cursos','tb_cursos.idCurso', '=', 'tb_divisiones.Curso')
                 ->join('tb_division','tb_division.idDivisionU', '=', 'tb_divisiones.Division')
                 ->join('tb_turnos', 'tb_turnos.idTurno', '=', 'tb_divisiones.Turno')
@@ -329,10 +332,10 @@ class AgController extends Controller
                 ->get();
         $datos=array(
             'mensajeError'=>"",
-            'CueOrg'=>$subOrganizacion[0]->cuecompleto,
-            'nombreSubOrg'=>$subOrganizacion[0]->Descripcion,
-            'infoSubOrganizaciones'=>$subOrganizacion,
-            'idSubOrg'=>$reparticion[0]->subOrganizacion, 
+            'CUECOMPLETO'=>$institucionExtension[0]->CUECOMPLETO,
+            'Nombre_Institucion'=>$institucionExtension[0]->Nombre_Institucion,
+            'institucionExtension'=>$institucionExtension,
+            'idInstitucionExtension'=>$institucionExtension[0]->idInstitucionExtension, 
             'infoNodos'=>$infoNodos,
             'CargosInicial'=>$CargosInicial,
             'SituacionDeRevista'=>$SituacionRevista,
@@ -341,18 +344,26 @@ class AgController extends Controller
             'mensajeNAV'=>'Panel de Configuración de POF(Planta Orgánica Funcional)'
         );
         //lo guardo para controlar a las personas de una determinada cue/suborg
-        session(['CUE'=>$subOrganizacion[0]->CUE]);
+        //session(['CUE'=>$institucionExtension[0]->CUE]);
         
-        session(['idSubOrg'=>$reparticion[0]->subOrganizacion]);
-        //dd($plazas);
+        //session(['idSubOrg'=>$institucionExtension[0]->subOrganizacion]);
+        //dd($infoNodos);
         return view('bandeja.AG.Servicios.arbol2',$datos);
     }
     public function getAgentes($DNI){
+        //verifico primero si el DNI existe en la base de datos
+        /*$infoDNI = DB::table('tb_desglose_agentes')
+        ->where('tb_desglose_agentes.docu',  $DNI)
+        ->join('tb_institucion', 'tb_institucion.Unidad_Liquidacion', '=', 'tb_desglose_agentes.escu')
+        ->select('tb_desglose_agentes.*')
+        ->orderBy('tb_desglose_agentes.idDesgloseAgente', 'ASC')
+        ->get();*/
+
         //traigo todos los agentes que coincidan con su DNI
         $Agentes = DB::table('tb_desglose_agentes')
         ->where([
             ['tb_desglose_agentes.docu', '=', $DNI],
-            ['tb_institucion.CUE', '=', session('CUE')]
+            //['tb_institucion.CUE', '=', session('CUE')] //aqui por ahora lo filtro por su cue base, asi esta cargado en Liq
         ])
         ->join('tb_institucion', 'tb_institucion.Unidad_Liquidacion', '=', 'tb_desglose_agentes.escu')
         ->select('tb_desglose_agentes.*')
@@ -362,39 +373,41 @@ class AgController extends Controller
        //print_r($Agentes);
         $respuesta="";
        
-        //if($Agentes->isNotEmpty()){
+        if($Agentes->isNotEmpty()){
             foreach($Agentes as $a){
                 $respuesta=$respuesta.'
                 <tr class="gradeX">
                     <td>'.$a->idDesgloseAgente.'</td>
-                    <td>'.$a->nomb.'<input type="hidden" id="nomAgenteModal'.$a->idDesgloseAgente.'" value="'.$a->nomb.'"</td>
+                    <td>'.$a->nomb.'<input type="hidden" id="nomAgenteModal'.$a->docu.'" value="'.$a->nomb.'"</td>
                     <td>'.$a->docu.'</td>
+                    <td>'.$a->desc_escu.'</td>
+                    <td>'.$a->desc_plan.'</td>
                     <td>
-                        <input type="hidden" name="Agente" value="'.$a->idDesgloseAgente.'">
-                        <button type="button" name="btnAgregar" onclick="seleccionarAgentes('.$a->idDesgloseAgente.')">Agregar Agente</button>
+                        <input type="hidden" name="Agente" value="'.$a->docu.'">
+                        <button type="button" name="btnAgregar" onclick="seleccionarAgentes('.$a->docu.')">Agregar Agente</button>
                     </td>
                 </tr>';
                 
                 
             }
-       /* }else{
+        }else{
             $respuesta=$respuesta.'
                 <tr class="gradeX">
                     <td colspan="4">Agente no encontrado en SAGE</td>
                 </tr>';
-        }*/
+        }
         //<button type="submit" onclick="seleccionarAgente('.$a->idAgente.')">Agregar Agente</button>
         //echo $respuesta;
         return response()->json(array('status' => 200, 'msg' => $respuesta), 200);
     }
     public function getAgentesActualizar($DNI){
         //traigo todos los agentes que coincidan con su DNI
-        $Agentes = DB::table('tb_agentes')
-        ->where('tb_agentes.Documento',$DNI)
+        $Agentes = DB::table('tb_desglose_agentes')
+        ->where('tb_desglose_agentes.docu',$DNI)
         ->select(
-            'tb_agentes.*',
+            'tb_desglose_agentes.*',
         )
-        ->orderBy('tb_agentes.idAgente','ASC')
+        ->orderBy('tb_desglose_agentes.docu','ASC')
         ->get();
 
        //print_r($Agentes);
@@ -403,17 +416,21 @@ class AgController extends Controller
         foreach($Agentes as $a){
             $respuesta=$respuesta.'
             <tr class="gradeX">
-                <td>'.$a->idAgente.'</td>
-                <td>'.$a->Nombres.'<input type="hidden" id="nomAgenteModal'.$a->idAgente.'" value="'.$a->Nombres.'"</td>
-                <td>'.$a->Documento.'</td>
-                <td>
-                    <input type="hidden" name="Agente" value="'.$a->idAgente.'">
-                    <button type="button" name="btnAgregar" onclick="seleccionarAgentesActualizar('.$a->idAgente.')">Agregar Agente</button>
+                    <td>'.$a->idDesgloseAgente.'</td>
+                    <td>'.$a->nomb.'<input type="hidden" id="nomAgenteModal'.$a->docu.'" value="'.$a->nomb.'"</td>
+                    <td>'.$a->docu.'</td>
+                    <td>'.$a->desc_escu.'</td>
+                    <td>'.$a->desc_plan.'</td>
+                    <td>
+                        <input type="hidden" name="Agente" value="'.$a->docu.'">
+                    <button type="button" name="btnAgregar" onclick="seleccionarAgentesActualizar('.$a->docu.')">Agregar Agente</button>
                 </td>
             </tr>';
             
             
         }
+
+        
         //<button type="submit" onclick="seleccionarAgente('.$a->idAgente.')">Agregar Agente</button>
         //echo $respuesta;
         return response()->json(array('status' => 200, 'msg' => $respuesta), 200);
@@ -452,19 +469,18 @@ class AgController extends Controller
     
     public function agregarAgenteEscuela(Request $request){
         //echo $request->Agente." ".session('CUE') ;
-        //dd($request);
+       // dd($request);
         /*
-        "_token" => "ndLPzzguR2yvC9IfD99w7SjoLPCmDgzR42nS5vzc"
-        "idAgenteNuevoNodo" => "11512"
-        "CargoSal" => "2"
-        "idEspCur" => "2224"
-        "SituacionDeRevista" => "1"
-        "idDivision" => "648"
-        "cant_horas" => "2"
-        "FechaAltaN" => "2000-01-01"
+            "_token" => "GlwXEhtxgnCKdflU0laeMRsVb2YsU6uLrrIbC1JE"
+            "idAgenteNuevoNodo" => "26731952"
+            "CargoSal" => "1"
+            "SituacionDeRevista" => "1"
+            "idDivision" => "658"
+            "cant_horas" => "20"
+            "FechaAltaN" => "2024-02-10"
 
         */
-        if($request->idEspCur != ""){
+       /* if($request->idEspCur != ""){
             $EspCur=DB::table('tb_espacioscurriculares')
             ->where('idEspacioCurricular',$request->idEspCur)
             ->get();
@@ -473,22 +489,21 @@ class AgController extends Controller
             $idAsig=$EspCur[0]->Asignatura;
         }else{
             $idAsig=1;
-        }
+        }*/
         
         $nodo = new Nodo;
-        $nodo->Agente = $request->idAgenteNuevoNodo;
-
-       
-        $nodo->EspacioCurricular = $request->idEspCur;
-        $nodo->Division = $request->idDivision;
-        $nodo->CargoSalarial = $request->CargoSal;
-        $nodo->CantidadHoras = $request->cant_horas;
-        $nodo->FechaDeAlta = $request->FechaAltaN;
-        $nodo->SitRev = $request->SituacionDeRevista;
-        $nodo->Asignatura = $idAsig;
-        $nodo->Activo = 1;  //es nuevo y esta activo
-        $nodo->Usuario = session('idUsuario');
-        $nodo->CUE = session('CUEa');
+            $nodo->Agente = $request->idAgenteNuevoNodo;    //DNI
+           // $nodo->EspacioCurricular = $request->idEspCur;
+            $nodo->Division = $request->idDivision;
+            $nodo->CargoSalarial = $request->CargoSal;
+            $nodo->CantidadHoras = $request->cant_horas;
+            $nodo->FechaDeAlta = $request->FechaAltaN;
+            $nodo->SitRev = $request->SituacionDeRevista;
+           // $nodo->Asignatura = $idAsig;
+            $nodo->Activo = 1;  //es nuevo y esta activo
+            $nodo->Usuario = session('idUsuario');  //el que administra la escuela
+            $nodo->CUECOMPLETO = session('CUECOMPLETO');
+            $nodo->idTurnoUsuario = session('idTurnoUsuario');
         $nodo->save();
         
         /*
@@ -642,22 +657,24 @@ class AgController extends Controller
                 //creo el nodo siguiente
             $Nuevo = new Nodo;
             $Nuevo->Agente = null;
-            $Nuevo->EspacioCurricular = null;
+           // $Nuevo->EspacioCurricular = null;
             $Nuevo->CargoSalarial = null;
             $Nuevo->CantidadHoras = null;
             $Nuevo->FechaDeAlta = null;
             $Nuevo->Division = null;
             $Nuevo->SitRev = null;
-            $Nuevo->Asignatura = null;
+            //$Nuevo->Asignatura = null;
             $Nuevo->Usuario = session('idUsuario');
-            $Nuevo->CUE = session('CUEa');
+            $Nuevo->CUECOMPLETO = session('CUECOMPLETO');
+            $Nuevo->idTurnoUsuario = session('idTurnoUsuario');
             $Nuevo->PosicionAnterior = $nodoActual;
+            $Nuevo->Activo = 0;
             $Nuevo->save();
            
             //obtengo el id y lo guardo relacionando al anterior que recibo por parametro
             $Nuevo->idNodo;
-            $nodo = Nodo::where('idNodo', $nodoActual)->first();
-            $nodo->PosicionSiguiente = $Nuevo->idNodo;
+                $nodo = Nodo::where('idNodo', $nodoActual)->first();
+                $nodo->PosicionSiguiente = $Nuevo->idNodo;
             $nodo->save();
        // }
         
@@ -742,15 +759,16 @@ class AgController extends Controller
         if($nodoActual->PosicionAnterior==null || $nodoActual->PosicionAnterior==""){
             $Nuevo = new Nodo;
             $Nuevo->Agente = null;
-            $Nuevo->EspacioCurricular = $nodoActual->EspacioCurricular;
+            //$Nuevo->EspacioCurricular = $nodoActual->EspacioCurricular;
             $Nuevo->CargoSalarial = null;
             $Nuevo->CantidadHoras = $nodoActual->CantidadHoras;
             $Nuevo->FechaDeAlta = null; //cuando se cargue el agente nuevo
             $Nuevo->Division = $nodoActual->Division;
             $Nuevo->SitRev = null;
-            $Nuevo->Asignatura = $nodoActual->Asignatura;
+           // $Nuevo->Asignatura = $nodoActual->Asignatura;
             $Nuevo->Usuario = session('idUsuario');
-            $Nuevo->CUE = session('CUEa');
+            $Nuevo->CUECOMPLETO = session('CUECOMPLETO');
+            $Nuevo->idTurnoUsuario = session('idTurnoUsuario');
             $Nuevo->PosicionAnterior = null;
             $Nuevo->PosicionSiguiente = $nodoActual->idNodo;
             $Nuevo->Activo = 0; //vacio vacante
@@ -765,15 +783,16 @@ class AgController extends Controller
             //nuevo nodo intermedio
             $Nuevo = new Nodo;
             $Nuevo->Agente = null;
-            $Nuevo->EspacioCurricular = $nodoActual->EspacioCurricular;
+            //$Nuevo->EspacioCurricular = $nodoActual->EspacioCurricular;
             $Nuevo->CargoSalarial = null;
             $Nuevo->CantidadHoras = $nodoActual->CantidadHoras;
             $Nuevo->FechaDeAlta = null; //cuando se agregue el nuevo agente
             $Nuevo->Division = $nodoActual->Division;
             $Nuevo->SitRev = null;
-            $Nuevo->Asignatura = $nodoActual->Asignatura;
+            //$Nuevo->Asignatura = $nodoActual->Asignatura;
             $Nuevo->Usuario = session('idUsuario');
-            $Nuevo->CUE = session('CUEa');
+            $Nuevo->CUECOMPLETO = session('CUECOMPLETO');
+            $Nuevo->idTurnoUsuario = session('idTurnoUsuario');
             $Nuevo->PosicionAnterior = $nodoAnterior->idNodo;
             $Nuevo->PosicionSiguiente = $nodoActual->idNodo;
             $Nuevo->Activo = 0; //vacio vacante
@@ -853,34 +872,33 @@ class AgController extends Controller
     public function ActualizarNodoAgente($idNodo){
         //dd($idNodo);
         //obtengo el usuario que es la escuela a trabajar
-        $idReparticion = session('idReparticion');
+        //$idReparticion = session('idReparticion');
         //consulto a reparticiones
-        $reparticion = DB::table('tb_reparticiones')
+        /*$reparticion = DB::table('tb_reparticiones')
         ->where('tb_reparticiones.idReparticion',$idReparticion)
-        ->get();
+        ->get();*/
         //dd($reparticion[0]->Organizacion);
         
         //traigo todo de suborganizacion pasada
-        $subOrganizacion=DB::table('tb_suborganizaciones')
-        ->where('tb_suborganizaciones.idsuborganizacion',$reparticion[0]->subOrganizacion)
-        ->select('*')
+        $institucionExtension=DB::table('tb_institucion_extension')
+        ->where('tb_institucion_extension.idInstitucionExtension',session('idInstitucionExtension'))
         ->get();
         
         //traigo los nodos
         $infoNodos=DB::table('tb_nodos')
-        ->where('tb_suborganizaciones.idSubOrganizacion',$reparticion[0]->subOrganizacion)
+        ->where('tb_institucion_extension.idInstitucionExtension',session('idInstitucionExtension'))
         ->where('tb_nodos.idNodo',$idNodo)
-        ->leftjoin('tb_suborganizaciones', 'tb_suborganizaciones.cuecompleto', 'tb_nodos.CUE')
-        ->leftjoin('tb_agentes', 'tb_agentes.idAgente', 'tb_nodos.Agente')
-        ->leftjoin('tb_asignaturas', 'tb_asignaturas.idAsignatura', 'tb_nodos.Asignatura')
+        ->leftjoin('tb_institucion_extension', 'tb_institucion_extension.CUECOMPLETO', 'tb_nodos.CUECOMPLETO')
+        ->leftjoin('tb_desglose_agentes', 'tb_desglose_agentes.docu', 'tb_nodos.Agente')
+        //->leftjoin('tb_asignaturas', 'tb_asignaturas.idAsignatura', 'tb_nodos.Asignatura')
         ->leftjoin('tb_cargossalariales', 'tb_cargossalariales.idCargo', 'tb_nodos.CargoSalarial')
         ->leftjoin('tb_situacionrevista', 'tb_situacionrevista.idSituacionRevista', 'tb_nodos.SitRev')
         ->leftjoin('tb_divisiones', 'tb_divisiones.idDivision', 'tb_nodos.Division')
         ->select(
-            'tb_agentes.*',
+            'tb_desglose_agentes.*',
             'tb_nodos.*',
-            'tb_asignaturas.idAsignatura',
-            'tb_asignaturas.Descripcion as nomAsignatura',
+           // 'tb_asignaturas.idAsignatura',
+            //'tb_asignaturas.Descripcion as nomAsignatura',
             'tb_cargossalariales.idCargo',
             'tb_cargossalariales.Cargo as nomCargo',
             'tb_cargossalariales.Codigo as nomCodigo',
@@ -897,7 +915,7 @@ class AgController extends Controller
         $TipoMotivo = DB::table('tb_motivos')->get();
         
         $Divisiones = DB::table('tb_divisiones')
-                ->where('tb_divisiones.idSubOrg',session('idSubOrganizacion'))
+                ->where('tb_divisiones.idInstitucionExtension',session('idInstitucionExtension'))
                 ->join('tb_cursos','tb_cursos.idCurso', '=', 'tb_divisiones.Curso')
                 ->join('tb_division','tb_division.idDivisionU', '=', 'tb_divisiones.Division')
                 ->join('tb_turnos', 'tb_turnos.idTurno', '=', 'tb_divisiones.Turno')
@@ -911,7 +929,7 @@ class AgController extends Controller
                 ->orderBy('tb_cursos.DescripcionCurso','ASC')
                 ->get();
 
-                $EspaciosCurriculares = DB::table('tb_espacioscurriculares')
+                /*$EspaciosCurriculares = DB::table('tb_espacioscurriculares')
                 ->where('tb_espacioscurriculares.SubOrg',session('idSubOrganizacion'))
                 ->join('tb_asignaturas','tb_asignaturas.idAsignatura', 'tb_espacioscurriculares.Asignatura')
                 ->select(
@@ -919,20 +937,20 @@ class AgController extends Controller
                     'tb_asignaturas.*'
                 )
                 //->orderBy('tb_asignaturas.DescripcionCurso','ASC')
-                ->get();
+                ->get();*/
 
                 $CargosSalariales = DB::table('tb_cargossalariales')->get();
                 $DiasSemana = DB::table('tb_diassemana')->get();
                 $datos=array(
                     'mensajeError'=>"",
-                    'CueOrg'=>$subOrganizacion[0]->cuecompleto,
-                    'nombreSubOrg'=>$subOrganizacion[0]->Descripcion,
-                    'infoSubOrganizaciones'=>$subOrganizacion,
-                    'idSubOrg'=>$reparticion[0]->subOrganizacion, 
+                    'CUECOMPLETO'=>$institucionExtension[0]->CUECOMPLETO,
+                    'Nombre_Institucion'=>$institucionExtension[0]->Nombre_Institucion,
+                    'institucionExtension'=>$institucionExtension,
+                    'idInstitucionExtension'=>$institucionExtension[0]->idInstitucionExtension, 
                     'infoNodos'=>$infoNodos,
                     'SituacionDeRevista'=>$SituacionRevista,
                     'Divisiones'=>$Divisiones,
-                    'EspaciosCurriculares'=>$EspaciosCurriculares,
+                    //'EspaciosCurriculares'=>$EspaciosCurriculares,
                     'CargosSalariales'=>$CargosSalariales,
                     'DiasSemana'=>$DiasSemana,
                     'Nodo'=>$idNodo,
@@ -1041,35 +1059,35 @@ class AgController extends Controller
         //echo $request->Agente." ".session('CUE') ;
         //dd($request);
         /*
-         "_token" => "ndLPzzguR2yvC9IfD99w7SjoLPCmDgzR42nS5vzc"
-        "Descripcion" => "LOYOLA LEO MARTIN"
-        "CargoSalarial" => "10"
-        "EspCur" => "2224"
-        "SitRev" => "648"
-        "CantidadHoras" => "10"
-        "FA" => "2001-01-01"
-        "nodo" => "55"
-        "Observaciones"--->llega 18 de abril en adelante--agregar a bd
-        ]
+            "_token" => "GlwXEhtxgnCKdflU0laeMRsVb2YsU6uLrrIbC1JE"
+            "DescripcionNombreAgenteActualizar" => "LOYOLA, LEO"
+            "idAgente" => "26731952"
+            "CargoSalarial" => "1"
+            "SitRev" => "1"
+            "Division" => "658"
+            "CantidadHoras" => "20"
+            "FA" => "2024-02-10"
+            "nodo" => "109"
+            "Observaciones" => "prueba en actualizar datos dentro de nodo"
         */
-        $EspCur=DB::table('tb_espacioscurriculares')
+        /*$EspCur=DB::table('tb_espacioscurriculares')
         ->where('idEspacioCurricular',$request->EspCur)
-        ->get();
+        ->get();*/
 
         //dd($EspCur[0]->Asignatura);
-        $idAsig=$EspCur[0]->Asignatura;
+        //$idAsig=$EspCur[0]->Asignatura;
         $nodo = Nodo::where('idNodo', $request->nodo)->first();
-        $nodo->Agente = $request->idAgente;
-        $nodo->EspacioCurricular = $request->EspCur;
-        $nodo->Division = $request->Division;
-        $nodo->CargoSalarial = $request->CargoSalarial; //listo
-        $nodo->CantidadHoras = $request->CantidadHoras; //listo
-        $nodo->FechaDeAlta = $request->FA;              //listo
-        $nodo->SitRev = $request->SitRev;               //listo
-        $nodo->Asignatura = $idAsig;
-        $nodo->Activo = 1;  //ingreso un agente
-        $nodo->Observaciones = $request->Observaciones; //listo 18 de abril
-        $nodo->Usuario = session('idUsuario');
+            $nodo->Agente = $request->idAgente;                 //es el DNI
+            //$nodo->EspacioCurricular = $request->EspCur;
+            $nodo->Division = $request->Division;
+            $nodo->CargoSalarial = $request->CargoSalarial; //listo
+            $nodo->CantidadHoras = $request->CantidadHoras; //listo
+            $nodo->FechaDeAlta = $request->FA;              //listo
+            $nodo->SitRev = $request->SitRev;               //listo
+           // $nodo->Asignatura = $idAsig;
+            $nodo->Activo = 1;  //ingreso un agente
+            $nodo->Observaciones = $request->Observaciones; //listo 18 de abril
+            $nodo->Usuario = session('idUsuario');
         $nodo->save();
         
         /*

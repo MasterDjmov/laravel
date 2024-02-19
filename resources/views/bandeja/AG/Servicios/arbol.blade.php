@@ -11,7 +11,7 @@
             <!-- Custom Tabs -->
             <div class="card card-lightblue">
               <div class="card-header d-flex p-0">
-                <h3 class="card-title p-3">Panel de Control POF - CUE / CUE COMPLETO: {{session('CUE')}} / {{session('CUEa')}}</h3>
+                <h3 class="card-title p-3">Panel de Control POF - CUE / CUE COMPLETO: {{session('CUE')}} / {{session('CUECOMPLETO')}}</h3>
               </div><!-- /.card-header -->
 
               <div class="card-body">
@@ -26,7 +26,7 @@
                           <div class="ml-1">
                             <div class="card bg-Suplente">
                               <div class="card-title mt-4 d-flex justify-content-center">
-                                <h5 id="DescripcionNombreAgente" class="mb-0">Docente: </h5>
+                                <h6 style="font-weight: bold" id="DescripcionNombreAgente" class="mb-0">Docente: </h6>
                                 <input type="hidden" name="idAgenteNuevoNodo" id="idAgenteNuevoNodo" value="">
                               </div>
                               <div class="card-body">
@@ -138,7 +138,7 @@
                           <div class="modal-header">
                             <div class="modal-title">
                               <h4 class="modal-title">Buscar Agente</h4>
-                              <h6 class="">CUE:<b>{{ session('CUEa') }}</b></h6>
+                              <h6 class="">CUE:<b>{{ session('CUECOMPLETO') }}</b></h6>
                             </div>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
@@ -164,6 +164,8 @@
                                           <th>ID</th>
                                           <th>Apellido y Nombre</th>
                                           <th>DNI</th>
+                                          <th>Instituci&oacute;n</th>
+                                          <th>Cargo</th>
                                           <th>Opciones</th>
                                       </tr>
                                   </thead>
@@ -202,9 +204,6 @@
 @endsection
 
  
-
-
-@section('Script')
 @section('Script')
     <script src="{{ asset('js/funcionesvarias.js') }}"></script>
    
@@ -250,7 +249,7 @@
     $('.formularioNuevoAgenteNodo').submit(function(e){
       if($("#idAgente").val()=="" ||
         $("#CargoSal").val()=="" ||
-        //$("#idEspCur").val()=="" ||
+        $("#idDivision").val() == "" || $("#idDivision").val() == null ||
         $("#cant_horas").val()==""){
         console.log("error")
          e.preventDefault();
@@ -263,7 +262,7 @@
         e.preventDefault();
         Swal.fire({
             title: 'Esta seguro de querer agregar el Agente?',
-            text: "Prueba por ahora",
+            text: "Esta accion sera validad luego por RRHH",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
@@ -283,7 +282,7 @@
         e.preventDefault();
         Swal.fire({
             title: 'Esta seguro de querer agregar el Agente?',
-            text: "Prueba por ahora",
+            text: "Esta accion sera validad luego por RRHH",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
@@ -297,165 +296,3 @@
     })
 </script>
 @endsection
-
-<?php
-  function recursiva($nodo) {
-    //variables a usar
-    $Agente="";
-    $idAgente="";
-    $SitRev="";
-    $CargoSalarial="";
-    $nomSitRev="";
-    $Nombres="";
-    $nomCargo="";
-    $nomCodigo="";
-    $idCargo="";
-    $Descripcion="";
-    $DescripcionTurno="";
-    $Asignatura="";
-    $idAsignatura="";
-
-    $recNodo=DB::table('tb_nodos')
-      ->where('tb_nodos.idNodo',$nodo)
-      ->select('tb_nodos.*')
-      ->get();
-
-    if($recNodo[0]->Agente==null){
-      $idAgente="";
-      $Nombres="VACANTE";
-    }else{
-     $iAgente = DB::table('tb_agentes')
-      ->where('tb_agentes.idAgente',$recNodo[0]->Agente)
-      ->select('*')
-      ->get();
-      $idAgente=$iAgente[0]->idAgente;
-      $Nombres=$iAgente[0]->Nombres;
-    }
-
-    //busco los datos
-    if($recNodo[0]->SitRev==null){
-      $nomSitRev="SR";
-    }else{
-      $SituacionRevista = DB::table('tb_situacionrevista')
-        ->where('tb_situacionrevista.idSituacionRevista',$recNodo[0]->SitRev)
-        ->select(
-          'tb_situacionrevista.idSituacionRevista',
-          'tb_situacionrevista.Descripcion as nomSitRev',
-                )
-        ->get();
-        $nomSitRev=$SituacionRevista[0]->nomSitRev;
-    }
-     
-    if($recNodo[0]->CargoSalarial==null){
-      $nomCargo="Cargo";
-      $nomCodigo="Cod";
-      $idCargo="";
-    }else{
-      $iCargo = DB::table('tb_cargossalariales')
-            ->where('tb_cargossalariales.idCargo',$recNodo[0]->CargoSalarial)
-            ->select(
-                  'tb_cargossalariales.idCargo',
-                  'tb_cargossalariales.Cargo as nomCargo',
-                  'tb_cargossalariales.Codigo as nomCodigo'
-                  )
-            ->get();
-      $nomCargo=$iCargo[0]->nomCargo;
-      $nomCodigo=$iCargo[0]->nomCodigo;
-      $idCargo=$iCargo[0]->idCargo;
-    }
-
-    if($recNodo[0]->Division==null){
-      $Descripcion="";
-      $DescripcionTurno="";
-    }else{
-      $iDivTur = DB::table('tb_divisiones')
-            ->where('tb_divisiones.idDivision',$recNodo[0]->Division)
-            ->join('tb_turnos', 'tb_turnos.idTurno', 'tb_divisiones.Turno')
-            ->select(
-                  'tb_divisiones.Descripcion as Descripcion',
-                  'tb_turnos.Descripcion as DescripcionTurno'
-                  )
-            ->get();
-      $Descripcion=$iDivTur[0]->Descripcion;
-      $DescripcionTurno=$iDivTur[0]->DescripcionTurno;
-      
-    }   
-
-    if($recNodo[0]->Asignatura==null){
-      $Asignatura="";
-      $idAsignatura="";
-    }else{
-      $iAsignatura = DB::table('tb_asignaturas')
-            ->where('tb_asignaturas.idAsignatura',$recNodo[0]->Asignatura)
-            ->select(
-                  'tb_asignaturas.Descripcion as Descripcion',
-                  'tb_asignaturas.idAsignatura',
-                  )
-            ->get();
-      $Asignatura=$iAsignatura[0]->Descripcion; 
-      $idAsignatura=$iAsignatura[0]->idAsignatura;     
-    } 
-    // dd($SituacionRevista[0]->nomSitRev); 
-?>
-    <!--primera Card-->
-    <div class="ml-1">
-      <div class="card shadow-lg bg-{{$nomSitRev}}">
-        <div class="card-title mt-4 d-flex justify-content-center">
-          {{-- $o->Nombres sale de agente--}}
-          @if (1)
-            <h5 id="DescripcionNombreAgente" class="mb-0">({{$recNodo[0]->idNodo}}) {{$Nombres}} </h5>
-          @else
-            <h5 id="DescripcionNombreAgente" class="mb-0">({{$recNodo[0]->idNodo}}) <b>VACANTE</b> </h5>
-          @endif
-                                            
-          <input type="hidden" name="idAgente" id="idAgente2" value="{{$idAgente}}">
-        </div>
-        <div class="card-body">
-          <p class="mb-0">Cargo: <label for="cargo" id="DescripcionCargo">{{$nomCargo}} - ({{$nomCodigo}})</label>
-            <input type="hidden" id="CargoSal2" name="CargoSal" value="{{$idCargo}}">
-          </p>
-          <p class="mb-0">E.C: <label for="DescripcionEspCur" id="DescripcionEspCur">{{$Asignatura}}</label>
-            <input type="hidden" id="idEspCur2" name="idEspCur" value="{{$idAsignatura}}">
-          </p>
-          <p class="mb-0">S.R:<b>{{$nomSitRev}}</b> (<b>{{$Descripcion}} - {{$DescripcionTurno}} </b>)</p>
-          
-          <p class="mb-0">
-            Cant. Horas: <label for="CantidadHoras" id="CantidadHoras">{{$recNodo[0]->CantidadHoras}}</label> - 
-            F.Alta: <label for="Fa" id="Fa">{{ \Carbon\Carbon::parse($recNodo[0]->FechaDeAlta)->format('d-m-Y')}}</label>
-            </p>
-        </div>
-        <div class="card-footer">
-          {{-- <a type="button" href="#" class="btn mx-1" data-toggle="tooltip" data-placement="top" title="Licencia">
-            <span class="material-symbols-outlined pt-1">medical_services</span>
-            </a> --}}
-          <a  href="{{route('ActualizarNodoAgente',$recNodo[0]->idNodo)}}" class="btn mx-1 "  data-placement="top" title="Actualizar Docente"  >
-            <span class="material-symbols-outlined pt-1" >edit_square</span>
-          </a>
-          {{-- @if ($o->PosicionSiguiente == "")
-            <a href="{{route('agregaNodo',$o->idNodo)}}" class="btn mx-1 Vincular">
-              <span class="material-symbols-outlined pt-1" data-toggle="tooltip" data-placement="top" title="Vincular">compare_arrows</span>
-            </a>
-          @endif --}}
-        </div>
-      </div>
-    </div>
-  <!--Fin primera Card-->
-<?php
-        if ($recNodo[0]->PosicionSiguiente==null || $recNodo[0]->PosicionSiguiente=="") {
-            return 1;
-        } else {
-          //armo el proceso de flecha antes de irse a buscar otro nodo
-?>
-        <!--Flechita-->
-        <div class="d-flex align-self-center ml-2 mb-4">
-          <div class="align-items-center st0"></div>
-          <div class="align-items-center st2"></div>
-        </div>
-<?php
-    
-        
-          return recursiva($recNodo[0]->PosicionSiguiente);//envio el nodo a analizar
-        }
-    }
-?>
-

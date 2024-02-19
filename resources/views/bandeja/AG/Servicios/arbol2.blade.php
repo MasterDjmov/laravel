@@ -11,7 +11,7 @@
             <!-- Custom Tabs -->
             <div class="card card-lightblue">
               <div class="card-header d-flex p-0">
-                <h3 class="card-title p-3">Panel de Control POF - CUE COMPLETO: {{session('CUEa')}}</h3>
+                <h3 class="card-title p-3">Panel de Control POF - CUE COMPLETO: {{session('CUECOMPLETO')}}</h3>
               </div><!-- /.card-header -->
 
               <div class="card-body">
@@ -19,12 +19,12 @@
                 <!-- /.tab-pane -->
                   <div class="" id="tab_3">
                     {{-- Agente info Inicio--}}
-                    <h3>Organizacion: {{$nombreSubOrg}} - CUE: {{ $CueOrg }}</h3>
+                    <h3>Organizacion: {{$Nombre_Institucion}} - CUE: {{ $CUECOMPLETO }}</h3>
                     
                     <div class="row" id="contenidoNodos">
                       @php
                         if(session('infoNodos')){
-                          $infoNodos = session('infoNodos');
+                          //$infoNodos = session('infoNodos');
                         }
                       @endphp
                     </div>
@@ -177,21 +177,24 @@
     $Asignatura="";
     $idAsignatura="";
 
+    //recupero el nodo pasado para recursiva
     $recNodo=DB::table('tb_nodos')
       ->where('tb_nodos.idNodo',$nodo)
       ->select('tb_nodos.*')
       ->get();
 
+    //dd($recNodo);
     if($recNodo[0]->Agente==null){
       $idAgente="";
       $Nombres="VACANTE";
     }else{
-     $iAgente = DB::table('tb_agentes')
-      ->where('tb_agentes.idAgente',$recNodo[0]->Agente)
+     $iAgente = DB::table('tb_desglose_agentes')
+      ->where('tb_desglose_agentes.docu',$recNodo[0]->Agente) //busco el dni
       ->select('*')
       ->get();
-      $idAgente=$iAgente[0]->idAgente;
-      $Nombres=$iAgente[0]->Nombres;
+      //dd($iAgente);
+      $idAgente=$iAgente[0]->docu;
+      $Nombres=$iAgente[0]->nomb;
     }
 
     //busco los datos
@@ -275,9 +278,6 @@
         <div class="card-body">
           <p class="mb-0">Cargo: <label for="cargo" id="DescripcionCargo">{{$nomCargo}} - ({{$nomCodigo}})</label>
             <input type="hidden" id="CargoSal2" name="CargoSal" value="{{$idCargo}}">
-          </p>
-          <p class="mb-0">E.C: <label for="DescripcionEspCur" id="DescripcionEspCur">{{$Asignatura}}</label>
-            <input type="hidden" id="idEspCur2" name="idEspCur" value="{{$idAsignatura}}">
           </p>
           <p class="mb-0">S.R:<b>{{$nomSitRev}}</b> (<b>{{$Descripcion}} - {{$DescripcionTurno}} </b>)</p>
           

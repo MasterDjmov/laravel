@@ -404,12 +404,12 @@ class LupController extends Controller
         //primero voy a borrar todos los datos de una suborg
        
         $Divisiones = new DivisionesModel();
-        $Divisiones->Descripcion = $request->Descripcion;
-        $Divisiones->Curso = $request->Curso;
-        $Divisiones->Division = $request->Division;
-        $Divisiones->Turno = $request->Turno;
-        $Divisiones->FechaAlta = Carbon::now();
-        $Divisiones->idInstitucion = session('idInstitucion');
+            $Divisiones->Descripcion = $request->Descripcion;
+            $Divisiones->Curso = $request->Curso;
+            $Divisiones->Division = $request->Division;
+            $Divisiones->Turno = $request->Turno;
+            $Divisiones->FechaAlta = Carbon::now();
+            $Divisiones->idInstitucionExtension = session('idInstitucionExtension');
         $Divisiones->save();
 
         return redirect("/verDivisiones")->with('ConfirmarActualizarDivisiones','OK');

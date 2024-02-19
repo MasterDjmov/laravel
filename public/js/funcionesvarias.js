@@ -119,10 +119,14 @@ function getAgentes() {
  function seleccionarAgentes($idAgente){
      var DescripcionAgente = document.getElementById('DescripcionNombreAgente');
      var nomAgenteModal = document.getElementById('nomAgenteModal'+$idAgente);
-     DescripcionAgente.innerHTML="Docente: " + nomAgenteModal.value;
+     DescripcionAgente.innerHTML="Docente: " + nomAgenteModal.value + "("+$idAgente+")";
      document.getElementById('idAgenteNuevoNodo').value=$idAgente; 
      $('#modalAgente').modal('hide');  
  }
+
+ $('#modalAgente').on('shown.bs.modal', function () {
+    $('#buscarAgente').focus();
+});
 
  function getAgentesActualizar() {
     if( $("#buscarAgente").val() != ""){
@@ -368,6 +372,10 @@ function getAgentes() {
     document.getElementById('CargoSal').value=$idCargo;
     $('#modalCargoFuncion').modal('hide');
 }
+
+$('#modalCargoFuncion').on('shown.bs.modal', function () {
+    $('#btCargos').focus();
+});
 
 function seleccionarAsigAgente($idAsignatura){
     var DescripcionEspCur = document.getElementById('DescripcionEspCur');

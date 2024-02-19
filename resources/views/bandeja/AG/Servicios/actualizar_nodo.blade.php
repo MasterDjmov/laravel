@@ -90,7 +90,7 @@
                                 <div class="form-group">
                                     <label class="label-form" for="Descripcion">Docente: </label>
                                     <div class="input-group">
-                                        <input type="text" autocomplete="off" class="form-control" id="DescripcionNombreAgenteActualizar" name="DescripcionNombreAgenteActualizar" placeholder="Ingrese Descripcion" value="{{$infoNodos[0]->Nombres}}">
+                                        <input type="text" autocomplete="off" class="form-control" id="DescripcionNombreAgenteActualizar" name="DescripcionNombreAgenteActualizar" placeholder="Ingrese Descripcion" value="{{$infoNodos[0]->nomb}}">
                                         <input type="hidden" name="idAgente"  id="idAgente" value="{{$infoNodos[0]->Agente}}">
                                         <span class="input-group-append">
                                             <a href="#modalAgente" class="btn btn-info btn-flat"  data-toggle="modal" data-placement="top" title="Agregar Docente"  data-target="#modalAgente">Agregar</a>
@@ -110,7 +110,7 @@
                                     @endforeach 
                                     </select>
                                 </div>  
-                                <div class="form-group">
+                                {{-- <div class="form-group">
                                     <label for="EspCur">Espacio Curricular</label>
                                     <select class="form-control" name="EspCur" id="EspCur">
                                         @foreach($EspaciosCurriculares as $key => $o)
@@ -119,9 +119,9 @@
                                             @else
                                                 <option value="{{$o->idEspacioCurricular}}">{{$o->Descripcion}}</option>
                                             @endif
-                                        @endforeach
+                                        @endforeach 
                                     </select>
-                                </div>
+                                </div> --}}
                                 <div class="form-group">
                                     <label for="SitRev">Situación de Revista</label>
                                     <select class="form-control" name="SitRev" id="SitRev">
@@ -303,20 +303,20 @@
                               <div class="col-12 col-sm-6 col-md-12 d-flex align-items-stretch flex-column">
                                 <div class="card d-flex flex-fill">
                                   <div class="card-header bg-{{$o->nomSitRev}}">
-                                    @if ($o->Nombres != "")
-                                      <h5 id="DescripcionNombreAgente" class="mb-0">({{$o->idNodo}})Docente: {{$o->Nombres}} </h5>
+                                    @if ($o->nomb != "")
+                                      <h5 id="DescripcionNombreAgente" class="mb-0">({{$o->idNodo}})Docente: {{$o->nomb}} </h5>
                                     @else
                                       <h5 id="DescripcionNombreAgente" class="mb-0">({{$o->idNodo}})Docente: <b>VACANTE</b> </h5>
                                     @endif
-                                      <input type="hidden" name="idAgente" id="idAgente2" value="{{$o->idAgente}}">
+                                      <input type="hidden" name="idAgente" id="idAgente2" value="{{$o->docu}}">
                                   </div>
                                   <div class="card-body">
                                     <label class="">Cargo/Función: <label for="cargo" id="DescripcionCargo">{{$o->nomCargo}} - ({{$o->nomCodigo}})</label>
                                       <input type="hidden" id="CargoSal2" name="CargoSal" value="{{$o->idCargo}}">
                                     </label>
-                                    <p class="mb-0">Esp. Curricular: <label for="DescripcionEspCur" id="DescripcionEspCur">{{$o->nomAsignatura}}</label>
+                                    {{-- <p class="mb-0">Esp. Curricular: <label for="DescripcionEspCur" id="DescripcionEspCur">{{$o->nomAsignatura}}</label>
                                       <input type="hidden" id="idEspCur2" name="idEspCur" value="{{$o->idAsignatura}}">
-                                    </p>
+                                    </p> --}}
 
                                     <p class="mb-0">Sit.Rev: 
                                       @foreach ($SituacionDeRevista as $sr)
@@ -366,17 +366,17 @@
                                   //traigo los nodos
                                   $infoNodoSiguiente=DB::table('tb_nodos')
                                   ->where('tb_nodos.idNodo',$o->PosicionSiguiente)
-                                  ->leftjoin('tb_suborganizaciones', 'tb_suborganizaciones.cuecompleto', 'tb_nodos.CUE')
-                                  ->leftjoin('tb_agentes', 'tb_agentes.idAgente', 'tb_nodos.Agente')
-                                  ->leftjoin('tb_asignaturas', 'tb_asignaturas.idAsignatura', 'tb_nodos.Asignatura')
+                                  ->leftjoin('tb_institucion_extension', 'tb_institucion_extension.CUECOMPLETO', 'tb_nodos.CUECOMPLETO')
+                                  ->leftjoin('tb_desglose_agentes', 'tb_desglose_agentes.docu', 'tb_nodos.Agente')
+                                  //->leftjoin('tb_asignaturas', 'tb_asignaturas.idAsignatura', 'tb_nodos.Asignatura')
                                   ->leftjoin('tb_cargossalariales', 'tb_cargossalariales.idCargo', 'tb_nodos.CargoSalarial')
                                   ->leftjoin('tb_situacionrevista', 'tb_situacionrevista.idSituacionRevista', 'tb_nodos.SitRev')
                                   ->leftjoin('tb_divisiones', 'tb_divisiones.idDivision', 'tb_nodos.Division')
                                   ->select(
-                                      'tb_agentes.*',
+                                      'tb_desglose_agentes.*',
                                       'tb_nodos.*',
-                                      'tb_asignaturas.idAsignatura',
-                                      'tb_asignaturas.Descripcion as nomAsignatura',
+                                      //'tb_asignaturas.idAsignatura',
+                                      //'tb_asignaturas.Descripcion as nomAsignatura',
                                       'tb_cargossalariales.idCargo',
                                       'tb_cargossalariales.Cargo as nomCargo',
                                       'tb_cargossalariales.Codigo as nomCodigo',
@@ -410,8 +410,8 @@
                                                 <div class="card-header bg-{{$infoNodoSiguiente[0]->nomSitRev}}">
                                                   <h4 class="card-title w-100">
                                                     <a class="d-block w-100 text-dark" data-toggle="collapse" href="#colapseEjemplo1">
-                                                      @if ($sig->Nombres != "")
-                                                        <h5 id="DescripcionNombreAgente" class="mb-0">({{$sig->idNodo}})Docente: {{strtoupper($sig->Nombres)}} <span class="material-symbols-outlined text-danger">history</span></h5>
+                                                      @if ($sig->nomb != "")
+                                                        <h5 id="DescripcionNombreAgente" class="mb-0">({{$sig->idNodo}})Docente: {{strtoupper($sig->nomb)}} <span class="material-symbols-outlined text-danger">history</span></h5>
                                                       @else
                                                         <h5 id="DescripcionNombreAgente" class="mb-0">({{$sig->idNodo}})Docente: <b>VACANTE</b> </h5>
                                                       @endif
@@ -423,9 +423,9 @@
                                                     <p class="mb-0">Cargo/Función: <label for="cargo" id="DescripcionCargo">{{$sig->nomCargo}} - ({{$sig->nomCodigo}})</label>
                                                     <input type="hidden" id="CargoSal2" name="CargoSal" value="{{$sig->idCargo}}">
                                                     </p>
-                                                    <p class="mb-0">Esp. Curricular: <label for="DescripcionEspCur" id="DescripcionEspCur">{{$sig->nomAsignatura}}</label>
+                                                    {{-- <p class="mb-0">Esp. Curricular: <label for="DescripcionEspCur" id="DescripcionEspCur">{{$sig->nomAsignatura}}</label>
                                                     <input type="hidden" id="idEspCur2" name="idEspCur" value="{{$sig->idAsignatura}}">
-                                                    </p>
+                                                    </p> --}}
                                                     <p class="mb-0">Sit.Rev: 
                                                     
                                                       @foreach ($SituacionDeRevista as $sr)
