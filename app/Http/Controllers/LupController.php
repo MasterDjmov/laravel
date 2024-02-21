@@ -13,6 +13,7 @@ use App\Models\EdificioModel;
 use App\Models\EspacioCurricularModel;
 use App\Models\InstitucionExtensionModel;
 use App\Models\InstitucionModel;
+use App\Models\InstRelAgenteModel;
 use App\Models\NivelesEnsenanzaRelSubOrgModel;
 use App\Models\Nodo;
 use App\Models\NovedadesModel;
@@ -214,18 +215,16 @@ class LupController extends Controller
         $EstadosCiviles = DB::table('tb_estadosciviles')->get();
         $Nacionalidades = DB::table('tb_nacionalidad')->get();
         //se agrego el 18 abril
-        $RelSubOrgAgente = DB::table('tb_suborg_agente')
-        ->join('tb_agentes', 'tb_agentes.idAgente', '=', 'tb_suborg_agente.idAgente')
-        ->join('tb_tiposdeagente', 'tb_tiposdeagente.idTipoAgente', '=', 'tb_agentes.TipoAgente')
-        ->join('tb_suborganizaciones', 'tb_suborganizaciones.idSubOrganizacion', '=', 'tb_suborg_agente.idSubOrg')
-        ->where('tb_suborg_agente.idSubOrg', session('idSubOrganizacion'))
+        $RelInstAgente = DB::table('tb_institucion_rel_agente')
+        ->join('tb_desglose_agentes', 'tb_desglose_agentes.idDesgloseAgente', '=', 'tb_institucion_rel_agente.idAgente')
+        ->join('tb_institucion_extension', 'tb_institucion_extension.idInstitucionExtension', '=', 'tb_institucion_rel_agente.idInstitucionExtension')
+        ->where('tb_institucion_extension.idInstitucionExtension', session('idInstitucionExtension'))
         ->select(
-            'tb_agentes.*',
-            'tb_suborganizaciones.*',
-            'tb_tiposdeagente.*',
-            'tb_suborg_agente.*'
+            'tb_desglose_agentes.*',
+            'tb_institucion_extension.*',
         )
         ->get();
+
         //dd($RelSubOrgAgente);
         $datos=array(
             'mensajeError'=>"",
@@ -235,7 +234,7 @@ class LupController extends Controller
             'EstadosCiviles' => $EstadosCiviles,
             'Nacionalidades' => $Nacionalidades,
             'mensajeNAV'=>'Panel de Configuración de Agentes / No Agentes',
-            'RelSubOrgAgente'=>$RelSubOrgAgente
+            'RelInstAgente'=>$RelInstAgente
         );
         //dd($infoPlaza);
         return view('bandeja.LUP.nuevo_agente',$datos);
@@ -244,54 +243,40 @@ class LupController extends Controller
     public function FormNuevoAgente(Request $request){
         //voy a omitir por ahora la comprobacion de agentes por DNI
 
-        
+        $institucionExtension=DB::table('tb_institucion_extension')
+                ->where('tb_institucion_extension.idInstitucionExtension',session('idInstitucionExtension'))
+                ->get();
+        $institucionBase=DB::table('tb_institucion')
+                ->where('tb_institucion.idInstitucion',$institucionExtension[0]->idInstitucion)
+                ->get();
+
         //dd($request);
         /*
-        "TipoDocumento" => "3"                  --
-      "Documento" => "123456"                   --
-      "Apellido" => "Cortez"                    --
-      "Nombre" => "Enrique Dario"               --
-      "TipoDeAgente" => "1"                     --
-      "Sexo" => "2"                             --
-      "CUIL" => "991234569"                     --
-      "Telefono" => "384533543"                 --
-      "Domicilio" => "Las Heras 1586 -Parque Sud"--
-      "nomLocalidad" => "LA RIOJA"
-      "Localidad" => "12379"                    --
-      "nomLugarNacimiento" => "Capital"
-      "LugarNacimiento" => "5446014"            --
-      "FechaNacimiento" => "1979-06-06"
-      "Vive" => "SI"                            --
-      "EstadoCivil" => "3"                      --
-      "Nacionalidad" => "1"                     --
-      "Correo" => "noirblackynegro@gmail.com"
+            "_token" => "CXxPRXwdpVUv0XBGLDF4mUTkiPap95bKWqRdB1lE"
+            "Apellido" => "loyola"
+            "Nombre" => "leo martin"
+            "Documento" => "22"
+            "Sexo" => "M"
+            "CUIL" => "23267319529"
+            "TipoDeAgente" => "1"
         */
         $o = new AgenteModel();
-          $o->TipoDocumento = $request->TipoDocumento;
-          $o->Documento = $request->Documento;
-          $o->Nombres = strtoupper($request->Apellido)." ".strtoupper($request->Nombre);
-          $o->Apellido = strtoupper($request->Apellido);
-          $o->Nombre = strtoupper($request->Nombre);
-          $o->TipoAgente = $request->TipoDeAgente;
+          $o->docu = $request->Documento;
+          $o->nomb = strtoupper($request->Apellido).", ".strtoupper($request->Nombre);
           $o->Sexo = $request->Sexo;
-          $o->CUIL = $request->CUIL;
-          $o->Telefono = $request->Telefono;
-          $o->Domicilio = $request->Domicilio;
-          $o->Localidad = $request->Localidad;
-          $o->LugarNacimiento = $request->LugarNacimiento;
-          $o->Vive = $request->Vive;
-          $o->EstadoCivil = $request->EstadoCivil;
-          $o->Nacionalidad = $request->Nacionalidad;
-          $o->Email = $request->Correo;
-          //agregado en abril
-          $o->FechaCarga = Carbon::now();
+          $o->cuil = $request->CUIL;
+          $o->viejo = 1;
+          //datos de la zona, los traigo desde la 
+          $o->zona = $institucionExtension[0]->Zona;
+          $o->desc_zona = $institucionExtension[0]->Localidad;
+          $o->escu = $institucionBase[0]->Unidad_Liquidacion;
+          $o->desc_escu = $institucionExtension[0]->Nombre_Institucion;
         $o->save();
           
         //agrego al docente en la tabla relacionada suborg y agente
-        $ag = new SubOrgAgenteModel();
-        $ag->idSubOrg = session('idSubOrganizacion');
-        $ag->idAgente = $o->idAgente;
-        $ag->Confirmado = "VERIFICANDO";
+        $ag = new InstRelAgenteModel();
+            $ag->idInstitucionExtension = session('idInstitucionExtension');
+            $ag->idAgente = $o->idDesgloseAgente;
         $ag->save();
          return redirect("/nuevoAgente")->with('ConfirmarNuevoAgente','OK');
          //LuiController::PlazaNueva($request->idSurOrg);
@@ -838,7 +823,7 @@ class LupController extends Controller
         ->where('Agente', $nodo->Agente)
         ->where('CUECOMPLETO', $nodo->CUECOMPLETO)
         ->where('idTurnoUsuario', $nodo->idTurnoUsuario)
-        ->where('Motivo','=', 1)    //pregunto si esta activo con ALTA
+        //->where('Motivo','=', 1)    //pregunto si esta activo con ALTA
         ->whereNotNull('Nodo') // Verifica si el campo 'Nodo' no es null
         ->first();
 

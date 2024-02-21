@@ -290,13 +290,67 @@
                                   </tr>
                               </thead>
                               <tbody>
-                               @foreach($Novedades as $key => $n)
+                                @php
+                                 $institucionExtension=DB::table('tb_institucion_extension')
+                                    ->where('tb_institucion_extension.idInstitucionExtension',session('idInstitucionExtension'))
+                                    ->get();
+                                
+                                $TiposDeEspacioCurricular = DB::table('tb_tiposespacioscurriculares')->get();
+                                $Cursos = DB::table('tb_cursos')->get();
+                                $Division = DB::table('tb_division')->get();
+                                $Cursos = DB::table('tb_cursos')->get();
+                                $TiposHora = DB::table('tb_tiposhora')->get();
+                                $RegimenDictado = DB::table('tb_pof_regimendictado')->get();
+                                $Divisiones = DB::table('tb_divisiones')
+                                ->where('tb_divisiones.idInstitucionExtension',session('idInstitucionExtension'))
+                                ->join('tb_cursos','tb_cursos.idCurso', '=', 'tb_divisiones.Curso')
+                                //->join('tb_division','tb_division.idDivisionU', '=', 'tb_divisiones.Division')
+                                //->join('tb_turnos', 'tb_turnos.idTurno', '=', 'tb_divisiones.Turno')
+                                ->select(
+                                    //'tb_divisiones.idDivision',
+                                    'tb_divisiones.Curso',
+                                    //'tb_cursos.*',
+                                    //'tb_division.*',
+                                    //'tb_turnos.Descripcion as DescripcionTurno',
+                                // 'tb_turnos.idTurno',
+                                )
+                                //->orderBy('tb_cursos.DescripcionCurso','ASC')
+                                ->groupBy('tb_divisiones.Curso')
+                                ->get();
+
+                                $NovedadesIndividual = DB::table('tb_novedades')
+                                    ->where('tb_novedades.CUECOMPLETO', session('CUECOMPLETO'))
+                                    ->where('tb_novedades.idTurnoUsuario', session('idTurnoUsuario'))
+                                    ->where('tb_novedades.Agente',$infoNodos[0]->Agente)
+                                    ->whereIn('tb_novedades.Motivo', [4, 6, 7])   //lo busco por su anexo
+                                    
+                                    // ->where(function($query) {
+                                    //     $query->orWhereNull('Nodo');
+                                    // })
+                                ->join('tb_cargossalariales','tb_cargossalariales.idCargo', 'tb_novedades.CargoSalarial')
+                                ->join('tb_situacionrevista','tb_situacionrevista.idSituacionRevista', 'tb_novedades.Caracter')
+                                ->join('tb_divisiones','tb_divisiones.idDivision', 'tb_novedades.Division')
+                                ->join('tb_turnos', 'tb_turnos.idTurno', 'tb_divisiones.Turno')
+                                ->join('tb_motivos', 'tb_motivos.idMotivo', 'tb_novedades.Motivo')
+                                ->select(
+                                'tb_novedades.*',
+                                'tb_novedades.Observaciones as novObservaciones',
+                                'tb_cargossalariales.*',
+                                'tb_motivos.*',
+                                'tb_situacionrevista.Descripcion as SitRev',
+                                'tb_divisiones.Descripcion as nomDivision',
+                                'tb_turnos.Descripcion as DescripcionTurno',
+                                )
+                                ->get();   
+                                @endphp
+                               @foreach($NovedadesIndividual as $key => $n)
                                       <tr class="gradeX">
                                           @php
                                               $infoDocu = DB::table('tb_desglose_agentes')
                                                   ->where('tb_desglose_agentes.docu', $n->Agente)
                                                   ->first();
                                               //dd($infoDocu);
+
                                           @endphp             
                                           <td>{{$infoDocu->docu}}</td>
                                           <td>{{$infoDocu->nomb}}</td>
@@ -528,17 +582,18 @@
 
    
     $('.formularioActualizarAgente').submit(function(e){
+    
       if($("#idAgente").val()=="" ||
         $("#DescripcionNombreAgenteActualizar").val()==""){
         console.log("error")
-         e.preventDefault();
+        e.preventDefault();
           Swal.fire(
             'Error',
             'No se pudo actualizar, debe existir un Agente seleccionado',
             'error'
                 )
       }else{
-        
+        e.preventDefault();
         Swal.fire({
             title: 'Esta seguro de querer actualizar la informacion del agente?',
             text: "Recuerde colocar datos verdaderos",

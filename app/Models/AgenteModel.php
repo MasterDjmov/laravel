@@ -8,6 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class AgenteModel extends Model
 {
     use HasFactory;
-    protected $table='tb_agentes';
-    protected $primaryKey = 'idAgente';
+    protected $table='tb_desglose_agentes';
+    protected $primaryKey = 'idDesgloseAgente';
 }

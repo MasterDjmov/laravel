@@ -44,7 +44,7 @@
                                 <p class="mb-0">Sala/Division/Año: 
                                     <select class="form-control-sm border-0" name="idDivision" id="idDivision">
                                     @foreach($Divisiones as $key => $o)
-                                        <option value="{{$o->idDivision}}">{{$o->DescripcionCurso}} - "{{$o->DescripcionDivision}}" - {{$o->DescripcionTurno}}</option>
+                                        <option value="{{$o->idDivision}}">{{$o->DescripcionDivi}} - {{$o->DescripcionCurso}} - "{{$o->DescripcionDivision}}" - {{$o->DescripcionTurno}}</option>
                                     @endforeach
                                     </select>
                                 </p>

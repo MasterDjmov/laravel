@@ -29,8 +29,25 @@
                       @endphp
                     </div>
                     <div class="card">
-                      <div class="card-header">
+                      <div class="card-header d-flex justify-content-between">
                         <h3 class="card-title">Agentes</h3>
+                        <div">
+                          <form method="POST" action="{{ route('activarFiltro') }}" class="formularioFiltro" id="formularioFiltro">
+                            @csrf
+                            <select class="form-control-sm border-0" name="idDivision" id="idDivision">
+                              <option value="">Sin Filtro Activo</option>
+                              @foreach($Divisiones as $key => $o)
+                                @if ($o->idDivision == session('filtroDivision'))
+                                  <option value="{{$o->idDivision}}" selected="selected">{{$o->DescripcionDivi}} - {{$o->DescripcionCurso}} - "{{$o->DescripcionDivision}}" - {{$o->DescripcionTurno}}</option>
+                                @else
+                                  <option value="{{$o->idDivision}}">{{$o->DescripcionDivi}} - {{$o->DescripcionCurso}} - "{{$o->DescripcionDivision}}" - {{$o->DescripcionTurno}}</option>
+                                @endif
+                              @endforeach
+                              </select>
+                              <button type="submit" name="btnEnviar"><i class="fa fa-check"></i></button>
+                          </form>
+
+                        </div>
                       </div>
                       <!-- /.card-header -->
                       <div class="card-body">
@@ -289,10 +306,10 @@
             <div class="d-flex justify-content-between">
               <div>Licencia: <label for="Licencia" id="Licencia">{{$recNodo[0]->LicenciaActiva}}</label></div>
               <div>
-                <form method="POST" action="{{ route('controlAsistencia') }}" class="formcontrolAsistencia" id="formcontrolAsistencia">
+                <form method="POST" action="{{ route('controlAsistencia') }}" class="formcontrolAsistencia{{$recNodo[0]->idNodo}}" id="formcontrolAsistencia{{$recNodo[0]->idNodo}}">
                   <div>Cant.Asistencia: 
                     @csrf
-                    <input type="number" value="{{$recNodo[0]->CantidadAsistencia}}" id="cantidadAsistencia" style="border: none; outline: none; background-color: transparent;font-weight:bold;width:40px">
+                    <input type="number" value="{{$recNodo[0]->CantidadAsistencia}}" id="cantidadAsistencia{{$recNodo[0]->idNodo}}" style="border: none; outline: none; background-color: transparent;font-weight:bold;width:40px">
                    
                     <input type="hidden" name="idn" value="{{{$recNodo[0]->idNodo}}}">
                     
@@ -300,8 +317,8 @@
                 </form>
               </div>
               <div class="d-flex justify-content-between">
-                <button id="incrementar">+</button>
-                <button id="decrementar">-</button>
+                <button id="incrementar" onclick="actualizarAsistencia(1,{{$recNodo[0]->idNodo}})">+</button>
+                <button id="decrementar" onclick="actualizarAsistencia(-1,{{$recNodo[0]->idNodo}})">-</button>
               </div>
             </div>
               

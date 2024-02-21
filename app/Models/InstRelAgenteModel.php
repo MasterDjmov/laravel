@@ -5,10 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class SubOrgAgenteModel extends Model
+class InstRelAgenteModel extends Model
 {
     use HasFactory;
-    protected $table='tb_suborg_agente';
-    protected $primaryKey = 'idSubOrg_Agente';
+    protected $table='tb_institucion_rel_agente';
+    protected $primaryKey = 'idInstitucionExtensionAgente';
     
 }

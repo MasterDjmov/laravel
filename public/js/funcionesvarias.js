@@ -467,17 +467,17 @@ $("#BtnPruebaAgregar").click(function() {
 
 //control para incrementar las asistencias en los nodos
 
-    $('#incrementar').on('click', function() {
+   /* $('#incrementar').on('click', function() {
       actualizarAsistencia(1);
     });
 
     $('#decrementar').on('click', function() {
       actualizarAsistencia(-1);
-    });
+    });*/
 
-    function actualizarAsistencia(cantidad) {
-        var formData = new FormData($("#formcontrolAsistencia")[0]);
-        var cantidadActual = parseInt($('#cantidadAsistencia').val());
+    function actualizarAsistencia(cantidad,idNodo) {
+        var formData = new FormData($("#formcontrolAsistencia"+idNodo)[0]);
+        var cantidadActual = parseInt($('#cantidadAsistencia'+idNodo).val());
         var nuevaCantidad = cantidadActual + cantidad;
     
         // Agrega la nueva cantidad al formData
@@ -496,7 +496,7 @@ $("#BtnPruebaAgregar").click(function() {
             success: function(response) {
                 // Manejo de la respuesta del servidor si es necesario
                 console.log(response);
-                $('#cantidadAsistencia').val(parseInt(response.message));
+                $('#cantidadAsistencia'+idNodo).val(parseInt(response.message));
 
             },
             error: function(xhr, status, error) {

@@ -96,6 +96,7 @@ Route::post('/FormNuevoAgente',[LupController::class,'FormNuevoAgente'])->name('
 //Servicio General
 Route::get('/verArbolServicio',[AgController::class,'verArbolServicio'])->name('verArbolServicio');
 Route::get('/verArbolServicio2',[AgController::class,'verArbolServicio2'])->name('verArbolServicio2');
+Route::post('/activarFiltro',[AgController::class,'activarFiltro'])->name('activarFiltro');
 
 Route::get('/getAgentes/{DNI}',[AgController::class,'getAgentes'])->name('getAgentes');
 Route::get('/getBuscarAgente/{DNI}',[AgController::class,'getBuscarAgente'])->name('getBuscarAgente');
