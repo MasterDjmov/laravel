@@ -135,28 +135,31 @@ class LuiController extends Controller
     public function verSubOrg(){
 
         //obtengo el usuario que es la escuela a trabajar
-        $idReparticion = session('idReparticion');
+       // $idReparticion = session('idReparticion');
         //consulto a reparticiones
-        $reparticion = DB::table('tb_reparticiones')
+        /*$reparticion = DB::table('tb_reparticiones')
         ->where('tb_reparticiones.idReparticion',$idReparticion)
         ->get();
-        //dd($reparticion[0]->Organizacion);
+        //dd($reparticion[0]->Organizacion);*/
 
-        $Suborganizaciones = DB::table('tb_suborganizaciones')
+        /*$Suborganizaciones = DB::table('tb_suborganizaciones')
         ->where('tb_suborganizaciones.idSubOrganizacion',$reparticion[0]->subOrganizacion)
         ->join('tb_edificios', 'tb_edificios.idEdificio', '=', 'tb_suborganizaciones.Edificio')
         ->select(
             'tb_suborganizaciones.*',
             'tb_edificios.*'
-        )
+        )*/
         //->orderBy('tb_suborganizaciones.cue','ASC')
+        //->get();
+        $institucionExtension=DB::table('tb_institucion_extension')
+        ->where('tb_institucion_extension.idInstitucionExtension',session('idInstitucionExtension'))
         ->get();
 
         
         $datos=array(
             'mensajeError'=>"",
-            'SubOrganizaciones'=>$Suborganizaciones,
-            'NombreEscuela'=>$Suborganizaciones[0]->Descripcion,
+            'institucionExtension'=>$institucionExtension,
+            'Nombre_Institucion'=>$institucionExtension[0]->Nombre_Institucion,
             'mensajeNAV'=>'Datos Institucionales'
            
         );

@@ -14,6 +14,8 @@ use App\Models\EspacioCurricularModel;
 use App\Models\InstitucionExtensionModel;
 use App\Models\InstitucionModel;
 use App\Models\NivelesEnsenanzaRelSubOrgModel;
+use App\Models\Nodo;
+use App\Models\NovedadesModel;
 use App\Models\PlanesRelSubOrgModel;
 use App\Models\PlazasModel;
 use App\Models\SubOrgAgenteModel;
@@ -22,6 +24,7 @@ use App\Models\TurnosRelInstModel;
 use App\Models\TurnosRelSubOrgModel;
 use App\Models\UsuarioModel;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class LupController extends Controller
 {
@@ -416,11 +419,22 @@ class LupController extends Controller
     }
 
     public function desvincularDivision($idDivision){
-        //elimino la carrera seleccionada
-        DB::table('tb_divisiones')
+        //verifico si hay o no division activa en nodo
+        $hayDivisiones=DB::table('tb_divisiones')
+        ->join('tb_nodos', 'tb_nodos.Division', '=', 'tb_divisiones.idDivision')
         ->where('idDivision', $idDivision)
-        ->delete();
-        return redirect("/verDivisiones")->with('ConfirmarEliminarDivision','OK');
+        ->get();
+
+        if(count($hayDivisiones)>0){
+            return redirect("/verDivisiones")->with('ConfirmarEliminarDivisionFallida','OK');
+        }else{
+            DB::table('tb_divisiones')
+            ->where('idDivision', $idDivision)
+            ->delete();
+            return redirect("/verDivisiones")->with('ConfirmarEliminarDivision','OK');
+        }
+        
+        
     }
 
     public function desvincularEspCur($idEspCur){
@@ -808,4 +822,49 @@ class LupController extends Controller
             //return redirect("/getOpcionesOrg")->with('ConfirmarLogoNoSubido','OK');
         //}
     }
+
+    //funcion para el control de asistencia en nodo
+   public function controlAsistencia(Request $request){
+    $nuevaCantidad = $request->input('nuevaCantidad');
+   // Log::info('Valor recibido en controlAsistencia: ' . $nuevaCantidad); // Agrega esta línea para verificar el valor recibido
+
+   //busco el nodo y lo actualizo
+        $nodo = Nodo::where('idNodo', $request->input('idn'))->first();
+            $nodo->CantidadAsistencia = $nuevaCantidad; //aqui aplico asistencia al nodo
+        $nodo->save();
+    //de paso actualizo en novedades si el nodo esta en servicio alta y le actualizo su cantidad de dias trabajados
+    
+        $novedad = NovedadesModel::where('Nodo', $request->input('idn'))
+        ->where('Agente', $nodo->Agente)
+        ->where('CUECOMPLETO', $nodo->CUECOMPLETO)
+        ->where('idTurnoUsuario', $nodo->idTurnoUsuario)
+        ->where('Motivo','=', 1)    //pregunto si esta activo con ALTA
+        ->whereNotNull('Nodo') // Verifica si el campo 'Nodo' no es null
+        ->first();
+
+        if($novedad){
+            $novedad->CantidadDiasTrabajados = $nuevaCantidad; //aqui aplico asistencia al nodo
+            $novedad->save();
+        }
+            
+    return response()->json(['success' => true, 'message' => $nuevaCantidad]);
+
+   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

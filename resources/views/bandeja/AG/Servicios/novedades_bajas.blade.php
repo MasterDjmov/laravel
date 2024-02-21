@@ -17,7 +17,7 @@
                     <div class="card card-lightblue">
                         <div class="card-header ">
                             
-                            <h3 class="card-title">Novedades - ALTAS</h3>
+                            <h3 class="card-title">Novedades - BAJAS CON ALTAS COMPLETADAS</h3>
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
@@ -43,8 +43,14 @@
                                 <tbody>
                                  @foreach($Novedades as $key => $n)
                                         <tr class="gradeX">
-                                            <td>{{$n->Documento}}</td>
-                                            <td>{{$n->Nombres}}</td>
+                                            @php
+                                                $infoDocu = DB::table('tb_desglose_agentes')
+                                                    ->where('tb_desglose_agentes.docu', $n->Agente)
+                                                    ->first();
+                                                //dd($infoDocu);
+                                            @endphp 
+                                            <td>{{$infoDocu->docu}}</td>
+                                            <td>{{$infoDocu->nomb}}</td>
                                             <td class="text-center">{{$n->Cargo}}<b>({{$n->Codigo}})</b></td>
                                             <td class="text-center">{{$n->SitRev}}</td>
                                             <td class="text-center">{{$n->nomDivision}} /<b>{{$n->DescripcionTurno}}</b></td>
@@ -54,9 +60,9 @@
                                             @else
                                                 <td class="text-center">{{ \Carbon\Carbon::parse($n->FechaHasta)->format('d-m-Y')}}</td>
                                             @endif
-                                            <td class="text-center">{{$n->TotalDias}}</td>
+                                            <td class="text-center">{{$n->CantidadDiasTrabajados}}</td>
                                             <td class="text-center">{{$n->Nombre_Motivo}}</td>
-                                            <td>{{$n->nomObservaciones}}</td>
+                                            <td>{{$n->Observaciones}}</td>
                                             
                                         </tr>
                                     @endforeach

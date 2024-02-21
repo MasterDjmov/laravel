@@ -285,6 +285,27 @@
             Cant. Horas: <label for="CantidadHoras" id="CantidadHoras">{{$recNodo[0]->CantidadHoras}}</label> - 
             F.Alta: <label for="Fa" id="Fa">{{ \Carbon\Carbon::parse($recNodo[0]->FechaDeAlta)->format('d-m-Y')}}</label>
             </p>
+            
+            <div class="d-flex justify-content-between">
+              <div>Licencia: <label for="Licencia" id="Licencia">{{$recNodo[0]->LicenciaActiva}}</label></div>
+              <div>
+                <form method="POST" action="{{ route('controlAsistencia') }}" class="formcontrolAsistencia" id="formcontrolAsistencia">
+                  <div>Cant.Asistencia: 
+                    @csrf
+                    <input type="number" value="{{$recNodo[0]->CantidadAsistencia}}" id="cantidadAsistencia" style="border: none; outline: none; background-color: transparent;font-weight:bold;width:40px">
+                   
+                    <input type="hidden" name="idn" value="{{{$recNodo[0]->idNodo}}}">
+                    
+                  </div>
+                </form>
+              </div>
+              <div class="d-flex justify-content-between">
+                <button id="incrementar">+</button>
+                <button id="decrementar">-</button>
+              </div>
+            </div>
+              
+            
         </div>
         <div class="card-footer">
           {{-- <a type="button" href="#" class="btn mx-1" data-toggle="tooltip" data-placement="top" title="Licencia">

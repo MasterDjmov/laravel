@@ -167,13 +167,21 @@
         @if (session('ConfirmarEliminarDivision')=='OK')
             <script>
             Swal.fire(
-                'Registro guardado',
+                'Registro Eliminado Exitosamente',
                 'Se desvinculo correctamente',
                 'success'
                     )
             </script>
         @endif
-    
+        @if (session('ConfirmarEliminarDivisionFallida')=='OK')
+        <script>
+        Swal.fire(
+            'Error al borrar Registro',
+            'No se puede borrar, debido a que esta vinculado a un/unos docentes',
+            'error'
+                )
+        </script>
+    @endif
 
 
 

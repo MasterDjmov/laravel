@@ -465,3 +465,45 @@ $("#BtnPruebaAgregar").click(function() {
 });
 
 
+//control para incrementar las asistencias en los nodos
+
+    $('#incrementar').on('click', function() {
+      actualizarAsistencia(1);
+    });
+
+    $('#decrementar').on('click', function() {
+      actualizarAsistencia(-1);
+    });
+
+    function actualizarAsistencia(cantidad) {
+        var formData = new FormData($("#formcontrolAsistencia")[0]);
+        var cantidadActual = parseInt($('#cantidadAsistencia').val());
+        var nuevaCantidad = cantidadActual + cantidad;
+    
+        // Agrega la nueva cantidad al formData
+        formData.append('nuevaCantidad', nuevaCantidad);
+    
+        // Envía el formData al controlador de Laravel mediante AJAX
+        $.ajax({
+            url: '/controlAsistencia',
+            method: 'POST',
+            data: formData, // Envía formData en lugar de enviar datos separados
+            processData: false,
+            contentType: false,
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr("content")
+            },
+            success: function(response) {
+                // Manejo de la respuesta del servidor si es necesario
+                console.log(response);
+                $('#cantidadAsistencia').val(parseInt(response.message));
+
+            },
+            error: function(xhr, status, error) {
+                // Manejo de errores si es necesario
+                console.error(xhr.responseText);
+            }
+        });
+    }
+    
+

@@ -3,10 +3,12 @@
 @section('Titulo', 'Sage2.0 - Institución')
 
 @section('LinkCSS')
-@if ($SubOrganizaciones[0]->imagen_escuela != "")
+@if ($institucionExtension[0]->imagen_escuela != "")
     <?php 
-        $cuecompleto=$SubOrganizaciones[0]->cuecompleto;
-        $url="storage/CUE/$cuecompleto/".$SubOrganizaciones[0]->imagen_escuela;
+        $CUECOMPLETO=$institucionExtension[0]->CUECOMPLETO;
+        $turno = $infoInstitucion[0]->idTurnoUsuario;
+        $cueconturno=$cuecompleto.$turno;
+        $url="storage/CUE/$cueconturno/".$institucionExtension[0]->imagen_escuela;
         echo '<style>
                 .widget-user-header{background: url('.$url.');
                 }
@@ -34,7 +36,7 @@
                     <!-- About Me Box -->
                     <div class="card card-lightblue">
                     <div class="card-header">
-                        <h3 class="card-title">Institución {{$NombreEscuela}}</h3>
+                        <h3 class="card-title">Institución {{$Nombre_Institucion}}</h3>
                     </div>
                     <!-- /.card-header -->
                     
@@ -45,10 +47,12 @@
                             
                         </div>
                         <div class="widget-user-image">
-                        @if ($SubOrganizaciones[0]->imagen_logo != ""){
+                        @if ($institucionExtension[0]->imagen_logo != ""){
                             <?php 
-                                $cuecompleto=$SubOrganizaciones[0]->cuecompleto;
-                                $url="storage/CUE/$cuecompleto/".$SubOrganizaciones[0]->imagen_logo;
+                                $CUECOMPLETO=$institucionExtension[0]->CUECOMPLETO;
+                                $turno = $infoInstitucion[0]->idTurnoUsuario;
+                                $cueconturno=$cuecompleto.$turno;
+                                $url="storage/CUE/$cueconturno/".$institucionExtension[0]->imagen_logo;
                             ?>
                         }@else{
                             <?php $url="storage/logoGenerico.png";?>
@@ -62,16 +66,16 @@
                                 <div class="description-block">
                                 <h5 class="description-header">
                                 @php
-                                    $cue=$SubOrganizaciones[0]->cuecompleto;
+                                   $CUECOMPLETO=$institucionExtension[0]->CUECOMPLETO;
                                     $cantidadAgente = DB::select("SELECT
                                         count(idNodo) as totalAgentes
                                     FROM
                                         tb_nodos
                                         INNER JOIN
-                                        tb_suborganizaciones
+                                        tb_institucion_extension
                                         ON 
-                                            tb_nodos.CUE = tb_suborganizaciones.cuecompleto
-                                            and tb_nodos.CUE = '$cue'");
+                                            tb_nodos.CUECOMPLETO = tb_institucion_extension.CUECOMPLETO
+                                            and tb_nodos.CUECOMPLETO = '$cue'");
                                             //print_r($cantidadAgente);
                                             echo $cantidadAgente[0]->totalAgentes;
                                 @endphp

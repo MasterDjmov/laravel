@@ -164,12 +164,12 @@
               </p>
             </a>
             <ul class="nav nav-treeview">
-              {{-- <li class="nav-item">
+               <li class="nav-item">
                 <a href="{{route('nuevoAgente')}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Crear Agente Nuevo</p>
                 </a>
-              </li> --}}
+              </li>
               <li class="nav-item">
                 <a href="{{route('verArbolServicio')}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
