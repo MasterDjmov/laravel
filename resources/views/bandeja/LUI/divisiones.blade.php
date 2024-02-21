@@ -6,6 +6,12 @@
 <section id="container" >
     <section id="main-content">
         <section class="content-wrapper">
+            <!-- Mensaje ALERTA -->
+            <div class="alert alert-warning alert-dismissible">
+                <h4><i class="icon fas fa-exclamation-triangle"></i> AVISO!</h4>
+                En esta sección debe crear todas las secciones / cursos que tiene su Institución, ademas de determinar que valores usaran para los Servicios Gral, etc<br>
+                Ejemplo: <b>Sala de 3 A&ntilde;os, P.S.G o Servicios Generales, etc</b>
+            </div>
             <!-- Inicio Selectores -->
             <div class="row">
                 <div class="col-md-6">

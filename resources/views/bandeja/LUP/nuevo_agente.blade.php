@@ -37,7 +37,7 @@
                             <div class="text-center alert alert-warning alert-dismissible">
                                 <h6 class="font-italic">
                                     <i class="icon fas fa-exclamation-triangle"></i>   
-                                    Este proceso requiere validar
+                                    Este proceso sera validado por RRHH
                                 </h6>
                             </div>
                             <div class="card card-lightblue">
