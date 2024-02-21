@@ -35,17 +35,19 @@
                     {{-- <a href="{{route('agregaLic',$infoNodos[0]->idNodo)}}" class="btn btn-app bg-info Vincular">
                       <i class="fas fa-stethoscope"></i> Crear Vacante x Licencia (izquierda) SIN MODAL
                     </a> --}}
-                    
+                    @if ($infoNodos[0]->LicenciaActiva == "NO")
                       <a href="#modalDatosExtras" class="btn btn-app bg-info"  data-toggle="modal" data-placement="top" title="Agregar Datos de Licencia"  data-target="#modalDatosExtras">
                         <i class="fas fa-stethoscope"></i> Crear Vacante x Licencia (izquierda)
                       </a>
+                    @endif
+                      
                     
 
-                    @if ($infoNodos[0]->PosicionSiguiente == "")
+                    {{-- @if ($infoNodos[0]->PosicionSiguiente == "")
                         <a href="{{route('agregaNodo',$infoNodos[0]->idNodo)}}" class="btn btn-app bg-info VincularDer">
                         <i class="fas fa-stethoscope"></i> Crear Vacante (derecha)
                       </a>
-                    @endif
+                    @endif --}}
 
                     
 
@@ -253,7 +255,7 @@
                     <!-- /.card -->
                 </div>
                 <!-- licencias -->
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <div class="card card-lightblue">
                         <div class="card-header">
                             <h3 class="card-title">
@@ -262,224 +264,80 @@
                             </h3>
                         </div>
                         <!-- /.card-header -->
-                        <form method="POST" action="{{ route('formularioActualizarHorario') }}" class="formularioActualizarHorario">
-                            @csrf
+                        
                             <div class="card-body">
-                                aqui todo licencias
+                                 <!-- /.card-header -->
+                        <div class="card-body">
+                          <table id="example" class="table table-bordered table-striped">
+                              <thead>
+                                  <tr>
+                                      <th rowspan="2" style="text-align:center">DNI</th>
+                                      <th rowspan="2" style="text-align:center">Apellido y Nombres</th>
+                                      <th rowspan="2" style="text-align:center">Cargo</th>
+                                      <th rowspan="2" style="text-align:center">Caracter</th>
+                                      <th rowspan="2" style="text-align:center">Grado/Curso/Division</th>
+                                      <th colspan="3" style="text-align:center">Servicios en el Mes - Licencias</th>
+                                      <th rowspan="2" style="text-align:center">Motivo</th>
+                                      <th rowspan="2" style="text-align:center">Activa</th>
+                                      <th rowspan="2" style="text-align:center">Observaciones</th>
+                                  </tr>
+                                  <tr>
+                                      <th style="text-align:center">Fecha Desde</th>
+                                      <th style="text-align:center">Fecha Hasta</th>
+                                      <th style="text-align:center">Total Dias</th>
+                                      
+                                      
+                                  </tr>
+                              </thead>
+                              <tbody>
+                               @foreach($Novedades as $key => $n)
+                                      <tr class="gradeX">
+                                          @php
+                                              $infoDocu = DB::table('tb_desglose_agentes')
+                                                  ->where('tb_desglose_agentes.docu', $n->Agente)
+                                                  ->first();
+                                              //dd($infoDocu);
+                                          @endphp             
+                                          <td>{{$infoDocu->docu}}</td>
+                                          <td>{{$infoDocu->nomb}}</td>
+                                          <td class="text-center">{{$n->Cargo}}<b>({{$n->Codigo}})</b></td>
+                                          <td class="text-center">{{$n->SitRev}}</td>
+                                          <td class="text-center">{{$n->nomDivision}} /<b>{{$n->DescripcionTurno}}</b></td>
+                                          <td class="text-center">{{ \Carbon\Carbon::parse($n->FechaInicioLicencia)->format('d-m-Y')}}</td>
+                                          @if ($n->FechaHastaLicencia==null)
+                                              <td class="text-center">{{$n->FechaHastaLicencia}}</td>
+                                          @else
+                                              <td class="text-center">{{ \Carbon\Carbon::parse($n->FechaHastaLicencia)->format('d-m-Y')}}</td>
+                                          @endif
+                                          <td class="text-center">{{$n->TotalDiasLicencia}}</td>
+                                          <td class="text-center">{{$n->Nombre_Motivo}}</td>
+                                          @if ($n->EstaActivaLicencia == "SI")
+                                              <td class="text-center" style="background-color:chartreuse">
+                                                  {{$n->EstaActivaLicencia}}
+                                              </td>
+                                          @else
+                                              <td class="text-center" style="background-color:dimgrey">
+                                                  {{$n->EstaActivaLicencia}}
+                                              </td>
+                                          @endif
+                                          
+                                          
+                                          <td>{{$n->ObservacionesLicencia}}</td>
+                                          
+                                      </tr>
+                                  @endforeach
+                              </tbody>
+                          </table>
+                      </div>
+                      <!-- /.card-body -->
                             </div>
-                            <div class="card-footer bg-transparent d-flex justify-content-end">
-                                <input type="hidden" name="Agn" id="Agn" value="{{$Nodo}}">
-                                <button type="submit" class="btn btn-primary">Actualizar Informacion</button>
-                            </div>
-                        </form>
+                            
                         <!-- /.card-body -->
                     </div>
                     <!-- /.card -->
                 </div>                               
                 
-                <div class="col-md-12">
-                {{-- Agente info Inicio--}}
-                   
-                    <div class="row" id="contenidoNodos">
-                      @php
-                        if(session('infoNodos')){
-                          $infoNodos = session('infoNodos');
-                        }
-                      @endphp
-                    </div>
-                    {{-- RepNodos --}}
-                    <div class="card card-lightblue">
-                        <div class="card-header">
-                            <h3 class="card-title">
-                            <i class="fas fa-book"></i>
-                            Panel de Control - Secuencia de Vinculación
-                            </h3>
-                        </div>
-                      <div class="card-body">
-                        <div class="row">
-                          <form method="POST" action="" class="row">
-                            @foreach ($infoNodos as $key => $o)
-                              @csrf
-                              <div class="col-12 col-sm-6 col-md-12 d-flex align-items-stretch flex-column">
-                                <div class="card d-flex flex-fill">
-                                  <div class="card-header bg-{{$o->nomSitRev}}">
-                                    @if ($o->nomb != "")
-                                      <h5 id="DescripcionNombreAgente" class="mb-0">({{$o->idNodo}})Docente: {{$o->nomb}} </h5>
-                                    @else
-                                      <h5 id="DescripcionNombreAgente" class="mb-0">({{$o->idNodo}})Docente: <b>VACANTE</b> </h5>
-                                    @endif
-                                      <input type="hidden" name="idAgente" id="idAgente2" value="{{$o->docu}}">
-                                  </div>
-                                  <div class="card-body">
-                                    <label class="">Cargo/Función: <label for="cargo" id="DescripcionCargo">{{$o->nomCargo}} - ({{$o->nomCodigo}})</label>
-                                      <input type="hidden" id="CargoSal2" name="CargoSal" value="{{$o->idCargo}}">
-                                    </label>
-                                    {{-- <p class="mb-0">Esp. Curricular: <label for="DescripcionEspCur" id="DescripcionEspCur">{{$o->nomAsignatura}}</label>
-                                      <input type="hidden" id="idEspCur2" name="idEspCur" value="{{$o->idAsignatura}}">
-                                    </p> --}}
-
-                                    <p class="mb-0">Sit.Rev: 
-                                      @foreach ($SituacionDeRevista as $sr)
-                                        @if ($sr->idSituacionRevista == $o->idSituacionRevista)
-                                          <label for="SituacionDeRevista" id="SituacionDeRevista">{{$sr->Descripcion}}</label>
-                                        @endif
-                                      @endforeach
-                                    </p>
-                                      
-                                    <p class="mb-0">Sala/Division/Año: 
-                                        @foreach($Divisiones as $key => $d)
-                                          @if ($d->idDivision == $o->idDivision)
-                                            <label for="idDivision" id="idDivision">{{$d->Descripcion}} - {{$d->DescripcionTurno}}</label>
-                                          @endif 
-                                        @endforeach
-                                    </p>
-                                    <p class="mb-0">Horas: <label for="CantidadHoras" id="CantidadHoras">{{$o->CantidadHoras}}</label></p>
-                                    <p class="mb-0">Fecha de Alta(Res): <label for="Fa" id="Fa">{{ \Carbon\Carbon::parse($o->FechaDeAlta)->format('d-m-Y')}}</label></p>
-                                  </div>
-                                  <div class="card-footer">
-                                    {{-- <a type="button" href="#" class="btn mx-1" data-toggle="tooltip" data-placement="top" title="Licencia">
-                                          <span class="material-symbols-outlined pt-1">medical_services</span>
-                                        </a> --}}
-                                        {{-- <a  href="{{route('ActualizarNodoAgente',$o->idNodo)}}" class="btn mx-1 "  data-placement="top" title="Actualizar Docente"  >
-                                          <span class="material-symbols-outlined pt-1" >edit_square</span>
-                                        </a> --}}
-
-                                        <!--boton PRUEBA modal historial plaza-->
-                                        @if ($o->PosicionSiguiente != "")
-                                        <button type="button" data-toggle="modal" data-target="#modal-{{$o->PosicionSiguiente}}" class="btn mx-1 " >
-                                          <span class="material-symbols-outlined pt-1" >history</span>
-                                        </button>
-                                        @else
-                                          
-                                        @endif
-
-                                        {{-- @if ($o->PosicionSiguiente == "")
-                                          <a href="{{route('agregaNodo',$o->idNodo)}}" class="btn mx-1 Vincular">
-                                          <span class="material-symbols-outlined pt-1" data-toggle="tooltip" data-placement="top" title="Vincular">compare_arrows</span>
-                                        </a>
-                                        @endif --}}
-                                  </div>
-                                </div>
-                              </div>
-                              @if($o->PosicionSiguiente != "")
-                                @php
-                                  //traigo los nodos
-                                  $infoNodoSiguiente=DB::table('tb_nodos')
-                                  ->where('tb_nodos.idNodo',$o->PosicionSiguiente)
-                                  ->leftjoin('tb_institucion_extension', 'tb_institucion_extension.CUECOMPLETO', 'tb_nodos.CUECOMPLETO')
-                                  ->leftjoin('tb_desglose_agentes', 'tb_desglose_agentes.docu', 'tb_nodos.Agente')
-                                  //->leftjoin('tb_asignaturas', 'tb_asignaturas.idAsignatura', 'tb_nodos.Asignatura')
-                                  ->leftjoin('tb_cargossalariales', 'tb_cargossalariales.idCargo', 'tb_nodos.CargoSalarial')
-                                  ->leftjoin('tb_situacionrevista', 'tb_situacionrevista.idSituacionRevista', 'tb_nodos.SitRev')
-                                  ->leftjoin('tb_divisiones', 'tb_divisiones.idDivision', 'tb_nodos.Division')
-                                  ->select(
-                                      'tb_desglose_agentes.*',
-                                      'tb_nodos.*',
-                                      //'tb_asignaturas.idAsignatura',
-                                      //'tb_asignaturas.Descripcion as nomAsignatura',
-                                      'tb_cargossalariales.idCargo',
-                                      'tb_cargossalariales.Cargo as nomCargo',
-                                      'tb_cargossalariales.Codigo as nomCodigo',
-                                      'tb_situacionrevista.idSituacionRevista',
-                                      'tb_situacionrevista.Descripcion as nomSitRev',
-                                      'tb_divisiones.idDivision',
-                                      'tb_divisiones.Descripcion as nomDivision',
-                                  )
-                                  ->get();
-                                @endphp
-                                <!--<div class="d-flex align-self-center ml-2 mb-4">
-                                  <div class="align-items-center st0"></div>
-                                  <div class="align-items-center st2"></div>
-                                </div>-->
-
-                                @foreach ($infoNodoSiguiente as $sig)
-                                  <!--PRUEBA modal historial plaza-->
-                                  <div class="modal fade" id="modal-{{$o->PosicionSiguiente}}">
-                                    <div class="modal-dialog modal-lg">
-                                      <div class="modal-content">
-                                        <div class="modal-header">
-                                          <h4 class="modal-title">HISTORIAL</h4>
-                                          <button type="button" class="close" data-dismiss="modal" aria-label="close">
-                                            <span area-hidden="true">x</span>
-                                          </button>
-                                        </div>
-                                        <div class="modal-body">
-                                          <div class="card-body">
-                                            <div id="accordion">
-                                              <div class="card">
-                                                <div class="card-header bg-{{$infoNodoSiguiente[0]->nomSitRev}}">
-                                                  <h4 class="card-title w-100">
-                                                    <a class="d-block w-100 text-dark" data-toggle="collapse" href="#colapseEjemplo1">
-                                                      @if ($sig->nomb != "")
-                                                        <h5 id="DescripcionNombreAgente" class="mb-0">({{$sig->idNodo}})Docente: {{strtoupper($sig->nomb)}} <span class="material-symbols-outlined text-danger">history</span></h5>
-                                                      @else
-                                                        <h5 id="DescripcionNombreAgente" class="mb-0">({{$sig->idNodo}})Docente: <b>VACANTE</b> </h5>
-                                                      @endif
-                                                    </a>
-                                                  </h4>
-                                                </div>
-                                                <div id="colapseEjemplo1" class="collapse" data-parent="#accordion">
-                                                  <div class="card-body">
-                                                    <p class="mb-0">Cargo/Función: <label for="cargo" id="DescripcionCargo">{{$sig->nomCargo}} - ({{$sig->nomCodigo}})</label>
-                                                    <input type="hidden" id="CargoSal2" name="CargoSal" value="{{$sig->idCargo}}">
-                                                    </p>
-                                                    {{-- <p class="mb-0">Esp. Curricular: <label for="DescripcionEspCur" id="DescripcionEspCur">{{$sig->nomAsignatura}}</label>
-                                                    <input type="hidden" id="idEspCur2" name="idEspCur" value="{{$sig->idAsignatura}}">
-                                                    </p> --}}
-                                                    <p class="mb-0">Sit.Rev: 
-                                                    
-                                                      @foreach ($SituacionDeRevista as $sr)
-                                                        @if ($sr->idSituacionRevista == $sig->idSituacionRevista)
-                                                          <label for="SituacionDeRevista" id="SituacionDeRevista">{{$sr->Descripcion}}</label>
-                                                        @endif
-                                                      @endforeach
-                                                      
-                                                    </p>
-                                                    
-                                                    <p class="mb-0">Sala/Division/Año: 
-                                                        @foreach($Divisiones as $key => $d)
-                                                          @if ($d->idDivision == $sig->idDivision)
-                                                            <label for="idDivision" id="idDivision">{{$d->Descripcion}} - {{$d->DescripcionTurno}}</label>
-                                                          @endif 
-                                                        @endforeach
-                                                        
-                                                    </p>
-                                                    <p class="mb-0">Horas: <label for="CantidadHoras" id="CantidadHoras">{{$sig->CantidadHoras}}</label></p>
-                                                    <p class="mb-0">Fecha de Alta(Res): <label for="Fa" id="Fa">{{ \Carbon\Carbon::parse($sig->FechaDeAlta)->format('d-m-Y')}}</label></p>
-                                                  </div>
-                                                  <div class="card-footer">
-                                                    {{-- <a type="button" href="#" class="btn mx-1" data-toggle="tooltip" data-placement="top" title="Licencia">
-                                                          <span class="material-symbols-outlined pt-1">medical_services</span>
-                                                        </a> --}}
-
-                                                    <a  href="{{route('ActualizarNodoAgente',$sig->idNodo)}}" class="btn mx-1 "  data-placement="top" title="Actualizar Docente"  >
-                                                      <span class="material-symbols-outlined pt-1" >edit_square</span>
-                                                    </a>
-                                                    {{-- <a href="{{route('agregaNodo',$o->idNodo)}}" class="btn mx-1">
-                                                          <span class="material-symbols-outlined pt-1" data-toggle="tooltip" data-placement="top" title="Vincular">compare_arrows</span>
-                                                        </a> --}}
-                                                  </div>
-                                                </div>
-                                              </div>
-                                            </div>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <!--Fin Modal Prueba historial plaza-->
-                                @endforeach
-                              @endif
-                              @endforeach
-                          </form>
-                        </div>
-                      </div>
-                    </div>
-                    
-                  {{-- Agente info Fin --}}
-                </div>
-            </div>
-            <!--fin div-->
+                
 
         </section>
     </section>
@@ -556,7 +414,7 @@
                       <input type="hidden" name="idNodo" value="{{$infoNodos[0]->idNodo}}">
                       <div class="form-group">
                         <label for="FechaHasta">Fecha Hasta</label>
-                        <input type="date" class="form-control" id="FechaHasta" name="FechaHasta" placeholder="Fecha Hasta">
+                        <input type="date" class="form-control" id="FechaHastaLic" name="FechaHastaLic" placeholder="Fecha Hasta">
                       </div>
                       <div class="form-group">
                         <label for="TL">Tipo de Licencia</label>
@@ -667,8 +525,20 @@
             }
           })
     })
+
+   
     $('.formularioActualizarAgente').submit(function(e){
-        e.preventDefault();
+      if($("#idAgente").val()=="" ||
+        $("#DescripcionNombreAgenteActualizar").val()==""){
+        console.log("error")
+         e.preventDefault();
+          Swal.fire(
+            'Error',
+            'No se pudo actualizar, debe existir un Agente seleccionado',
+            'error'
+                )
+      }else{
+        
         Swal.fire({
             title: 'Esta seguro de querer actualizar la informacion del agente?',
             text: "Recuerde colocar datos verdaderos",
@@ -682,6 +552,7 @@
               this.submit();
             }
           })
+      }
     })
     
     $('#EliminarNodo').click(function(e){
@@ -707,7 +578,7 @@
        e.preventDefault(); 
         Swal.fire({
             title: 'Esta seguro de querer retornar el Agente a su lugar de trabajo anterior?',
-            text: "Recuerde colocar datos verdaderos",
+            text: "Esta accion no puede ser recuperada",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',

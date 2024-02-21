@@ -11,6 +11,7 @@ use App\Models\NovedadesModel;
 use Illuminate\Http\Request;
 use App\Models\OrganizacionesModel;
 use App\Models\PlazasModel;
+use App\Models\SitRevModel;
 use DateTime;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -509,7 +510,8 @@ class AgController extends Controller
             $nodo->CantidadAsistencia = 0;  
         $nodo->save();
         
-        
+        $SituacionDeRevista = SitRevModel::where('idSituacionRevista',$nodo->SitRev)->get();
+
         //cargo la novedad de ingreso nuevo
         $novedad = new NovedadesModel();
             $novedad->Agente = $nodo->Agente;
@@ -523,7 +525,7 @@ class AgController extends Controller
             $novedad->Mes = date('m');
             $novedad->Anio = date('Y');
             $novedad->Motivo = 1;   //en este caso es vacante
-            $novedad->Observaciones = "Alta de Servicio";
+            $novedad->Observaciones = "Alta de Servicio: ".$SituacionDeRevista->Descripcion;
             $novedad->Estado = 1;   //activo tiene novedad sin fecha hasta
             $novedad->Nodo = $nodo->idNodo; //por ahora lo hago asi, tengo dudas
             $novedad->CantidadDiasTrabajados = $nodo->CantidadAsistencia;
@@ -764,24 +766,68 @@ class AgController extends Controller
             //1 si es raiz
         if($nodoActual->PosicionAnterior==null || $nodoActual->PosicionAnterior==""){
             $Nuevo = new Nodo;
-            $Nuevo->Agente = null;
-            //$Nuevo->EspacioCurricular = $nodoActual->EspacioCurricular;
-            $Nuevo->CargoSalarial = null;
-            $Nuevo->CantidadHoras = $nodoActual->CantidadHoras;
-            $Nuevo->FechaDeAlta = null; //cuando se cargue el agente nuevo
-            $Nuevo->Division = $nodoActual->Division;
-            $Nuevo->SitRev = null;
-           // $Nuevo->Asignatura = $nodoActual->Asignatura;
-            $Nuevo->Usuario = session('idUsuario');
-            $Nuevo->CUECOMPLETO = session('CUECOMPLETO');
-            $Nuevo->idTurnoUsuario = session('idTurnoUsuario');
-            $Nuevo->PosicionAnterior = null;
-            $Nuevo->PosicionSiguiente = $nodoActual->idNodo;
-            $Nuevo->Activo = 0; //vacio vacante
+                //creo un nodo vacio, no le agrego novedad, dejo para usar el vincular
+                $Nuevo->Agente = null;
+                //$Nuevo->EspacioCurricular = $nodoActual->EspacioCurricular;
+                $Nuevo->CargoSalarial = null;
+                $Nuevo->CantidadHoras = $nodoActual->CantidadHoras;
+                $Nuevo->FechaDeAlta = null; //cuando se cargue el agente nuevo
+                $Nuevo->Division = $nodoActual->Division;
+                $Nuevo->SitRev = null;
+            // $Nuevo->Asignatura = $nodoActual->Asignatura;
+                $Nuevo->Usuario = session('idUsuario');
+                $Nuevo->CUECOMPLETO = session('CUECOMPLETO');
+                $Nuevo->idTurnoUsuario = session('idTurnoUsuario');
+                $Nuevo->PosicionAnterior = null;
+                $Nuevo->PosicionSiguiente = $nodoActual->idNodo;            //aqui lo vinculo con mi actual, el que saca la lic
+                $Nuevo->Activo = 0; //vacio vacante
+                $Nuevo->CantidadAsistencia = 0;
+                $Nuevo->LicenciaActiva = "NO";
             $Nuevo->save();
 
             $nodoActual->PosicionAnterior=$Nuevo->idNodo;
+            $nodoActual->LicenciaActiva="SI";
             $nodoActual->save();
+
+            //le agrego la novedad de Lic, no borro la activa
+            //cargo la novedad de ingreso nuevo
+            $novedad = new NovedadesModel();
+                $novedad->Agente = $nodoActual->Agente;
+                $novedad->CUECOMPLETO = session('CUECOMPLETO');
+                $novedad->idTurnoUsuario = session('idTurnoUsuario');
+                $novedad->CargoSalarial = $nodoActual->CargoSal;
+                $novedad->Caracter = $nodoActual->SituacionDeRevista;
+                $novedad->Division = $nodoActual->idDivision;
+                $novedad->FechaDesde = Carbon::parse(Carbon::now())->format('Y-m-d');
+                $novedad->TotalDias = 1;
+                $novedad->Mes = date('m');
+                $novedad->Anio = date('Y');
+                $novedad->Motivo = $request->TipoLicencia;   //en este caso es vacante
+                $novedad->ObservacionesLicencia = $request->Observaciones;
+                $novedad->Estado = 1;   //activo tiene novedad sin fecha hasta
+                $novedad->Nodo = $nodoActual->idNodo; //por ahora lo hago asi, tengo dudas
+                $novedad->CantidadDiasTrabajados = $nodoActual->CantidadAsistencia;
+
+                //calculo fecha desde-hasta
+                // Fecha inicial y final en formato YYYY-MM-DD
+                $fechaInicialObj = '2023-07-15';
+                $fechaFinalObj = '2023-08-02';
+
+                // Crear objetos DateTime
+                $fechaInicialObj = new DateTime(Carbon::parse(Carbon::now())->format('Y-m-d'));
+                $fechaFinalObj = new DateTime($request->FechaHastaLic);
+
+                // Calcular la diferencia entre las dos fechas
+                $intervalo = $fechaInicialObj->diff($fechaFinalObj);
+
+                // Obtener la cantidad de días
+                $cantidadDias = $intervalo->days;
+
+                $novedad->FechaInicioLicencia = Carbon::parse(Carbon::now())->format('Y-m-d');
+                $novedad->FechaHastaLicencia = $request->FechaHastaLic;
+                $novedad->TotalDiasLicencia = $cantidadDias ;
+                $novedad->EstaActivaLicencia = "SI" ;
+            $novedad->save();
         }else{
             //2-valor entre nodos
             $nodoAnterior =Nodo::where('idNodo', $nodoActual->PosicionAnterior)->first();
@@ -818,7 +864,26 @@ class AgController extends Controller
 
         return redirect()->back()->with('ConfirmarNuevoNodo','OK');
     }
+    public function quitaLic($idNodo){
+        //aqui voy a verificar si es titular/interino u otra clase que requiera nodo anterior
+        //por ahora no verificar a volante, tenerlo en cuenta luego
+        //obtengo el agente actual(nodo actual)
+        $nodoActual = Nodo::where('idNodo', $idNodo)->first();
+       
+        //busco la novedad y la actualizo
+        $novedad = NovedadesModel::where('Nodo',$idNodo)
+        ->where('tb_novedades.CUECOMPLETO', session('CUECOMPLETO'))
+        ->where('tb_novedades.idTurnoUsuario', session('idTurnoUsuario'))
+        ->whereIn('tb_novedades.Motivo', [4, 6, 7])   //lo busco por su anexo
+        ->get();
 
+        //cuando lo encuentra lo actualiza
+            $novedad->EstaActivaLicencia = "NO" ;
+            $novedad->Nodo = null;  //le quito para que no se accesible otra vez
+        $novedad->save();
+
+        return 1;
+    }
     public function agregarDatoANodo(Request $request){
         //actualizar el nodo creado vacio por el dato del interino, titular, etc
         $nodo = Nodo::where('idNodo', $request->input('idNodo'))->first();
@@ -947,6 +1012,34 @@ class AgController extends Controller
 
                 $CargosSalariales = DB::table('tb_cargossalariales')->get();
                 $DiasSemana = DB::table('tb_diassemana')->get();
+
+
+                //le busco la licencia de paso
+                $Novedades = DB::table('tb_novedades')
+                ->where('tb_novedades.CUECOMPLETO', session('CUECOMPLETO'))
+                ->where('tb_novedades.idTurnoUsuario', session('idTurnoUsuario'))
+                ->where('tb_novedades.Nodo', $idNodo)
+                ->whereIn('tb_novedades.Motivo', [4, 6, 7])   //lo busco por su anexo
+                // ->where(function($query) {
+                //     $query->orWhereNull('Nodo');
+                // })
+                ->join('tb_cargossalariales','tb_cargossalariales.idCargo', 'tb_novedades.CargoSalarial')
+                ->join('tb_situacionrevista','tb_situacionrevista.idSituacionRevista', 'tb_novedades.Caracter')
+                ->join('tb_divisiones','tb_divisiones.idDivision', 'tb_novedades.Division')
+                ->join('tb_turnos', 'tb_turnos.idTurno', 'tb_divisiones.Turno')
+                ->join('tb_motivos', 'tb_motivos.idMotivo', 'tb_novedades.Motivo')
+                ->select(
+                'tb_novedades.*',
+                'tb_novedades.Observaciones as novObservaciones',
+                'tb_cargossalariales.*',
+                'tb_motivos.*',
+                'tb_situacionrevista.Descripcion as SitRev',
+                'tb_divisiones.Descripcion as nomDivision',
+                'tb_turnos.Descripcion as DescripcionTurno',
+                )
+                ->get();
+
+
                 $datos=array(
                     'mensajeError'=>"",
                     'CUECOMPLETO'=>$institucionExtension[0]->CUECOMPLETO,
@@ -962,7 +1055,8 @@ class AgController extends Controller
                     'Nodo'=>$idNodo,
                     'mensajeNAV'=>'Panel de Configuración de Agente',
                     'idBack'=>$infoNodos[0]->PosicionAnterior,
-                    'TipoMotivos'=>$TipoMotivo
+                    'TipoMotivos'=>$TipoMotivo,
+                    'Novedades' => $Novedades
                 );
        
         
@@ -1098,6 +1192,9 @@ class AgController extends Controller
             $nodo->Usuario = session('idUsuario');
         $nodo->save();
         
+        //busco el nombre de la sitre
+        $SituacionDeRevista = SitRevModel::where('idSituacionRevista',$nodo->SitRev)->get();
+
         //agrego al docente en novedades de alta
         //cargo la novedad avisando que es baja
         $novedad = new NovedadesModel();
@@ -1113,7 +1210,7 @@ class AgController extends Controller
             $novedad->Mes = date('m');
             $novedad->Anio = date('Y');
             $novedad->Motivo = 1;   //en este caso es vacante
-            $novedad->Observaciones = "Alta de Servicio";
+            $novedad->Observaciones = "Alta de Servicio: ".$SituacionDeRevista->Descripcion;
             $novedad->Estado = 1;   //activo tiene novedad sin fecha hasta
             $novedad->Nodo = $nodo->idNodo; //por ahora lo hago asi, tengo dudas
             $novedad->CantidadDiasTrabajados = $nodo->CantidadAsistencia;
@@ -1173,7 +1270,7 @@ class AgController extends Controller
             $novedad->Mes = date('m');
             $novedad->Anio = date('Y');
             $novedad->Motivo = 5;   //en este caso es vacante
-            $novedad->Observaciones = "Se dio de baja al docene por desvinculacion";
+            $novedad->Observaciones = "Se dio de baja al docente por desvinculacion";
             $novedad->Estado = 1;   //activo tiene novedad sin fecha hasta
             $novedad->Nodo = null; //por ahora lo hago asi, tengo dudas
             $novedad->CantidadDiasTrabajados = $nodo->CantidadAsistencia;
@@ -1192,6 +1289,62 @@ class AgController extends Controller
 
         
         return redirect()->back()->with('ConfirmarDesvincularAgente','OK');
+    }
+
+    public function desvincularDocenteRetornoRaiz($idNodo){
+        //dd($idAgente);
+        //dd($idNodo);
+        //traigo la info del nodo actual
+        $nodo =  Nodo::where('idNodo', $idNodo)->first();
+
+         //como voy a liberar el nodo del actual docente, antes doy de baja en novedad
+         $novedad = NovedadesModel::where('Nodo', $nodo->idNodo)
+         ->where('Agente', $nodo->Agente)
+         ->where('CUECOMPLETO', $nodo->CUECOMPLETO)
+         ->where('idTurnoUsuario', $nodo->idTurnoUsuario)
+         ->where('Motivo','=', 1)    //pregunto si esta activo con ALTA
+         ->whereNotNull('Nodo') // Verifica si el campo 'Nodo' no es null debido a que todavia esta activo
+         ->first();
+ 
+         if($novedad){
+             $novedad->Nodo = null; //le quito el valor del nodo a la antigua novedad de alta
+             $novedad->save();
+         }
+
+         //agrego una novedad en baja
+         //cargo la novedad avisando que es baja
+        $novedad = new NovedadesModel();
+            $novedad->Agente = $nodo->Agente;
+            $novedad->CUECOMPLETO = session('CUECOMPLETO');
+            $novedad->idTurnoUsuario = session('idTurnoUsuario');
+            $novedad->CargoSalarial = $nodo->CargoSalarial;
+            $novedad->Caracter = $nodo->SitRev;
+            $novedad->Division = $nodo->Division;
+            $novedad->FechaDesde = $nodo->FechaDesde;
+            $novedad->FechaHasta = Carbon::parse(Carbon::now())->format('Y-m-d');
+            $novedad->TotalDias = 1;
+            $novedad->Mes = date('m');
+            $novedad->Anio = date('Y');
+            $novedad->Motivo = 5;   //en este caso es vacante
+            $novedad->Observaciones = "Se dio de baja al docente por Retorno de Agente";
+            $novedad->Estado = 1;   //activo tiene novedad sin fecha hasta
+            $novedad->Nodo = null; //por ahora lo hago asi, tengo dudas
+            $novedad->CantidadDiasTrabajados = $nodo->CantidadAsistencia;
+        $novedad->save();
+
+
+        //al nodo que esta en uso le saco el agente
+        $nodo =  Nodo::where('idNodo', $idNodo)->first();;
+            $nodo->Agente = null;
+            $nodo->Activo = 0;  //quito un agente
+            $nodo->CantidadAsistencia = 0;
+            $nodo->Usuario = session('idUsuario');
+        $nodo->save();
+
+       
+
+        
+        return 1;
     }
     public function formularioActualizarHorario(Request $request){
         $idSubOrg =session('idSubOrganizacion');
@@ -1301,67 +1454,60 @@ class AgController extends Controller
     }
 
     public function regresarNodo($idNodo){
-        //al retornar mantendremos la info del nodo, horarios queda como esta
-        $nodoSiguiente=null;
+      
         //antes de borrar debo verificar su anterior
-        $nodoActual =  Nodo::where('idNodo', $idNodo)->first();
-        $nodoAnterior =  Nodo::where('idNodo', $nodoActual->PosicionAnterior)->first();
-        //verifico si su derecha es nulla total por nuevo nodo
-        if($nodoActual->PosicionSiguiente=="" || $nodoActual->PosicionSiguiente==null)
-        {
-            $nodoSiguiente=null;
-            //2- actualizar la posicion de A--> C
-            $nodoAnterior->PosicionSiguiente = $nodoSiguiente;
-        }else{
-            $nodoSiguiente =  Nodo::where('idNodo', $nodoActual->PosicionSiguiente)->first();
-            //1- actualizar la posicion de A <--C
-            $nodoSiguiente->PosicionAnterior = $nodoAnterior->idNodo;
-            $nodoSiguiente->save();
+        $nodoActual =  Nodo::where('idNodo', $idNodo)->first();                                     //C
+        $nodoAnterior =  Nodo::where('idNodo', $nodoActual->PosicionAnterior)->first();             //B
 
-            //2- actualizar la posicion de A--> C
-            $nodoAnterior->PosicionSiguiente = $nodoSiguiente->idNodo;  
+        //pregunto por si acaso hay triada
+        if($nodoAnterior->PosicionAnterior != null || $nodoAnterior->PosicionAnterior != ""){
+            $nodoAnteriorAnterior =  Nodo::where('idNodo', $nodoAnterior->PosicionAnterior)->first();   //A
+            //dar de baja al nodo anterior y crear novedad
+            $desvinculando = $this->desvincularDocenteRetornoRaiz($nodoAnterior->idNodo);
+            //le indico que apunta a raiz, no hay nadie por debajo, le asigno valores como nuevo y creo novedad
+            $nodoActual->PosicionAnterior = $nodoAnteriorAnterior->idNodo;
+            
+            //Eliminar nodo B con sus datos(todos + lic + horario)
+            //ahora puedo borrarlo porque es raiz el retorno y nadie lo usara
+            DB::table('tb_nodos')
+                ->where('idNodo', $nodoAnterior->idNodo)
+                ->delete();
+            
+            $nodoActual->save();
+        
+        }else{
+            //dar de baja al nodo anterior y crear novedad
+            $desvinculando = $this->desvincularDocenteRetornoRaiz($nodoAnterior->idNodo);
+            //le indico que apunta a raiz, no hay nadie por debajo, le asigno valores como nuevo y creo novedad
+            $nodoActual->PosicionAnterior = null;
+            $nodoActual->LicenciaActiva = "NO";
+            $nodoActual->CantidadAsistencia = 0;
+
+            //actualizo la novedad del nodo actual para poder regresar
+            $actualizoEstado  = $this->quitaLic($nodoActual->idNodo);
+            
+            //Eliminar nodo B con sus datos(todos + lic + horario)
+            //ahora puedo borrarlo porque es raiz el retorno y nadie lo usara
+            DB::table('tb_nodos')
+                ->where('idNodo', $nodoAnterior->idNodo)
+                ->delete();
+            
+            $nodoActual->save();
         }
+
+        
+        /*$nodoSiguiente =  Nodo::where('idNodo', $nodoActual->PosicionSiguiente)->first();
+        //1- actualizar la posicion de A <--C
+        $nodoSiguiente->PosicionAnterior = $nodoAnterior->idNodo;
+        $nodoSiguiente->save();
+
+        //2- actualizar la posicion de A--> C
+        $nodoAnterior->PosicionSiguiente = $nodoSiguiente->idNodo;  
+        
+
         if($nodoAnterior->Activo == 1){
           
-            //obtengo su nodo anterior y lo actualizo a null
-            //traigo info del agente que sera reemplazado
-            $AgenteQueRetorna = AgenteModel::where('idAgente', $nodoAnterior->Agente)->first();
-            
-            /*
-            //agrego la novedad antes que cambie su situacion de la persona que cubre
-            $novedad = NovedadesModel::where('Agente', $nodoAnterior->Agente)
-            ->where('tb_novedades.CUE',session('CUEa'))
-            ->first();
-            $novedad->Agente = $nodoAnterior->Agente;
-            $novedad->CUE = session('CUEa');
-            $novedad->CargoSalarial = $nodoAnterior->CargoSalarial;
-            $novedad->Caracter = $nodoAnterior->SitRev;
-            $novedad->Division = $nodoAnterior->Division;
-            //$novedad->FechaDesde = Carbon::parse(Carbon::now())->format('Y-m-d');
-            $novedad->FechaHasta = Carbon::parse(Carbon::now())->format('Y-m-d');
-            //calculo fecha desde-hasta
-            // Fecha inicial y final en formato YYYY-MM-DD
-            $fechaInicial = '2023-07-15';
-            $fechaFinal = '2023-08-02';
-
-            // Crear objetos DateTime
-            $fechaInicialObj = new DateTime($novedad->FechaDesde);
-            $fechaFinalObj = new DateTime($novedad->FechaHasta);
-            // Calcular la diferencia entre las dos fechas
-            $intervalo = $fechaInicialObj->diff($fechaFinalObj);
-            // Obtener la cantidad de días
-            $cantidadDias = $intervalo->days;
-            
-            $novedad->TotalDias = $cantidadDias;
-            $novedad->Mes = date('m');
-            $novedad->Anio = date('Y');
-            $novedad->Motivo = 11;
-            //$novedad->Motivo = $request->TipoLicencia;   //a evaluar
-            $novedad->Observaciones = "Baja por Retorno del Agente al Servicio - DNI del Agente que retorno: ".$AgenteQueRetorna->Documento." /Nombre: ".$AgenteQueRetorna->Nombres;
-            $novedad->Estado = 1;   //activo tiene novedad sin fecha hasta
-            $novedad->save();
-            */
-            
+         
         }
             //solo con ativo cero entra
             //3- actualizar el agente de B--> A
@@ -1377,14 +1523,12 @@ class AgController extends Controller
             $nodoAnterior->Usuario = session('idUsuario');
             $nodoAnterior->save();
             
+        */
         
         
-        //4- eliminar nodo B con sus datos(todos + lic + horario)
-        //ahora puedo borrarlo
-        DB::table('tb_nodos')
-            ->where('idNodo', $nodoActual->idNodo)
-            ->delete();
             return redirect("/verArbolServicio2")->with('ConfirmarRegresoNodo','OK');
+
+            
     }
     public function getFiltrandoNodos($valorBuscado){
         $CargosInicial=DB::table('tb_asignaturas')
@@ -1579,7 +1723,7 @@ class AgController extends Controller
     }
     public function ver_novedades_licencias(){
         //obtengo el usuario que es la escuela a trabajar
-        $idReparticion = session('idReparticion');
+       /* $idReparticion = session('idReparticion');
         //consulto a reparticiones
         $reparticion = DB::table('tb_reparticiones')
         ->where('tb_reparticiones.idReparticion',$idReparticion)
@@ -1589,9 +1733,11 @@ class AgController extends Controller
         //traigo el edificio de una suborg
         $SubOrg = DB::table('tb_suborganizaciones')
         ->where('tb_suborganizaciones.idSubOrganizacion',$reparticion[0]->subOrganizacion)
-        ->get();
+        ->get();*/
 
-        
+        $institucionExtension=DB::table('tb_institucion_extension')
+            ->where('tb_institucion_extension.idInstitucionExtension',session('idInstitucionExtension'))
+            ->get();
         
         $TiposDeEspacioCurricular = DB::table('tb_tiposespacioscurriculares')->get();
         $Cursos = DB::table('tb_cursos')->get();
@@ -1600,7 +1746,7 @@ class AgController extends Controller
         $TiposHora = DB::table('tb_tiposhora')->get();
         $RegimenDictado = DB::table('tb_pof_regimendictado')->get();
         $Divisiones = DB::table('tb_divisiones')
-        ->where('tb_divisiones.idSubOrg',session('idSubOrganizacion'))
+        ->where('tb_divisiones.idInstitucionExtension',session('idInstitucionExtension'))
         ->join('tb_cursos','tb_cursos.idCurso', '=', 'tb_divisiones.Curso')
         //->join('tb_division','tb_division.idDivisionU', '=', 'tb_divisiones.Division')
         //->join('tb_turnos', 'tb_turnos.idTurno', '=', 'tb_divisiones.Turno')
@@ -1617,9 +1763,12 @@ class AgController extends Controller
         ->get();
 
         $Novedades = DB::table('tb_novedades')
-        ->where('tb_novedades.CUE',session('CUEa'))    //lo busco por su anexo
-        ->where('tb_novedades.Motivo',[4])    //lo busco por su anexo
-        ->join('tb_agentes','tb_agentes.idAgente', 'tb_novedades.Agente')
+            ->where('tb_novedades.CUECOMPLETO', session('CUECOMPLETO'))
+            ->where('tb_novedades.idTurnoUsuario', session('idTurnoUsuario'))
+            ->whereIn('tb_novedades.Motivo', [4, 6, 7])   //lo busco por su anexo
+            // ->where(function($query) {
+            //     $query->orWhereNull('Nodo');
+            // })
         ->join('tb_cargossalariales','tb_cargossalariales.idCargo', 'tb_novedades.CargoSalarial')
         ->join('tb_situacionrevista','tb_situacionrevista.idSituacionRevista', 'tb_novedades.Caracter')
         ->join('tb_divisiones','tb_divisiones.idDivision', 'tb_novedades.Division')
@@ -1628,7 +1777,6 @@ class AgController extends Controller
         ->select(
            'tb_novedades.*',
            'tb_novedades.Observaciones as novObservaciones',
-           'tb_agentes.*',
            'tb_cargossalariales.*',
            'tb_motivos.*',
            'tb_situacionrevista.Descripcion as SitRev',
@@ -1636,7 +1784,7 @@ class AgController extends Controller
            'tb_turnos.Descripcion as DescripcionTurno',
         )
         ->get();
-
+        
         $datos=array(
             'mensajeError'=>"",
             'Novedades'=>$Novedades,

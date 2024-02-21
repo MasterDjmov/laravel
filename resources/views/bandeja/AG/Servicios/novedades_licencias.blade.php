@@ -29,8 +29,9 @@
                                         <th rowspan="2" style="text-align:center">Cargo</th>
                                         <th rowspan="2" style="text-align:center">Caracter</th>
                                         <th rowspan="2" style="text-align:center">Grado/Curso/Division</th>
-                                        <th colspan="3" style="text-align:center">Servicios en el Mes</th>
+                                        <th colspan="3" style="text-align:center">Servicios en el Mes - Licencias</th>
                                         <th rowspan="2" style="text-align:center">Motivo</th>
+                                        <th rowspan="2" style="text-align:center">Activa</th>
                                         <th rowspan="2" style="text-align:center">Observaciones</th>
                                     </tr>
                                     <tr>
@@ -38,27 +39,43 @@
                                         <th style="text-align:center">Fecha Hasta</th>
                                         <th style="text-align:center">Total Dias</th>
                                         
+                                        
                                     </tr>
                                 </thead>
                                 <tbody>
                                  @foreach($Novedades as $key => $n)
                                         <tr class="gradeX">
-                                            <td>{{$n->Documento}}</td>
-                                            <td>{{$n->Nombres}}</td>
+                                            @php
+                                                $infoDocu = DB::table('tb_desglose_agentes')
+                                                    ->where('tb_desglose_agentes.docu', $n->Agente)
+                                                    ->first();
+                                                //dd($infoDocu);
+                                            @endphp             
+                                            <td>{{$infoDocu->docu}}</td>
+                                            <td>{{$infoDocu->nomb}}</td>
                                             <td class="text-center">{{$n->Cargo}}<b>({{$n->Codigo}})</b></td>
                                             <td class="text-center">{{$n->SitRev}}</td>
                                             <td class="text-center">{{$n->nomDivision}} /<b>{{$n->DescripcionTurno}}</b></td>
-                                            <td class="text-center">{{ \Carbon\Carbon::parse($n->FechaDesde)->format('d-m-Y')}}</td>
-                                            @if ($n->FechaHasta==null)
-                                                <td class="text-center">{{$n->FechaHasta}}</td>
+                                            <td class="text-center">{{ \Carbon\Carbon::parse($n->FechaInicioLicencia)->format('d-m-Y')}}</td>
+                                            @if ($n->FechaHastaLicencia==null)
+                                                <td class="text-center">{{$n->FechaHastaLicencia}}</td>
                                             @else
-                                                <td class="text-center">{{ \Carbon\Carbon::parse($n->FechaHasta)->format('d-m-Y')}}</td>
+                                                <td class="text-center">{{ \Carbon\Carbon::parse($n->FechaHastaLicencia)->format('d-m-Y')}}</td>
                                             @endif
-                                            <td class="text-center">
-                                                {{$n->TotalDias}}
-                                            </td>
+                                            <td class="text-center">{{$n->TotalDiasLicencia}}</td>
                                             <td class="text-center">{{$n->Nombre_Motivo}}</td>
-                                            <td>{{$n->novObservaciones}}</td>
+                                            @if ($n->EstaActivaLicencia == "SI")
+                                                <td class="text-center" style="background-color:chartreuse">
+                                                    {{$n->EstaActivaLicencia}}
+                                                </td>
+                                            @else
+                                                <td class="text-center" style="background-color:dimgrey">
+                                                    {{$n->EstaActivaLicencia}}
+                                                </td>
+                                            @endif
+                                            
+                                            
+                                            <td>{{$n->ObservacionesLicencia}}</td>
                                             
                                         </tr>
                                     @endforeach

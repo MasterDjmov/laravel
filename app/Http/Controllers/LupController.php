@@ -845,6 +845,8 @@ class LupController extends Controller
         if($novedad){
             $novedad->CantidadDiasTrabajados = $nuevaCantidad; //aqui aplico asistencia al nodo
             $novedad->save();
+        }else{
+            $nuevaCantidad = 0;
         }
             
     return response()->json(['success' => true, 'message' => $nuevaCantidad]);
