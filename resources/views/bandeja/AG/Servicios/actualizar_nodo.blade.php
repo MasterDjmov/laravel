@@ -43,11 +43,11 @@
                       
                     
 
-                    {{-- @if ($infoNodos[0]->PosicionSiguiente == "")
+                    @if ($infoNodos[0]->PosicionSiguiente == "")
                         <a href="{{route('agregaNodo',$infoNodos[0]->idNodo)}}" class="btn btn-app bg-info VincularDer">
                         <i class="fas fa-stethoscope"></i> Crear Vacante (derecha)
                       </a>
-                    @endif --}}
+                    @endif 
 
                     
 
@@ -351,9 +351,18 @@
                                                   ->first();
                                               //dd($infoDocu);
 
-                                          @endphp             
-                                          <td>{{$infoDocu->docu}}</td>
+                                          @endphp
+                                          @if ($infoDocu)
+                                            <td>{{$infoDocu->docu}}</td>
+                                          @else
+                                            <td>Sin Dato</td>
+                                          @endif             
+                                          
+                                          @if ($infoDocu)
                                           <td>{{$infoDocu->nomb}}</td>
+                                        @else
+                                          <td>Sin Dato</td>
+                                        @endif 
                                           <td class="text-center">{{$n->Cargo}}<b>({{$n->Codigo}})</b></td>
                                           <td class="text-center">{{$n->SitRev}}</td>
                                           <td class="text-center">{{$n->nomDivision}} /<b>{{$n->DescripcionTurno}}</b></td>
