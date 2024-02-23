@@ -52,7 +52,7 @@
                                 <thead>
                                     <tr>
                                         <th colspan="4" style="text-align:center">Datos Personales</th>
-                                        <th colspan="7" style="text-align:center">Datos Institucionales</th>
+                                        <th colspan="9" style="text-align:center">Datos Institucionales</th>
                                     </tr>
                                     <tr>
                                         <th rowspan="1" style="text-align:center">DNI</th>
@@ -64,6 +64,8 @@
                                         <th rowspan="1" style="text-align:center">Area</th>
                                         <th rowspan="1" style="text-align:center">Cargo/Funcion</th>
                                         <th rowspan="1" style="text-align:center">Agrupamiento</th>
+                                        <th rowspan="1" style="text-align:center">Cant. Horas</th>
+                                        <th rowspan="1" style="text-align:center">Nomenclatura</th>
                                         <th rowspan="1" style="text-align:center">Zona</th>
                                         <th rowspan="1" style="text-align:center">Localidad</th>
                                         
@@ -84,6 +86,8 @@
                                             <td>{{$n->area}}</th>
                                             <td>{{$n->desc_plan}}</th>
                                             <td>{{$n->desc_agru}}</th>
+                                            <td>{{$n->hora}}</th>
+                                            <td>{{$n->nomencla}}(<b>{{$n->codigo}}</b>)</th>
                                             <td>{{$n->zona}}</th>
                                             <td>{{$n->desc_zona}}</th>
                                         </tr>
