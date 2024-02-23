@@ -212,12 +212,12 @@
                   <p>Licencias</p>
                 </a>
               </li>
-              {{-- <li class="nav-item">
-                <a href="{{route('ver_novedades_bajas')}}" class="nav-link">
+              <li class="nav-item">
+                <a href="{{route('buscar_dni_cue')}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Otras Novedades</p>
+                  <p>Consulta Temporal - Borrar</p>
                 </a>
-              </li> --}}
+              </li>
             </ul>
           </li>
         @endif

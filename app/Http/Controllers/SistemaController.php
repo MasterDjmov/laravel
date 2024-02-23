@@ -30,4 +30,61 @@ class SistemaController extends Controller
             }
             echo "<hr>FIN";
     }
+
+    public function buscar_dni_cue(Request $request){
+        
+        if($_POST){
+            $indoDesglose=DB::table('tb_desglose_agentes')
+            ->join('tb_institucion', 'tb_institucion.Unidad_Liquidacion', '=', 'tb_desglose_agentes.escu')
+           // ->join('tb_institucion_extension', 'tb_institucion_extension.idInstitucion', '=', 'tb_institucion.idInstitucion')
+            ->where('tb_desglose_agentes.docu',$request->dni)
+            ->select(
+            'tb_institucion.*',
+            //'tb_institucion_extension.*',
+            'tb_desglose_agentes.*',
+            'tb_desglose_agentes.area as desc_area'
+            )
+            ->get();
+
+            $datos=array(
+                'estado'=>"Agente Localizado",
+                'indoDesglose'=>$indoDesglose,
+                'dniUsuario'=>$request->dni
+            );
+            //dd($indoDesglose);
+        }else{
+            $indoDesglose=DB::table('tb_desglose_agentes')
+            ->join('tb_institucion', 'tb_institucion.Unidad_Liquidacion', '=', 'tb_desglose_agentes.escu')
+           // ->join('tb_institucion_extension', 'tb_institucion_extension.idInstitucion', '=', 'tb_institucion.idInstitucion')
+            ->where('tb_desglose_agentes.docu','1')
+            ->select(
+            'tb_institucion.*',
+            //'tb_institucion_extension.*',
+            'tb_desglose_agentes.*'
+            )
+            ->get();
+
+            $datos=array(
+                'estado'=>"Sin Accion",
+                'indoDesglose'=>$indoDesglose,
+                'dniUsuario'=>1
+            );
+        }
+        /*$indoDesglose=DB::table('tb_desglose_agentes')
+        //->join('tb_institucion', 'tb_institucion.idInstitucion', '=', 'tb_desglose_agentes.escu')
+        ->select(
+            //'tb_institucion.*',
+            'tb_desglose_agentes.*'
+        )
+        ->get();*/
+
+
+        //dd($indoDesglose);
+        //traemos otros array
+       
+        //lo guardo para controlar a las personas de una determinada cue/suborg
+
+        //dd($plazas);
+        return view('bandeja.LUP.usuarios_dni_cue',$datos);
+    }
 }

@@ -142,3 +142,6 @@ Route::get('/salir',[BandejaController::class,'salir'])->name('Salir');
 //procesos solo de creacion o script
 Route::get('/vincularSubOrgEdi',[SistemaController::class,'vincularSubOrgEdi'])->name('vincularSubOrgEdi');
 Route::post('/controlAsistencia',[LupController::class,'controlAsistencia'])->name('controlAsistencia');
+Route::get('/buscar_dni_cue',[SistemaController::class,'buscar_dni_cue'])->name('buscar_dni_cue');
+Route::post('/buscar_dni_cue',[SistemaController::class,'buscar_dni_cue'])->name('buscar_dni_cue');
+
