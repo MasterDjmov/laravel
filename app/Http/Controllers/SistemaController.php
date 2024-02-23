@@ -35,7 +35,7 @@ class SistemaController extends Controller
         
         if($_POST){
             $indoDesglose=DB::table('tb_desglose_agentes')
-            ->join('tb_institucion', 'tb_institucion.Unidad_Liquidacion', '=', 'tb_desglose_agentes.escu')
+            ->leftjoin('tb_institucion', 'tb_institucion.Unidad_Liquidacion', '=', 'tb_desglose_agentes.escu')
            // ->join('tb_institucion_extension', 'tb_institucion_extension.idInstitucion', '=', 'tb_institucion.idInstitucion')
             ->where('tb_desglose_agentes.docu',$request->dni)
             ->select(
