@@ -13,7 +13,7 @@
             <div class="row">
                 <div class="card card-info  col-lg-6">
                     <div class="card-header">
-                      <h3 class="card-title">Busqueda por DNI</h3>
+                      <h3 class="card-title">Busqueda por DNI / Apellido, Nombre</h3>
                     </div>
                     <form action="{{ route('buscar_dni_cue') }}"  class="buscar_dni_cue" id="buscar_dni_cue" method="POST" >
                         @csrf
@@ -21,7 +21,7 @@
                       <div class="row  col-lg-12">
                         
                           <div class="col-6">
-                            <input type="text" class="form-control" placeholder="DNI del agente" name="dni">
+                            <input type="text" class="form-control" placeholder="DNI del agente o parte del nombre" name="dni">
                           </div>
                           <div class="col-6">
                             <input type="submit" class="form-control btn-success" value="Consultar DNI" name="bd">
@@ -42,7 +42,7 @@
                     <div class="card card-lightblue">
                         <div class="card-header ">
                             
-                            <h3 class="card-title">Novedades - x DNI temporal</h3>
+                            <h3 class="card-title">Novedades - por DNI o por Nombre</h3>
                         </div>
                         
                         

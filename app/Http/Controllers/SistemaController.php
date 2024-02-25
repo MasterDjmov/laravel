@@ -34,17 +34,19 @@ class SistemaController extends Controller
     public function buscar_dni_cue(Request $request){
         
         if($_POST){
-            $indoDesglose=DB::table('tb_desglose_agentes')
+            $indoDesglose = DB::table('tb_desglose_agentes')
             ->leftjoin('tb_institucion', 'tb_institucion.Unidad_Liquidacion', '=', 'tb_desglose_agentes.escu')
-           // ->join('tb_institucion_extension', 'tb_institucion_extension.idInstitucion', '=', 'tb_institucion.idInstitucion')
-            ->where('tb_desglose_agentes.docu',$request->dni)
+            ->where(function ($query) use ($request) {
+                $query->where('tb_desglose_agentes.docu', $request->dni)
+                    ->orWhere('tb_desglose_agentes.nomb', 'like', '%' . $request->dni . '%');
+            })
             ->select(
-            'tb_institucion.*',
-            //'tb_institucion_extension.*',
-            'tb_desglose_agentes.*',
-            'tb_desglose_agentes.area as desc_area'
+                'tb_institucion.*',
+                'tb_desglose_agentes.*',
+                'tb_desglose_agentes.area as desc_area'
             )
             ->get();
+
 
             $datos=array(
                 'estado'=>"Agente Localizado",
