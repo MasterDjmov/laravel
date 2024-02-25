@@ -1508,15 +1508,9 @@ class AgController extends Controller
             ->where('Nodo', $idNodo)
             ->delete();
         
-        //antes de borrar debo verificar su anterior
+        //traigo la info del nodo
         $nodo =  Nodo::where('idNodo', $idNodo)->first();
 
-        //verifico si ese nodo a borrar tiene alguna relacion o siguiente
-        // if($nodo->PosicionSiguiente != "")
-        // {
-        //     return redirect("/verArbolServicio")->with('ConfirmarBorradoNodoAnulado','OK');
-        // }
-        //dd($nodo->PosicionAnterior);
         $nodoAnteriorPos =$nodo->PosicionAnterior;
         //obtengo su nodo anterior y lo actualizo a null
             $nodoAnterior =  Nodo::where('idNodo', $nodo->PosicionAnterior)->first();
@@ -1529,6 +1523,12 @@ class AgController extends Controller
         DB::table('tb_nodos')
             ->where('idNodo', $idNodo)
             ->delete();
+
+        //tambien localizo el alta y la novedad y las borro
+        DB::table('tb_novedades')
+            ->where('Nodo', $idNodo)
+            ->delete();
+
         
             //si tiene alguien lo llevo a seguir editando
         if($nodoAnteriorPos == ""){
