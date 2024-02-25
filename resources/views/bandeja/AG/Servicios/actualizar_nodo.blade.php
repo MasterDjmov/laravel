@@ -322,10 +322,10 @@
                                     ->where('tb_novedades.CUECOMPLETO', session('CUECOMPLETO'))
                                     ->where('tb_novedades.idTurnoUsuario', session('idTurnoUsuario'))
                                     ->where('tb_novedades.Agente',$infoNodos[0]->Agente)
-                                    ->whereIn('tb_novedades.Motivo', [4, 6, 7])   //lo busco por su anexo
+                                    ->whereIn('tb_novedades.Motivo', [2,3, 4, 6, 7])   //menos vacante y baja traigo
                                     
                                     // ->where(function($query) {
-                                    //     $query->orWhereNull('Nodo');
+                                    //     $query->orWhereNull('Nodo'); 
                                     // })
                                 ->join('tb_cargossalariales','tb_cargossalariales.idCargo', 'tb_novedades.CargoSalarial')
                                 ->join('tb_situacionrevista','tb_situacionrevista.idSituacionRevista', 'tb_novedades.Caracter')
@@ -480,10 +480,14 @@
                         <input type="date" class="form-control" id="FechaHastaLic" name="FechaHastaLic" placeholder="Fecha Hasta">
                       </div>
                       <div class="form-group">
-                        <label for="TL">Tipo de Licencia</label>
+                        <label for="TL">Tipo de Solicitud: </label>
                         <select name="TipoLicencia" class="form-control">
                           @foreach ($TipoMotivos as $tm)
+                            @if ($tm->idMotivo == 1 || $tm->idMotivo == 5)
+                                {{-- no aplico nada --}}
+                            @else
                             <option value='{{$tm->idMotivo}}'>{{$tm->Nombre_Motivo}}</option>
+                            @endif
                           @endforeach
                         </select>
                       </div>

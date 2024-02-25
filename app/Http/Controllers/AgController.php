@@ -525,7 +525,7 @@ class AgController extends Controller
             $nodo->CUECOMPLETO = session('CUECOMPLETO');
             $nodo->idTurnoUsuario = session('idTurnoUsuario');
             //datos extra
-            $nodo->LicenciaActiva = "NO";
+            $nodo->LicenciaActiva = "NO";   //es nodo nuevo, no tiene una licencia
             $nodo->CantidadAsistencia = 0;  
         $nodo->save();
         
@@ -655,126 +655,102 @@ class AgController extends Controller
 
     public function agregaNodo($nodoActual){
         //aqui voy a verificar si es titular/interino u otra clase que requiera nodo anterior
-        /*
-        $nodo = Nodo::where('idNodo', $nodoActual)->first();
-        
-        if($nodo->SitRev == 1 || $nodo->sitRev == 2){
-            //aqui crea atras
-            $Nuevo = new Nodo;
-            $Nuevo->Agente = null;
-            $Nuevo->EspacioCurricular = $Nuevo->EspacioCurricular;
-            $Nuevo->CargoSalarial = $Nuevo->CargoSalarial;
-            $Nuevo->CantidadHoras = $Nuevo->CantidadHoras;
-            $Nuevo->FechaDeAlta = $Nuevo->FechaDeAlta;
-            $Nuevo->Division =  $Nuevo->Division;
-            $Nuevo->SitRev = 4;
-            $Nuevo->Asignatura = $Nuevo->Asignatura;
-            $Nuevo->Usuario = session('idUsuario');
-            $Nuevo->CUE = session('CUEa');
-            $Nuevo->PosicionSiguiente = $nodoActual;
-            $Nuevo->save();
+
+            $nodo = Nodo::where('idNodo', $nodoActual)->first();
+
+            //valido si no tiene nadie a su derecha, no existe nodo y puede crear
+            if($nodo->PosicionSiguiente == null || $nodo->PosicionSiguiente == "" ){
+                    $Nuevo = new Nodo;
+                    $Nuevo->Agente = null;
+                // $Nuevo->EspacioCurricular = null;
+                    $Nuevo->CargoSalarial = $nodo->CargoSalarial;
+                    $Nuevo->CantidadHoras = $nodo->CantidadHoras;
+                    $Nuevo->FechaDeAlta = $nodo->FechaDeAlta;
+                    $Nuevo->Division = $nodo->Division;
+                    $Nuevo->SitRev = $nodo->SitRev;
+                    //$Nuevo->Asignatura = null;
+                    $Nuevo->Usuario = session('idUsuario');
+                    $Nuevo->CUECOMPLETO = session('CUECOMPLETO');
+                    $Nuevo->idTurnoUsuario = session('idTurnoUsuario');
+                    $Nuevo->PosicionAnterior = $nodoActual;
+                    $Nuevo->Activo = 0;
+                    $Nuevo->CantidadAsistencia = 0;
+                    $Nuevo->LicenciaActiva = "SI";
+                $Nuevo->save();
+
+                $SituacionDeRevista = SitRevModel::where('idSituacionRevista',$nodo->SitRev)->get();
+                //le doy de alta 
+                $novedad = new NovedadesModel();
+                    $novedad->Agente = null;
+                    $novedad->CUECOMPLETO = session('CUECOMPLETO');
+                    $novedad->idTurnoUsuario = session('idTurnoUsuario');
+                    $novedad->CargoSalarial = $nodo->CargoSalarial;
+                    $novedad->Caracter = $nodo->SitRev;
+                    $novedad->Division = $nodo->Division;
+                    $novedad->FechaDesde = Carbon::parse(Carbon::now())->format('Y-m-d');
+                    $novedad->TotalDias = 1;
+                    $novedad->Mes = date('m');
+                    $novedad->Anio = date('Y');
+                    $novedad->Motivo = 1;   //en este caso es vacante
+                    $novedad->Observaciones = "Alta de Servicio: ".$SituacionDeRevista[0]->Descripcion;
+                    $novedad->Estado = 1;   //activo tiene novedad sin fecha hasta
+                    $novedad->Nodo = $Nuevo->idNodo; //por ahora lo hago asi, tengo dudas
+                    $novedad->CantidadDiasTrabajados = $nodo->CantidadAsistencia;
+                $novedad->save();
+
+                //si viene de izquierda a dererecha, le agrego una novedad de licencia
+                //cargo la novedad de ingreso nuevo
+                $novedad = new NovedadesModel();
+                    $novedad->Agente = $Nuevo->Agente;
+                    $novedad->CUECOMPLETO = session('CUECOMPLETO');
+                    $novedad->idTurnoUsuario = session('idTurnoUsuario');
+                    $novedad->CargoSalarial = $Nuevo->CargoSalarial;
+                    $novedad->Caracter = $Nuevo->SitRev;
+                    $novedad->Division = $Nuevo->Division;
+                    $novedad->FechaDesde = Carbon::parse(Carbon::now())->format('Y-m-d');
+                    $novedad->TotalDias = 1;
+                    $novedad->Mes = date('m');
+                    $novedad->Anio = date('Y');
+                    $novedad->Motivo = 2;   //activo un suplencia
+                    $novedad->ObservacionesLicencia = $Nuevo->Observaciones;
+                    $novedad->Estado = 1;   //activo tiene novedad sin fecha hasta
+                    $novedad->Nodo = $Nuevo->idNodo; //por ahora lo hago asi, tengo dudas
+                    $novedad->CantidadDiasTrabajados = $Nuevo->CantidadAsistencia;
+
+                    //calculo fecha desde-hasta
+                    // Fecha inicial y final en formato YYYY-MM-DD
+                    $fechaInicialObj = '2023-07-15';
+                    $fechaFinalObj = '2023-08-02';
+
+                    // Crear objetos DateTime
+                    $fechaInicialObj = new DateTime(Carbon::parse(Carbon::now())->format('Y-m-d'));
+                    $fechaFinalObj = new DateTime(Carbon::parse(Carbon::now())->format('Y-m-d'));
+
+                    // Calcular la diferencia entre las dos fechas
+                    $intervalo = $fechaInicialObj->diff($fechaFinalObj);
+
+                    // Obtener la cantidad de días
+                    $cantidadDias = $intervalo->days;
+
+                    $novedad->FechaInicioLicencia = Carbon::parse(Carbon::now())->format('Y-m-d');
+                    $novedad->FechaHastaLicencia = Carbon::parse(Carbon::now())->format('Y-m-d');
+                    $novedad->TotalDiasLicencia = $cantidadDias ;
+                    $novedad->EstaActivaLicencia = "SI" ;
+                $novedad->save();
             
-            //obtengo el id y lo guardo relacionando al anterior que recibo por parametro
-            $Nuevo->idNodo;
-            $nodo = Nodo::where('idNodo', $nodoActual)->first();
-            $nodo->PosicionAnterior = $Nuevo->idNodo;
-            $nodo->save();
-        }else{*/
-            //aqui es suplente crea adelante
-                //creo el nodo siguiente
+                //obtengo el id y lo guardo relacionando al anterior que recibo por parametro
+                $Nuevo->idNodo;
+                    $nodo = Nodo::where('idNodo', $nodoActual)->first();
+                    $nodo->PosicionSiguiente = $Nuevo->idNodo;
+                $nodo->save();
 
-            $nodo = Nodo::where('idNodo', $nodoActual)->first();
-
-            $Nuevo = new Nodo;
-                $Nuevo->Agente = null;
-            // $Nuevo->EspacioCurricular = null;
-                $Nuevo->CargoSalarial = $nodo->CargoSalarial;
-                $Nuevo->CantidadHoras = $nodo->CantidadHoras;
-                $Nuevo->FechaDeAlta = $nodo->FechaDeAlta;
-                $Nuevo->Division = $nodo->Division;
-                $Nuevo->SitRev = $nodo->SitRev;
-                //$Nuevo->Asignatura = null;
-                $Nuevo->Usuario = session('idUsuario');
-                $Nuevo->CUECOMPLETO = session('CUECOMPLETO');
-                $Nuevo->idTurnoUsuario = session('idTurnoUsuario');
-                $Nuevo->PosicionAnterior = $nodoActual;
-                $Nuevo->Activo = 0;
-                $Nuevo->CantidadAsistencia = 0;
-                $Nuevo->LicenciaActiva = "SI";
-            $Nuevo->save();
-
-            $SituacionDeRevista = SitRevModel::where('idSituacionRevista',$nodo->SitRev)->get();
-            //le doy de alta 
-            $novedad = new NovedadesModel();
-                $novedad->Agente = null;
-                $novedad->CUECOMPLETO = session('CUECOMPLETO');
-                $novedad->idTurnoUsuario = session('idTurnoUsuario');
-                $novedad->CargoSalarial = $nodo->CargoSalarial;
-                $novedad->Caracter = $nodo->SitRev;
-                $novedad->Division = $nodo->Division;
-                $novedad->FechaDesde = Carbon::parse(Carbon::now())->format('Y-m-d');
-                $novedad->TotalDias = 1;
-                $novedad->Mes = date('m');
-                $novedad->Anio = date('Y');
-                $novedad->Motivo = 1;   //en este caso es vacante
-                $novedad->Observaciones = "Alta de Servicio: ".$SituacionDeRevista[0]->Descripcion;
-                $novedad->Estado = 1;   //activo tiene novedad sin fecha hasta
-                $novedad->Nodo = $Nuevo->idNodo; //por ahora lo hago asi, tengo dudas
-                $novedad->CantidadDiasTrabajados = $nodo->CantidadAsistencia;
-            $novedad->save();
-
-            //si viene de izquierda a dererecha, le agrego una novedad de licencia
-            //cargo la novedad de ingreso nuevo
-            $novedad = new NovedadesModel();
-                $novedad->Agente = $Nuevo->Agente;
-                $novedad->CUECOMPLETO = session('CUECOMPLETO');
-                $novedad->idTurnoUsuario = session('idTurnoUsuario');
-                $novedad->CargoSalarial = $Nuevo->CargoSalarial;
-                $novedad->Caracter = $Nuevo->SitRev;
-                $novedad->Division = $Nuevo->Division;
-                $novedad->FechaDesde = Carbon::parse(Carbon::now())->format('Y-m-d');
-                $novedad->TotalDias = 1;
-                $novedad->Mes = date('m');
-                $novedad->Anio = date('Y');
-                $novedad->Motivo = 4;   //activo una licencia
-                $novedad->ObservacionesLicencia = $Nuevo->Observaciones;
-                $novedad->Estado = 1;   //activo tiene novedad sin fecha hasta
-                $novedad->Nodo = $Nuevo->idNodo; //por ahora lo hago asi, tengo dudas
-                $novedad->CantidadDiasTrabajados = $Nuevo->CantidadAsistencia;
-
-                //calculo fecha desde-hasta
-                // Fecha inicial y final en formato YYYY-MM-DD
-                $fechaInicialObj = '2023-07-15';
-                $fechaFinalObj = '2023-08-02';
-
-                // Crear objetos DateTime
-                $fechaInicialObj = new DateTime(Carbon::parse(Carbon::now())->format('Y-m-d'));
-                $fechaFinalObj = new DateTime(Carbon::parse(Carbon::now())->format('Y-m-d'));
-
-                // Calcular la diferencia entre las dos fechas
-                $intervalo = $fechaInicialObj->diff($fechaFinalObj);
-
-                // Obtener la cantidad de días
-                $cantidadDias = $intervalo->days;
-
-                $novedad->FechaInicioLicencia = Carbon::parse(Carbon::now())->format('Y-m-d');
-                $novedad->FechaHastaLicencia = Carbon::parse(Carbon::now())->format('Y-m-d');
-                $novedad->TotalDiasLicencia = $cantidadDias ;
-                $novedad->EstaActivaLicencia = "SI" ;
-            $novedad->save();
+                return redirect()->back()->with('ConfirmarNuevoNodo','OK');
+        // }
+            }else{
+                return redirect()->back()->with('ConfirmarNuevoNodoDerechoFallo','OK');
+            }
            
-            //obtengo el id y lo guardo relacionando al anterior que recibo por parametro
-            $Nuevo->idNodo;
-                $nodo = Nodo::where('idNodo', $nodoActual)->first();
-                $nodo->PosicionSiguiente = $Nuevo->idNodo;
-            $nodo->save();
-       // }
         
-
-        
-        
-
-        return redirect()->back()->with('ConfirmarNuevoNodo','OK');
     }
 
     public function agregaLic(Request $request){
@@ -783,74 +759,10 @@ class AgController extends Controller
         //obtengo el agente actual(nodo actual)
         $nodoActual = Nodo::where('idNodo', $request->idNodo)->first();
        
-        /*
-        //agrego la novedad antes que cambie su situacion
-        //cargo la novedad de licencia izquierda o derecha
-        $novedad = new NovedadesModel();
-        $novedad->Agente = $nodoActual->Agente;
-        $novedad->CUE = session('CUEa');
-        $novedad->CargoSalarial = $nodoActual->CargoSalarial;
-        $novedad->Caracter = $nodoActual->SitRev;
-        $novedad->Division = $nodoActual->Division;
-        $novedad->FechaDesde = Carbon::parse(Carbon::now())->format('Y-m-d');
-        $novedad->FechaHasta = $request->FechaHasta;
-        //calculo fecha desde-hasta
-        // Fecha inicial y final en formato YYYY-MM-DD
-        $fechaInicial = '2023-07-15';
-        $fechaFinal = '2023-08-02';
-
-        // Crear objetos DateTime
-        $fechaInicialObj = new DateTime($novedad->FechaDesde);
-        $fechaFinalObj = new DateTime($request->FechaHasta);
-
-        // Calcular la diferencia entre las dos fechas
-        $intervalo = $fechaInicialObj->diff($fechaFinalObj);
-
-        // Obtener la cantidad de días
-        $cantidadDias = $intervalo->days;
-        
-        $novedad->TotalDias = $cantidadDias;
-        $novedad->Mes = date('m');
-        $novedad->Anio = date('Y');
-        $novedad->Motivo = $request->TipoLicencia;   //en este caso 4 articulo de licencia, luego se puede editar
-        $novedad->Observaciones = $request->Observaciones;
-        $novedad->Estado = 1;   //activo tiene novedad sin fecha hasta
-        $novedad->save();
-       */
-
-        /*
-        if($nodo->SitRev == 1 || $nodo->sitRev == 2){
-            //aqui crea atras
-            $Nuevo = new Nodo;
-            $Nuevo->Agente = null;
-            $Nuevo->EspacioCurricular = $Nuevo->EspacioCurricular;
-            $Nuevo->CargoSalarial = $Nuevo->CargoSalarial;
-            $Nuevo->CantidadHoras = $Nuevo->CantidadHoras;
-            $Nuevo->FechaDeAlta = $Nuevo->FechaDeAlta;
-            $Nuevo->Division =  $Nuevo->Division;
-            $Nuevo->SitRev = 4;
-            $Nuevo->Asignatura = $Nuevo->Asignatura;
-            $Nuevo->Usuario = session('idUsuario');
-            $Nuevo->CUE = session('CUEa');
-            $Nuevo->PosicionSiguiente = $nodoActual;
-            $Nuevo->save();
-            
-            //obtengo el id y lo guardo relacionando al anterior que recibo por parametro
-            $Nuevo->idNodo;
-            $nodo = Nodo::where('idNodo', $nodoActual)->first();
-            $nodo->PosicionAnterior = $Nuevo->idNodo;
-            $nodo->save();
-        }else{*/
-            //aqui es suplente crea adelante
-            
-            //creo el nodo anterior o intermedio segun criterio
-            //1-si es raiz
-            //2-si se pide entre dos nodos -suplente de suplente de titular/interino etc
-        
-            //1 si es raiz
+        //1 si es raiz
         if($nodoActual->PosicionAnterior==null || $nodoActual->PosicionAnterior==""){
+            //creo un nodo vacio, no le agrego novedad, dejo para usar el vincular
             $Nuevo = new Nodo;
-                //creo un nodo vacio, no le agrego novedad, dejo para usar el vincular
                 $Nuevo->Agente = null;
                 //$Nuevo->EspacioCurricular = $nodoActual->EspacioCurricular;
                 $Nuevo->CargoSalarial = null;
@@ -886,7 +798,7 @@ class AgController extends Controller
                 $novedad->TotalDias = 1;
                 $novedad->Mes = date('m');
                 $novedad->Anio = date('Y');
-                $novedad->Motivo = $request->TipoLicencia;   //en este caso es vacante
+                $novedad->Motivo = $request->TipoLicencia;   //en este caso es suplencia, etc
                 $novedad->ObservacionesLicencia = $request->Observaciones;
                 $novedad->Estado = 1;   //activo tiene novedad sin fecha hasta
                 $novedad->Nodo = $nodoActual->idNodo; //por ahora lo hago asi, tengo dudas
@@ -956,7 +868,8 @@ class AgController extends Controller
         $novedad = NovedadesModel::where('Nodo',$idNodo)
         ->where('tb_novedades.CUECOMPLETO', session('CUECOMPLETO'))
         ->where('tb_novedades.idTurnoUsuario', session('idTurnoUsuario'))
-        ->whereIn('tb_novedades.Motivo', [4, 6, 7])   //lo busco por su anexo
+        ->where('tb_novedades.EstaActivaLicencia', "SI")
+        ->whereIn('tb_novedades.Motivo', [2, 3, 4, 6, 7])   //lo busco por su anexo
         ->first();
 
         //cuando lo encuentra lo actualiza
@@ -1264,37 +1177,43 @@ class AgController extends Controller
         
         //verifico si hay nueva entrada o si es simplemente actualizar al agente
         if($request->idAgente == $nodo->Agente){
-            //$nodo->Agente = $request->idAgente;                 //es el DNI
-            //$nodo->EspacioCurricular = $request->EspCur;
-            $nodo->Division = $request->Division;
-            $nodo->CargoSalarial = $request->CargoSalarial; //listo
-            $nodo->CantidadHoras = $request->CantidadHoras; //listo
-            $nodo->FechaDeAlta = $request->FA;              //listo
-            $nodo->SitRev = $request->SitRev;               //listo
-           // $nodo->Asignatura = $idAsig;
-            $nodo->Activo = 1;  //ingreso un agente
-            $nodo->Observaciones = $request->Observaciones; //listo 18 de abril
-            //$nodo->CantidadAsistencia = 0;
-            $nodo->Usuario = session('idUsuario');
-        $nodo->save();
+            if($nodo->LicenciaActiva == "NO"){
+                    //$nodo->Agente = $request->idAgente;                 //es el DNI
+                    //$nodo->EspacioCurricular = $request->EspCur;
+                    $nodo->Division = $request->Division;
+                    $nodo->CargoSalarial = $request->CargoSalarial; //listo
+                    $nodo->CantidadHoras = $request->CantidadHoras; //listo
+                    $nodo->FechaDeAlta = $request->FA;              //listo
+                    $nodo->SitRev = $request->SitRev;               //listo
+                    // $nodo->Asignatura = $idAsig;
+                    $nodo->Activo = 1;  //ingreso un agente
+                    $nodo->Observaciones = $request->Observaciones; //listo 18 de abril
+                    //$nodo->CantidadAsistencia = 0;
+                    $nodo->Usuario = session('idUsuario');
+                    $nodo->save();
 
-            //se trata de actualizar, por ende no cargo novedad, pero edito la activa
-            //como voy a liberar el nodo del actual docente, antes doy de baja en novedad
-            $novedad = NovedadesModel::where('Nodo', $nodo->idNodo)
-            ->where('Agente', $nodo->Agente)
-            ->where('CUECOMPLETO', $nodo->CUECOMPLETO)
-            ->where('idTurnoUsuario', $nodo->idTurnoUsuario)
-            ->where('Motivo','=', 1)    //pregunto si esta activo con ALTA
-            ->whereNotNull('Nodo') // Verifica si el campo 'Nodo' no es null debido a que todavia esta activo
-            ->first();
-    
-            if($novedad){
-                $novedad->CargoSalarial = $request->CargoSalarial;
-                $novedad->Caracter = $request->SitRev;
-                $novedad->Division = $nodo->Division;
-                $novedad->save();
+                    //se trata de actualizar, por ende no cargo novedad, pero edito la activa
+                    //como voy a liberar el nodo del actual docente, antes doy de baja en novedad
+                    $novedad = NovedadesModel::where('Nodo', $nodo->idNodo)
+                    ->where('Agente', $nodo->Agente)
+                    ->where('CUECOMPLETO', $nodo->CUECOMPLETO)
+                    ->where('idTurnoUsuario', $nodo->idTurnoUsuario)
+                    ->where('Motivo','=', 1)    //pregunto si esta activo con ALTA de tipo vacante
+                    ->whereNotNull('Nodo') // Verifica si el campo 'Nodo' no es null debido a que todavia esta activo
+                    ->first();
+            
+                    if($novedad){
+                        $novedad->CargoSalarial = $request->CargoSalarial;
+                        $novedad->Caracter = $request->SitRev;
+                        $novedad->Division = $nodo->Division;
+                        $novedad->save();
+                    }
+            }else{
+                //en caso de tener licencia, no lo dejo modificar nada de sus atributos
             }
+           
         }else{
+            //nodo en blanco
             $nodo->Agente = $request->idAgente;                 //es el DNI
             //$nodo->EspacioCurricular = $request->EspCur;
             $nodo->Division = $request->Division;
@@ -1335,9 +1254,7 @@ class AgController extends Controller
                         $novedad->CantidadDiasTrabajados = $nodo->CantidadAsistencia;
                     $novedad->save();
             }else{
-                //actualizo la novedad que le faltan datos
-                //de alta
-                //actualizo la novedad que le faltan datos
+                //actualizo la novedad que le faltan datos de alta
                 $novedad = NovedadesModel::where('Nodo', $request->nodo)
                 //->where('Agente', $nodo->Agente)
                 ->where('CUECOMPLETO', $nodo->CUECOMPLETO)
@@ -1359,7 +1276,7 @@ class AgController extends Controller
                 //->where('Agente', $nodo->Agente)
                 ->where('CUECOMPLETO', $nodo->CUECOMPLETO)
                 ->where('idTurnoUsuario', $nodo->idTurnoUsuario)
-                ->where('Motivo', 4)     //pregunto si esta activo con ALTA
+                ->where('Motivo', 2)     //pregunto si esta activo con ALTA
                 ->whereNotNull('Nodo') // Verifica si el campo 'Nodo' no es null debido a que todavia esta activo
                 ->first();
         
@@ -1394,57 +1311,60 @@ class AgController extends Controller
     }
 
     public function desvincularDocente($idNodo){
+        
         //dd($idAgente);
         //dd($idNodo);
         //traigo la info del nodo actual
         $nodo =  Nodo::where('idNodo', $idNodo)->first();
+        
+        //en caso de tener licencia el nodo, no permito desvincularlo
+        if($nodo->LicenciaActiva == "NO"){
+            //como voy a liberar el nodo del actual docente, antes doy de baja en novedad
+            $novedad = NovedadesModel::where('Nodo', $nodo->idNodo)
+            ->where('Agente', $nodo->Agente)
+            ->where('CUECOMPLETO', $nodo->CUECOMPLETO)
+            ->where('idTurnoUsuario', $nodo->idTurnoUsuario)
+            ->where('Motivo','=', 1)    //pregunto si esta activo con ALTA y es vacante
+            ->whereNotNull('Nodo') // Verifica si el campo 'Nodo' no es null debido a que todavia esta activo
+            ->first();
 
-         //como voy a liberar el nodo del actual docente, antes doy de baja en novedad
-         $novedad = NovedadesModel::where('Nodo', $nodo->idNodo)
-         ->where('Agente', $nodo->Agente)
-         ->where('CUECOMPLETO', $nodo->CUECOMPLETO)
-         ->where('idTurnoUsuario', $nodo->idTurnoUsuario)
-         ->where('Motivo','=', 1)    //pregunto si esta activo con ALTA
-         ->whereNotNull('Nodo') // Verifica si el campo 'Nodo' no es null debido a que todavia esta activo
-         ->first();
- 
-         if($novedad){
-             $novedad->Nodo = null; //le quito el valor del nodo a la antigua novedad de alta
-             $novedad->save();
-         }
+            if($novedad){
+                $novedad->Nodo = null; //le quito el valor del nodo a la antigua novedad de alta
+                $novedad->save();
+            }
 
-         //agrego una novedad en baja
-         //cargo la novedad avisando que es baja
-        $novedad = new NovedadesModel();
-            $novedad->Agente = $nodo->Agente;
-            $novedad->CUECOMPLETO = session('CUECOMPLETO');
-            $novedad->idTurnoUsuario = session('idTurnoUsuario');
-            $novedad->CargoSalarial = $nodo->CargoSalarial;
-            $novedad->Caracter = $nodo->SitRev;
-            $novedad->Division = $nodo->Division;
-            $novedad->FechaDesde = $nodo->FechaDesde;
-            $novedad->FechaHasta = Carbon::parse(Carbon::now())->format('Y-m-d');
-            $novedad->TotalDias = 1;
-            $novedad->Mes = date('m');
-            $novedad->Anio = date('Y');
-            $novedad->Motivo = 5;   //en este caso es vacante
-            $novedad->Observaciones = "Se dio de baja al docente por desvinculacion";
-            $novedad->Estado = 1;   //activo tiene novedad sin fecha hasta
-            $novedad->Nodo = null; //por ahora lo hago asi, tengo dudas
-            $novedad->CantidadDiasTrabajados = $nodo->CantidadAsistencia;
-        $novedad->save();
+            //agrego una novedad en baja
+            //cargo la novedad avisando que es baja
+            $novedad = new NovedadesModel();
+                $novedad->Agente = $nodo->Agente;
+                $novedad->CUECOMPLETO = session('CUECOMPLETO');
+                $novedad->idTurnoUsuario = session('idTurnoUsuario');
+                $novedad->CargoSalarial = $nodo->CargoSalarial;
+                $novedad->Caracter = $nodo->SitRev;
+                $novedad->Division = $nodo->Division;
+                $novedad->FechaDesde = $nodo->FechaDesde;
+                $novedad->FechaHasta = Carbon::parse(Carbon::now())->format('Y-m-d');
+                $novedad->TotalDias = 1;
+                $novedad->Mes = date('m');
+                $novedad->Anio = date('Y');
+                $novedad->Motivo = 5;   //en este caso es vacante
+                $novedad->Observaciones = "Se dio de baja al docente por desvinculacion";
+                $novedad->Estado = 1;   //activo tiene novedad sin fecha hasta
+                $novedad->Nodo = null; //por ahora lo hago asi, tengo dudas
+                $novedad->CantidadDiasTrabajados = $nodo->CantidadAsistencia;
+            $novedad->save();
 
 
-        //al nodo que esta en uso le saco el agente
-        $nodo =  Nodo::where('idNodo', $idNodo)->first();;
-            $nodo->Agente = null;
-            $nodo->Activo = 0;  //quito un agente
-            $nodo->CantidadAsistencia = 0;
-            $nodo->Usuario = session('idUsuario');
-        $nodo->save();
-
-       
-
+            //al nodo que esta en uso le saco el agente
+            $nodo =  Nodo::where('idNodo', $idNodo)->first();;
+                $nodo->Agente = null;
+                $nodo->Activo = 0;  //quito un agente
+                $nodo->CantidadAsistencia = 0;
+                $nodo->Usuario = session('idUsuario');
+            $nodo->save();
+        }else{
+            //tienen lic no permito desvincular
+        }
         
         return redirect()->back()->with('ConfirmarDesvincularAgente','OK');
     }
@@ -1454,51 +1374,60 @@ class AgController extends Controller
         //dd($idNodo);
         //traigo la info del nodo actual
         $nodo =  Nodo::where('idNodo', $idNodo)->first();
+        if($nodo->Agente != null || $nodo->Agente != ""){
+            //como voy a liberar el nodo del actual docente, antes doy de baja en novedad
+            $novedad = NovedadesModel::where('Nodo', $nodo->idNodo)
+            ->where('Agente', $nodo->Agente)
+            ->where('CUECOMPLETO', $nodo->CUECOMPLETO)
+            ->where('idTurnoUsuario', $nodo->idTurnoUsuario)
+            ->where('Motivo','=', 1)    //pregunto si esta activo con ALTA
+            ->whereNotNull('Nodo') // Verifica si el campo 'Nodo' no es null debido a que todavia esta activo
+            ->first();
 
-         //como voy a liberar el nodo del actual docente, antes doy de baja en novedad
-         $novedad = NovedadesModel::where('Nodo', $nodo->idNodo)
-         ->where('Agente', $nodo->Agente)
-         ->where('CUECOMPLETO', $nodo->CUECOMPLETO)
-         ->where('idTurnoUsuario', $nodo->idTurnoUsuario)
-         ->where('Motivo','=', 1)    //pregunto si esta activo con ALTA
-         ->whereNotNull('Nodo') // Verifica si el campo 'Nodo' no es null debido a que todavia esta activo
-         ->first();
- 
-         if($novedad){
-             $novedad->Nodo = null; //le quito el valor del nodo a la antigua novedad de alta
-             $novedad->save();
-         }
+            if($novedad){
+                $novedad->Nodo = null; //le quito el valor del nodo a la antigua novedad de alta
+                $novedad->save();
+            }
 
-         //agrego una novedad en baja
-         //cargo la novedad avisando que es baja
-        $novedad = new NovedadesModel();
-            $novedad->Agente = $nodo->Agente;
-            $novedad->CUECOMPLETO = session('CUECOMPLETO');
-            $novedad->idTurnoUsuario = session('idTurnoUsuario');
-            $novedad->CargoSalarial = $nodo->CargoSalarial;
-            $novedad->Caracter = $nodo->SitRev;
-            $novedad->Division = $nodo->Division;
-            $novedad->FechaDesde = $nodo->FechaDesde;
-            $novedad->FechaHasta = Carbon::parse(Carbon::now())->format('Y-m-d');
-            $novedad->TotalDias = 1;
-            $novedad->Mes = date('m');
-            $novedad->Anio = date('Y');
-            $novedad->Motivo = 5;   //en este caso es vacante
-            $novedad->Observaciones = "Se dio de baja al docente por Retorno de Agente";
-            $novedad->Estado = 1;   //activo tiene novedad sin fecha hasta
-            $novedad->Nodo = null; //por ahora lo hago asi, tengo dudas
-            $novedad->CantidadDiasTrabajados = $nodo->CantidadAsistencia;
-        $novedad->save();
+            //controlo si esta en triada y si tiene licencia que seria lo mas obvio
+            if($nodo->LicenciaActiva == "SI"){
+                //actualizo la novedad del nodo actual para poder regresar
+                $actualizoEstado  = $this->quitaLic($nodo->idNodo);
+            }
+            //agrego una novedad en baja
+            //cargo la novedad avisando que es baja
+            $novedad = new NovedadesModel();
+                $novedad->Agente = $nodo->Agente;
+                $novedad->CUECOMPLETO = session('CUECOMPLETO');
+                $novedad->idTurnoUsuario = session('idTurnoUsuario');
+                $novedad->CargoSalarial = $nodo->CargoSalarial;
+                $novedad->Caracter = $nodo->SitRev;
+                $novedad->Division = $nodo->Division;
+                $novedad->FechaDesde = $nodo->FechaDesde;
+                $novedad->FechaHasta = Carbon::parse(Carbon::now())->format('Y-m-d');
+                $novedad->TotalDias = 1;
+                $novedad->Mes = date('m');
+                $novedad->Anio = date('Y');
+                $novedad->Motivo = 5;   //en este caso es BAJA
+                $novedad->Observaciones = "Se dio de baja al docente por Retorno de Agente";
+                $novedad->Estado = 1;   //activo tiene novedad sin fecha hasta
+                $novedad->Nodo = null; //por ahora lo hago asi, tengo dudas
+                $novedad->CantidadDiasTrabajados = $nodo->CantidadAsistencia;
+            $novedad->save();
 
 
-        //al nodo que esta en uso le saco el agente
-        $nodo =  Nodo::where('idNodo', $idNodo)->first();
-            $nodo->Agente = null;
-            $nodo->Activo = 0;  //quito un agente
-            $nodo->CantidadAsistencia = 0;
-            $nodo->Usuario = session('idUsuario');
-        $nodo->save();
+            //al nodo que esta en uso le saco el agente
+            $nodo =  Nodo::where('idNodo', $idNodo)->first();
+                $nodo->Agente = null;
+                $nodo->Activo = 0;  //quito un agente
+                $nodo->CantidadAsistencia = 0;
+                $nodo->Usuario = session('idUsuario');
+            $nodo->save();
 
+        }else{
+            //no aplico 
+        }
+        
        
 
         
@@ -1624,13 +1553,14 @@ class AgController extends Controller
             $desvinculando = $this->desvincularDocenteRetornoRaiz($nodoAnterior->idNodo);
             //le indico que apunta a raiz, no hay nadie por debajo, le asigno valores como nuevo y creo novedad
             $nodoActual->PosicionAnterior = $nodoAnteriorAnterior->idNodo;
-            
+            $nodoAnteriorAnterior->PosicionSiguiente = $nodoActual->idNodo;
             //Eliminar nodo B con sus datos(todos + lic + horario)
             //ahora puedo borrarlo porque es raiz el retorno y nadie lo usara
             DB::table('tb_nodos')
                 ->where('idNodo', $nodoAnterior->idNodo)
                 ->delete();
-            
+                
+            $nodoAnteriorAnterior->save();
             $nodoActual->save();
         
         }else{
@@ -1775,7 +1705,7 @@ class AgController extends Controller
              $Novedades = DB::table('tb_novedades')
                 ->where('tb_novedades.CUECOMPLETO', session('CUECOMPLETO'))
                 ->where('tb_novedades.idTurnoUsuario', session('idTurnoUsuario'))
-                ->whereIn('tb_novedades.Motivo', [1, 2, 3])
+                ->whereIn('tb_novedades.Motivo', [1]) //solo altas traigo
                 ->whereNotNull('tb_novedades.Nodo') // Verifica si el campo 'Nodo' no es null
                 ->whereNotNull('tb_novedades.Agente') // Verifica si el campo 'Nodo' no es null
                 ->join('tb_cargossalariales', 'tb_cargossalariales.idCargo', '=', 'tb_novedades.CargoSalarial')
@@ -1849,7 +1779,7 @@ class AgController extends Controller
         $Novedades = DB::table('tb_novedades')
             ->where('tb_novedades.CUECOMPLETO', session('CUECOMPLETO'))
             ->where('tb_novedades.idTurnoUsuario', session('idTurnoUsuario'))
-            ->whereIn('tb_novedades.Motivo', [1, 2, 3, 4, 5])   //lo busco por su anexo
+            ->whereIn('tb_novedades.Motivo', [5])   //lo busco por su anexo
             ->whereNotNull('tb_novedades.Agente') // Verifica si el campo 'Nodo' no es null
             ->where(function($query) {
                 $query->orWhereNull('Nodo');
@@ -1925,7 +1855,7 @@ class AgController extends Controller
         $Novedades = DB::table('tb_novedades')
             ->where('tb_novedades.CUECOMPLETO', session('CUECOMPLETO'))
             ->where('tb_novedades.idTurnoUsuario', session('idTurnoUsuario'))
-            ->whereIn('tb_novedades.Motivo', [4, 6, 7])   //lo busco por su anexo
+            ->whereIn('tb_novedades.Motivo', [2,3, 4, 6, 7])   //en tb_motivos, menos vacante y baja
             
             // ->where(function($query) {
             //     $query->orWhereNull('Nodo');

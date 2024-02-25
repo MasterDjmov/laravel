@@ -106,6 +106,15 @@
                 )
         </script>
     @endif
+    @if (session('ConfirmarNuevoNodoDerechoFallo')=='OK')
+        <script>
+        Swal.fire(
+            'Nodo Agregado',
+            'No se permite crear un registro en blanco entre dos agentes, solo si no hay nadie a su derecha',
+            'error'
+                )
+        </script>
+    @endif
     @if (session('ConfirmarBorradoNodo')=='OK')
         <script>
         Swal.fire(

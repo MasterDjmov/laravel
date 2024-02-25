@@ -823,12 +823,12 @@ class LupController extends Controller
         ->where('Agente', $nodo->Agente)
         ->where('CUECOMPLETO', $nodo->CUECOMPLETO)
         ->where('idTurnoUsuario', $nodo->idTurnoUsuario)
-        //->where('Motivo','=', 1)    //pregunto si esta activo con ALTA
+        ->where('Motivo','=', 1)    //pregunto si esta activo con ALTA, son los unicos que tendran asistencia
         ->whereNotNull('Nodo') // Verifica si el campo 'Nodo' no es null
         ->first();
 
         if($novedad){
-            $novedad->CantidadDiasTrabajados = $nuevaCantidad; //aqui aplico asistencia al nodo
+            $novedad->CantidadDiasTrabajados = $nodo->CantidadAsistencia; //aqui aplico asistencia al nodo
             $novedad->save();
         }else{
             $nuevaCantidad = 0;

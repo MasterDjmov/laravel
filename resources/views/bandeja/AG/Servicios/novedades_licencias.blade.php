@@ -50,9 +50,15 @@
                                                     ->where('tb_desglose_agentes.docu', $n->Agente)
                                                     ->first();
                                                 //dd($infoDocu);
-                                            @endphp             
+                                            @endphp
+                                            @if ($infoDocu)
                                             <td>{{$infoDocu->docu}}</td>
                                             <td>{{$infoDocu->nomb}}</td>
+                                            @else
+                                            <td>Sin datos</td>
+                                            <td>Sin datos</td>
+                                            @endif             
+                                           
                                             <td class="text-center">{{$n->Cargo}}<b>({{$n->Codigo}})</b></td>
                                             <td class="text-center">{{$n->SitRev}}</td>
                                             <td class="text-center">{{$n->nomDivision}} /<b>{{$n->DescripcionTurno}}</b></td>
