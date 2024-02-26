@@ -50,7 +50,12 @@
                                 </p>
                                 <p class="mb-0" style="padding: 5px">Horas Ocupadas: <input type="number" id="cant_horas" class="form-control-sm border-0" name="cant_horas" style="width:50px" value=""></p>
                                 <p class="mb-0">Fecha de Ingreso: <input type="date" id="FechaAltaN" class="form-control-sm border-0" name="FechaAltaN" style="width:125px" value=""></p>
+                                <div class="form-group">
+                                  <label for="Observacion">Observación</label><br>
+                                  <textarea class="form-control" name="Observaciones" rows="5" cols="100%"></textarea>
+                                </div>
                               </div>
+                              
                               <div class="card-footer d-flex justify-content-center">
                                 {{-- <a type="button" href="#" class="btn mx-1" data-toggle="tooltip" data-placement="top" title="Licencia">
                                         <span class="material-symbols-outlined pt-1">medical_services</span>

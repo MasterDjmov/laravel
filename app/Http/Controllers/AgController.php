@@ -500,6 +500,7 @@ class AgController extends Controller
             "idDivision" => "658"
             "cant_horas" => "20"
             "FechaAltaN" => "2024-02-10"
+            se agrego la observacion para poner resoluciones
 
         */
        /* if($request->idEspCur != ""){
@@ -528,7 +529,8 @@ class AgController extends Controller
             $nodo->idTurnoUsuario = session('idTurnoUsuario');
             //datos extra
             $nodo->LicenciaActiva = "NO";   //es nodo nuevo, no tiene una licencia
-            $nodo->CantidadAsistencia = 0;  
+            $nodo->CantidadAsistencia = 0; 
+            $nodo->Observaciones = $request->Observaciones;
         $nodo->save();
         
         $SituacionDeRevista = SitRevModel::where('idSituacionRevista',$request->SituacionDeRevista)->get();
