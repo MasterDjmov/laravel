@@ -42,6 +42,7 @@
   <link href="{{ asset('css/style.css') }}" rel="stylesheet">
   <link href="{{ asset('css/app.css') }}" rel="stylesheet">
   <link rel="stylesheet" href="{{ asset('css/style_vincular.css') }}">
+  <link rel="stylesheet" href="{{ asset('css/reloj.css') }}">
   @yield('LinkCSS')
   <meta name="csrf-token" content="{{csrf_token()}}">
 </head>
@@ -368,6 +369,7 @@
 <script src="{{ asset('dist/js/adminlte.js') }}"></script>
 <script src="{{ asset('js/arbol.js')}}"></script>
 <script src="{{ asset('js/funcionesvarias.js') }}"></script>
+<script src="{{ asset('js/reloj.js') }}"></script>
 <!-- SweetAlert2 -->
 <script src="{{ asset('plugins/sweetalert2/sweetalert2.min.js')}}"></script>
 <!-- Toastr -->

@@ -3,6 +3,10 @@
 @section('Titulo', 'Sage2.0 - Altas')
 
 @section('ContenidoPrincipal')
+{{-- <div class="loader">
+    <h2>Por favor, espere...</h2>
+    <div id="clock"></div>
+  </div> --}}
 <section id="container" >
     <section id="main-content">
         <section class="content-wrapper">
@@ -24,7 +28,7 @@
                             <input type="text" class="form-control" placeholder="DNI del agente o parte del nombre" name="dni">
                           </div>
                           <div class="col-6">
-                            <input type="submit" class="form-control btn-success" value="Consultar DNI" name="bd">
+                            <input type="submit" class="form-control btn-success" value="Consultar DNI" name="btnDNI">
                           </div>
                         
                         
@@ -32,7 +36,29 @@
                     </div>
                     </form>
                     <!-- /.card-body -->
-                  </div>
+                </div>
+                <div class="card card-info  col-lg-6">
+                    <div class="card-header">
+                      <h3 class="card-title">Busqueda por CUE</h3>
+                    </div>
+                    <form action="{{ route('buscar_dni_cue') }}"  class="buscar_dni_cue" id="buscar_dni_cue" method="POST" >
+                        @csrf
+                    <div class="card-body  col-lg-12">
+                      <div class="row  col-lg-12">
+                        
+                          <div class="col-6">
+                            <input type="text" class="form-control" placeholder="DNI del agente o parte del nombre" name="dni">
+                          </div>
+                          <div class="col-6">
+                            <input type="submit" class="form-control btn-success" value="Consultar CUE" name="btnCUE">
+                          </div>
+                        
+                        
+                      </div>
+                    </div>
+                    </form>
+                    <!-- /.card-body -->
+                </div>
             </div>
             <!-- Inicio Selectores -->
             <div class="row">
