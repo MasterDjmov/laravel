@@ -37,9 +37,9 @@
                     </form>
                     <!-- /.card-body -->
                 </div>
-                <div class="card card-info  col-lg-6">
+                <div class="card card-info  col-lg-3">
                     <div class="card-header">
-                      <h3 class="card-title">Busqueda por CUE</h3>
+                      <h3 class="card-title">Busqueda por CUE en Liq</h3>
                     </div>
                     <form action="{{ route('buscar_dni_cue') }}"  class="buscar_dni_cue" id="buscar_dni_cue" method="POST" >
                         @csrf
@@ -51,6 +51,28 @@
                           </div>
                           <div class="col-6">
                             <input type="submit" class="form-control btn-success" value="Consultar CUE" name="btnCUE">
+                          </div>
+                        
+                        
+                      </div>
+                    </div>
+                    </form>
+                    <!-- /.card-body -->
+                </div>
+                <div class="card card-info  col-lg-3">
+                    <div class="card-header">
+                      <h3 class="card-title">Busqueda por CUE en Jardines RRHH</h3>
+                    </div>
+                    <form action="{{ route('buscar_dni_cue') }}"  class="buscar_dni_cue" id="buscar_dni_cue" method="POST" >
+                        @csrf
+                    <div class="card-body  col-lg-12">
+                      <div class="row  col-lg-12">
+                        
+                          <div class="col-6">
+                            <input type="text" class="form-control" placeholder="DNI del agente o parte del nombre" name="dni">
+                          </div>
+                          <div class="col-6">
+                            <input type="submit" class="form-control btn-success" value="Consultar CUE" name="btnCUE2">
                           </div>
                         
                         
@@ -71,57 +93,96 @@
                             <h3 class="card-title">Novedades - por DNI o por Nombre</h3>
                         </div>
                         
-                        
-                        <!-- /.card-header -->
-                        <div class="card-body">
-                            <table id="example" class="table table-bordered table-striped">
-                                <thead>
-                                    <tr>
-                                        <th colspan="4" style="text-align:center">Datos Personales</th>
-                                        <th colspan="9" style="text-align:center">Datos Institucionales</th>
-                                    </tr>
-                                    <tr>
-                                        <th rowspan="1" style="text-align:center">DNI</th>
-                                        <th rowspan="1" style="text-align:center">CUIL</th>
-                                        <th rowspan="1" style="text-align:center">Apellido y Nombres</th>
-                                        <th rowspan="1" style="text-align:center">Sexo</th>
-                                        <th rowspan="1" style="text-align:center">CUE</th>
-                                        <th rowspan="1" style="text-align:center">Nombre Institucion</th>
-                                        <th rowspan="1" style="text-align:center">Area</th>
-                                        <th rowspan="1" style="text-align:center">Cargo/Funcion</th>
-                                        <th rowspan="1" style="text-align:center">Agrupamiento</th>
-                                        <th rowspan="1" style="text-align:center">Cant. Horas</th>
-                                        <th rowspan="1" style="text-align:center">Nomenclatura</th>
-                                        <th rowspan="1" style="text-align:center">Zona</th>
-                                        <th rowspan="1" style="text-align:center">Localidad</th>
-                                        
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @php
-                                       //dd($indoDesglose);
-                                    @endphp
-                                  @foreach($indoDesglose as $key => $n)
-                                        <tr class="gradeX">
-                                            <td>{{$n->docu}}</th>
-                                            <td>{{$n->cuil}}</th>
-                                            <td>{{$n->nomb}}</th>
-                                            <td>{{$n->sexo}}</th>
-                                            <td>{{$n->CUE}}</th>
-                                            <td>{{$n->desc_escu}}</th>
-                                            <td>{{$n->area}}</th>
-                                            <td>{{$n->desc_plan}}</th>
-                                            <td>{{$n->desc_agru}}</th>
-                                            <td>{{$n->hora}}</th>
-                                            <td>{{$n->nomencla}}(<b>{{$n->codigo}}</b>)</th>
-                                            <td>{{$n->zona}}</th>
-                                            <td>{{$n->desc_zona}}</th>
+                        @if (isset($indoDesglose2) && !$indoDesglose2->isEmpty())
+                            <!-- /.card-header -->
+                            <div class="card-body">
+                                <table id="example" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th colspan="5" style="text-align:center">Datos Institucionales</th>
                                         </tr>
-                                    @endforeach 
-                                </tbody>
-                            </table>
-                        </div>
+                                        <tr>
+                                            <th rowspan="1" style="text-align:center">CUE</th>
+                                            <th rowspan="1" style="text-align:center">Codigo Anexo</th>
+                                            <th rowspan="1" style="text-align:center">Nombre del Jardin</th>
+                                            <th rowspan="1" style="text-align:center">Localidad</th>
+                                            <th rowspan="1" style="text-align:center">Departamento</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @php
+                                        //dd($indoDesglose);
+                                        @endphp
+                                
+                                    @foreach($indoDesglose2 as $key => $n)
+                                            <tr class="gradeX">
+                                                <td>{{ isset($n->CUE) ? $n->CUE : '' }}</td>
+                                                <td>{{ isset($n->Anexo) ? $n->Anexo : '' }}</td>
+                                                <td>{{ isset($n->Nombre) ? $n->Nombre : '' }}</td>
+                                                <td>{{ isset($n->Localidad) ? $n->Localidad : '' }}</td>
+                                                <td>{{ isset($n->Departamento) ? $n->Departamento : '' }}</td>
+                                            </tr>
+                                        @endforeach 
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- /.card-body -->                       
+                                                        
+                        @endif
+
+                        @if (isset($indoDesglose) && !$indoDesglose->isEmpty())
+                            <!-- /.card-header -->
+                            <div class="card-body">
+                                <table id="example" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th colspan="4" style="text-align:center">Datos Personales</th>
+                                            <th colspan="9" style="text-align:center">Datos Institucionales</th>
+                                        </tr>
+                                        <tr>
+                                            <th rowspan="1" style="text-align:center">DNI</th>
+                                            <th rowspan="1" style="text-align:center">CUIL</th>
+                                            <th rowspan="1" style="text-align:center">Apellido y Nombres</th>
+                                            <th rowspan="1" style="text-align:center">Sexo</th>
+                                            <th rowspan="1" style="text-align:center">CUE</th>
+                                            <th rowspan="1" style="text-align:center">Nombre Institucion</th>
+                                            <th rowspan="1" style="text-align:center">Area</th>
+                                            <th rowspan="1" style="text-align:center">Cargo/Funcion</th>
+                                            <th rowspan="1" style="text-align:center">Agrupamiento</th>
+                                            <th rowspan="1" style="text-align:center">Cant. Horas</th>
+                                            <th rowspan="1" style="text-align:center">Nomenclatura</th>
+                                            <th rowspan="1" style="text-align:center">Zona</th>
+                                            <th rowspan="1" style="text-align:center">Localidad</th>
+                                            
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @php
+                                        //dd($indoDesglose);
+                                        @endphp
+                                    @foreach($indoDesglose as $key => $n)
+                                            <tr class="gradeX">
+                                                <td>{{ isset($n->cuil) ? $n->cuil : '' }}</td>
+                                                <td>{{ isset($n->nomb) ? $n->nomb : '' }}</td>
+                                                <td>{{ isset($n->sexo) ? $n->sexo : '' }}</td>
+                                                <td>{{ isset($n->CUE) ? $n->CUE : '' }}</td>
+                                                <td>{{ isset($n->desc_escu) ? $n->desc_escu : '' }}</td>
+                                                <td>{{ isset($n->area) ? $n->area : '' }}</td>
+                                                <td>{{ isset($n->desc_plan) ? $n->desc_plan : '' }}</td>
+                                                <td>{{ isset($n->desc_agru) ? $n->desc_agru : '' }}</td>
+                                                <td>{{ isset($n->hora) ? $n->hora : '' }}</td>
+                                                <td>{{ isset($n->nomencla) ? $n->nomencla : '' }}(<b>{{ isset($n->codigo) ? $n->codigo : '' }}</b>)</td>
+                                                <td>{{ isset($n->zona) ? $n->zona : '' }}</td>
+                                                <td>{{ isset($n->desc_zona) ? $n->desc_zona : '' }}</td>
+
+                                            </tr>
+                                        @endforeach 
+                                    </tbody>
+                                </table>
+                            </div>
                         <!-- /.card-body -->
+                        @endif
+                        
                     </div>
                     <!-- /.card -->
                 </div>
