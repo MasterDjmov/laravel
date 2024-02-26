@@ -721,6 +721,40 @@
     
     
 </script>
+<script>
+    function validarFecha() {
+        var fechaInput = document.getElementById('FA').value;
+        var regex = /^\d{4}-\d{2}-\d{2}$/;
+        if (!regex.test(fechaInput)) {
+            //alert('Formato de fecha inválido. Por favor, ingrese una fecha válida en el formato YYYY-MM-DD.');
+            document.getElementById('FA').focus();
+            Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Formato de fecha inválido. Por favor, ingrese una fecha válida en el formato YYYY-MM-DD",
 
+          });
+        }
+    }
+  
+    document.getElementById('FA').addEventListener('blur', validarFecha);
+  </script>
+<script>
+    function validarFecha() {
+        var fechaInput = document.getElementById('FechaHastaLic').value;
+        var regex = /^\d{4}-\d{2}-\d{2}$/;
+        if (!regex.test(fechaInput)) {
+            //alert('Formato de fecha inválido. Por favor, ingrese una fecha válida en el formato YYYY-MM-DD.');
+            document.getElementById('FechaHastaLic').focus();
+            Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Formato de fecha inválido. Por favor, ingrese una fecha válida en el formato YYYY-MM-DD",
 
+          });
+        }
+    }
+  
+    document.getElementById('FechaHastaLic').addEventListener('blur', validarFecha);
+  </script>
 @endsection

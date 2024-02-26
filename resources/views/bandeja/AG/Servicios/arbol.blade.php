@@ -300,4 +300,23 @@
           })
     })
 </script>
+
+<script>
+  function validarFecha() {
+      var fechaInput = document.getElementById('FechaAltaN').value;
+      var regex = /^\d{4}-\d{2}-\d{2}$/;
+      if (!regex.test(fechaInput)) {
+          //alert('Formato de fecha inválido. Por favor, ingrese una fecha válida en el formato YYYY-MM-DD.');
+          document.getElementById('FechaAltaN').focus();
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Formato de fecha inválido. Por favor, ingrese una fecha válida en el formato YYYY-MM-DD",
+
+          });
+      }
+  }
+
+  document.getElementById('FechaAltaN').addEventListener('blur', validarFecha);
+</script>
 @endsection
