@@ -78,11 +78,12 @@
                                                   <option value="N" >NO</option>
                                               </select>
                                           </div>
-                                          <div class="col-3">
+                                          
+                                          <div class="form-group">
                                             <label for="Usuario">CUE Anexo(Agregar los dos digitos): </label><br>
                                             <b>{{$infoInstitucion[0]->CUE}} - </b>
                                             
-                                            <select class="form-control col-2" name="CUEa" id="CUEa" style="display: inline">
+                                            <select class="form-control" name="CUEa" id="CUEa" style="display: inline;width:70px;">
                                               @foreach ($Extensiones as $e)
                                                   <option value="{{$e->Descripcion}}">{{$e->Descripcion}}</option>
                                               @endforeach
