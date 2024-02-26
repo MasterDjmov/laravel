@@ -212,6 +212,12 @@
                   <p>Licencias</p>
                 </a>
               </li>
+              {{-- <li class="nav-item">
+                <a href="{{route('generar_pdf_novedades')}}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Generar PDF de Novedades</p>
+                </a>
+              </li> --}}
               <li class="nav-item">
                 <a href="{{route('buscar_dni_cue')}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>

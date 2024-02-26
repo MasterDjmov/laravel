@@ -41,6 +41,15 @@
 @endsection
 
 @section('Script')
+@if (session('FinDeSession')=='OK')
+            <script>
+            Swal.fire(
+                'Alerta',
+                'Tu sesión ha expirado debido a inactividad.',
+                'question'
+                    )
+            </script>
+        @endif
 <script>
   function startTime()
   {

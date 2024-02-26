@@ -15,6 +15,8 @@ use App\Models\SitRevModel;
 use DateTime;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 
 class AgController extends Controller
 {
@@ -1900,7 +1902,96 @@ class AgController extends Controller
        return redirect("/verArbolServicio2");
     }
 
+    public function generar_pdf_novedades(){
+        //traigo los datos para armar la tabla
+        $institucionExtension=DB::table('tb_institucion_extension')
+        ->where('tb_institucion_extension.idInstitucionExtension',session('idInstitucionExtension'))
+        ->get();
 
+         
+         $TiposDeEspacioCurricular = DB::table('tb_tiposespacioscurriculares')->get();
+         $Cursos = DB::table('tb_cursos')->get();
+         $Division = DB::table('tb_division')->get();
+         $Cursos = DB::table('tb_cursos')->get();
+         $TiposHora = DB::table('tb_tiposhora')->get();
+         $RegimenDictado = DB::table('tb_pof_regimendictado')->get();
+         $Divisiones = DB::table('tb_divisiones')
+         ->where('tb_divisiones.idInstitucionExtension',session('idInstitucionExtension'))
+         ->join('tb_cursos','tb_cursos.idCurso', '=', 'tb_divisiones.Curso')
+         //->join('tb_division','tb_division.idDivisionU', '=', 'tb_divisiones.Division')
+         //->join('tb_turnos', 'tb_turnos.idTurno', '=', 'tb_divisiones.Turno')
+         ->select(
+             //'tb_divisiones.idDivision',
+             'tb_divisiones.Curso',
+             //'tb_cursos.*',
+             //'tb_division.*',
+             //'tb_turnos.Descripcion as DescripcionTurno',
+            // 'tb_turnos.idTurno',
+         )
+         //->orderBy('tb_cursos.DescripcionCurso','ASC')
+         ->groupBy('tb_divisiones.Curso')
+         ->get();
+
+        
+         $Novedades = DB::table('tb_novedades')
+            ->where('tb_novedades.CUECOMPLETO', session('CUECOMPLETO'))
+            ->where('tb_novedades.idTurnoUsuario', session('idTurnoUsuario'))
+            ->whereIn('tb_novedades.Motivo', [1]) //solo altas traigo
+            ->whereNotNull('tb_novedades.Nodo') // Verifica si el campo 'Nodo' no es null
+            ->whereNotNull('tb_novedades.Agente') // Verifica si el campo 'Nodo' no es null
+            ->join('tb_cargossalariales', 'tb_cargossalariales.idCargo', '=', 'tb_novedades.CargoSalarial')
+            ->join('tb_situacionrevista', 'tb_situacionrevista.idSituacionRevista', '=', 'tb_novedades.Caracter')
+            ->join('tb_divisiones', 'tb_divisiones.idDivision', '=', 'tb_novedades.Division')
+            ->join('tb_turnos', 'tb_turnos.idTurno', '=', 'tb_divisiones.Turno')
+            ->join('tb_motivos', 'tb_motivos.idMotivo', '=', 'tb_novedades.Motivo')
+            ->select(
+                'tb_novedades.*',
+                'tb_cargossalariales.*',
+                'tb_motivos.*',
+                'tb_situacionrevista.Descripcion as SitRev',
+                'tb_divisiones.Descripcion as nomDivision',
+                'tb_turnos.Descripcion as DescripcionTurno'
+            )
+            ->get();
+
+            //dd($Novedades);
+         $datos=array(
+             'mensajeError'=>"",
+             'Novedades'=>$Novedades,
+             'FechaActual'=>$FechaAlta = Carbon::parse(Carbon::now())->format('Y-m-d'),
+             'mensajeNAV'=>'Panel de Novedades - Altas'
+ 
+ 
+         );
+        // Cargar el HTML que quieres convertir en PDF
+        $html = view('bandeja.LUI.POF.generar_pdf',['datos' => $datos])->render();
+
+        // Configurar Dompdf
+        $options = new Options();
+        $options->set('isHtml5ParserEnabled', true);
+        $options->set('isRemoteEnabled', true);
+
+        // Crear una instancia de Dompdf con las opciones
+        $dompdf = new Dompdf($options);
+
+        // Cargar el HTML en Dompdf
+        $dompdf->loadHtml($html);
+
+        // Establecer la orientación de la página (landscape o portrait)
+        $dompdf->setPaper('A4', 'landscape'); // Aquí puedes cambiar 'landscape' a 'portrait' si prefieres la orientación vertical
+
+        // Renderizar el PDF
+        $dompdf->render();
+
+        // Obtener el contenido del PDF generado
+        $pdf_content = $dompdf->output();
+
+        // Devolver el PDF al navegador para descargar
+        return response($pdf_content, 200)
+            ->header('Content-Type', 'application/pdf')
+            ->header('Content-Disposition', 'attachment; filename="Novedades.pdf"');
+        
+    }
 
 
 
