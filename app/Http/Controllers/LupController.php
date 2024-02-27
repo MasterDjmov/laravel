@@ -701,7 +701,7 @@ class LupController extends Controller
         if($request->r9=="SI"){
             $radio = new TurnosRelInstModel();
             $radio->idTurno = 9;
-            $radio->idInstituidInstitucionExtensioncion = $idInstitucion;
+            $radio->idInstitucionExtension = $idInstitucion;
             $radio->save();
            
         }
