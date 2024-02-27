@@ -162,6 +162,7 @@
                                         @endphp
                                     @foreach($indoDesglose as $key => $n)
                                             <tr class="gradeX">
+                                                <td>{{ isset($n->docu) ? $n->docu : '' }}</td>
                                                 <td>{{ isset($n->cuil) ? $n->cuil : '' }}</td>
                                                 <td>{{ isset($n->nomb) ? $n->nomb : '' }}</td>
                                                 <td>{{ isset($n->sexo) ? $n->sexo : '' }}</td>
