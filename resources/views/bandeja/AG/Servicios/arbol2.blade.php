@@ -261,14 +261,17 @@
     }else{
       $iDivTur = DB::table('tb_divisiones')
             ->where('tb_divisiones.idDivision',$recNodo[0]->Division)
+            ->join('tb_division','tb_division.idDivisionU','tb_divisiones.Division')
             ->join('tb_turnos', 'tb_turnos.idTurno', 'tb_divisiones.Turno')
             ->select(
                   'tb_divisiones.Descripcion as Descripcion',
-                  'tb_turnos.Descripcion as DescripcionTurno'
+                  'tb_turnos.Descripcion as DescripcionTurno',
+                  'tb_division.DescripcionDivision',
                   )
             ->get();
       $Descripcion=$iDivTur[0]->Descripcion;
       $DescripcionTurno=$iDivTur[0]->DescripcionTurno;
+      $DescripcionDivision=$iDivTur[0]->DescripcionDivision;
       
     }   
 
@@ -305,7 +308,7 @@
           <p class="mb-0">Cargo: <label for="cargo" id="DescripcionCargo">{{$nomCargo}} - ({{$nomCodigo}})</label>
             <input type="hidden" id="CargoSal2" name="CargoSal" value="{{$idCargo}}">
           </p>
-          <p class="mb-0">S.R:<b>{{$nomSitRev}}</b> (<b>{{$Descripcion}} - {{$DescripcionTurno}} </b>)</p>
+          <p class="mb-0">S.R:<b>{{$nomSitRev}}</b> (<b>{{$Descripcion}} - {{$DescripcionDivision}} - {{$DescripcionTurno}} </b>)</p>
           
           <p class="mb-0">
             Cant. Horas: <label for="CantidadHoras" id="CantidadHoras">{{$recNodo[0]->CantidadHoras}}</label> - 
