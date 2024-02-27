@@ -241,17 +241,26 @@ class LupController extends Controller
     }
 
     public function FormNuevoAgente(Request $request){
-        //voy a omitir por ahora la comprobacion de agentes por DNI
-
-        $institucionExtension=DB::table('tb_institucion_extension')
-                ->where('tb_institucion_extension.idInstitucionExtension',session('idInstitucionExtension'))
-                ->get();
-        $institucionBase=DB::table('tb_institucion')
-                ->where('tb_institucion.idInstitucion',$institucionExtension[0]->idInstitucion)
-                ->get();
 
         //dd($request);
-        /*
+        //valido si existe o no
+        $consultaDNI = DB::table('tb_desglose_agentes')
+        ->where('docu', $request->Documento)
+        ->first();
+
+
+        if ($consultaDNI === null || $request->Documento==null ||$request->Documento=="") {
+            //voy a omitir por ahora la comprobacion de agentes por DNI
+
+            $institucionExtension=DB::table('tb_institucion_extension')
+            ->where('tb_institucion_extension.idInstitucionExtension',session('idInstitucionExtension'))
+            ->get();
+            $institucionBase=DB::table('tb_institucion')
+            ->where('tb_institucion.idInstitucion',$institucionExtension[0]->idInstitucion)
+            ->get();
+
+            //dd($request);
+            /*
             "_token" => "CXxPRXwdpVUv0XBGLDF4mUTkiPap95bKWqRdB1lE"
             "Apellido" => "loyola"
             "Nombre" => "leo martin"
@@ -259,27 +268,31 @@ class LupController extends Controller
             "Sexo" => "M"
             "CUIL" => "23267319529"
             "TipoDeAgente" => "1"
-        */
-        $o = new AgenteModel();
-          $o->docu = $request->Documento;
-          $o->nomb = strtoupper($request->Apellido).", ".strtoupper($request->Nombre);
-          $o->Sexo = $request->Sexo;
-          $o->cuil = $request->CUIL;
-          $o->viejo = 1;
-          //datos de la zona, los traigo desde la 
-          $o->zona = $institucionExtension[0]->Zona;
-          $o->desc_zona = $institucionExtension[0]->Localidad;
-          $o->escu = $institucionBase[0]->Unidad_Liquidacion;
-          $o->desc_escu = $institucionExtension[0]->Nombre_Institucion;
-        $o->save();
-          
-        //agrego al docente en la tabla relacionada suborg y agente
-        $ag = new InstRelAgenteModel();
-            $ag->idInstitucionExtension = session('idInstitucionExtension');
-            $ag->idAgente = $o->idDesgloseAgente;
-        $ag->save();
-         return redirect("/nuevoAgente")->with('ConfirmarNuevoAgente','OK');
-         //LuiController::PlazaNueva($request->idSurOrg);
+            */
+            $o = new AgenteModel();
+                $o->docu = $request->Documento;
+                $o->nomb = strtoupper($request->Apellido).", ".strtoupper($request->Nombre);
+                $o->Sexo = $request->Sexo;
+                $o->cuil = $request->CUIL;
+                $o->viejo = 1;
+                //datos de la zona, los traigo desde la 
+                $o->zona = $institucionExtension[0]->Zona;
+                $o->desc_zona = $institucionExtension[0]->Localidad;
+                $o->escu = $institucionBase[0]->Unidad_Liquidacion;
+                $o->desc_escu = $institucionExtension[0]->Nombre_Institucion;
+            $o->save();
+
+            //agrego al docente en la tabla relacionada suborg y agente
+            $ag = new InstRelAgenteModel();
+                $ag->idInstitucionExtension = session('idInstitucionExtension');
+                $ag->idAgente = $o->idDesgloseAgente;
+            $ag->save();
+            return redirect("/nuevoAgente")->with('ConfirmarNuevoAgente','OK');
+            //LuiController::PlazaNueva($request->idSurOrg);
+        }else{
+            return redirect("/nuevoAgente")->with('ConfirmarNuevoAgenteExiste','OK');
+        }
+        
 
       }
 

@@ -166,7 +166,18 @@
                     )
             </script>
         @endif
+        @if (session('ConfirmarNuevoAgenteExiste')=='OK')
+            <script>
+            Swal.fire(
+                'Registro Fallido',
+                'El Agente ya existe no puede volver a crearlo',
+                'error'
+                    )
+            </script>
+        @endif
     <script>
+
+
 
     $('.formularioNuevoAgente').submit(function(e){
         if($("#Apellido").val()=="" || $("#Nombre").val()=="" || $("#Documento").val()==""){
