@@ -31,12 +31,13 @@ class LoginController extends Controller
         
 
     public function validar(Request $request){
-        
+        //dd($request);
         if($request->email!="" && $request->clave!=""){
             $usuario= UsuarioModel::where('email',$request->email)
             ->where('Clave',$request->clave)
-            ->join('tb_turnos_usuario', 'tb_turnos_usuario.idTurnoUsuario', 'tb_usuarios.Turno')
+            ->join('tb_turnos_usuario', 'tb_turnos_usuario.idTurnoUsuario', 'tb_usuarios.Turno')        //no olvidar dar turno
             ->get();
+            //dd($usuario);
             $cantidadEncontrados=count($usuario);
             if($cantidadEncontrados){   
                  //creo la session para que cargue el menu
@@ -68,10 +69,17 @@ class LoginController extends Controller
                 ->get();
 
                 //dd($institucionExtension);
-                session(['CUE'=>$institucionExtension[0]->CUE]);     //en esta version nueva usare el CUE, tengo que ver si usare el CUEa
-                session(['CUECOMPLETO'=>$institucionExtension[0]->CUECOMPLETO]);
-                session(['idInstitucionExtension'=>$institucionExtension[0]->idInstitucionExtension]);     
-                session(['Validar' => 'ok']);
+                if ($institucionExtension->isNotEmpty()) {
+                    session(['CUE' => $institucionExtension[0]->CUE ?? null]);
+                    session(['CUECOMPLETO' => $institucionExtension[0]->CUECOMPLETO ?? null]);
+                    session(['idInstitucionExtension' => $institucionExtension[0]->idInstitucionExtension ?? null]);
+                    session(['Validar' => 'ok']);
+                } else {
+                    session(['CUE' => '0000000']);
+                    session(['CUECOMPLETO' => '000000000']);
+                    session(['idInstitucionExtension' => '00']);
+                    session(['Validar' => 'ok']);
+                }
                 
                 $datos=array(
                     'mensajeError'=>"Usuario Correcto",

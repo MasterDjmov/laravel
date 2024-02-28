@@ -63,6 +63,14 @@
                                                 <label for="Correo">Correo Electronico: </label>
                                                 <input type="email" autocomplete="off" class="form-control" id="Correo" name="Correo" placeholder="Ingrese Correo Electronico">
                                             </div>
+                                            <div class="col-3">
+                                                <label for="Usuario">Turno: </label><br>
+                                                <select class="form-control" name="Turno" id="Turno" style="display: inline">
+                                                  @foreach ($TurnosUsuario as $t)
+                                                        <option value="{{$t->idTurnoUsuario}}">{{$t->Descripcion}}</option>
+                                                    @endforeach ()
+                                                </select>
+                                              </div>
                                     </div>
                                     <!-- /.card-body -->
 
