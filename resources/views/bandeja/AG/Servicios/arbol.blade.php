@@ -114,8 +114,8 @@
                                   <thead>
                                       <tr>
                                           <th>ID</th>
-                                          <th>Apellido y Nombre</th>
-                                          <th>DNI</th>
+                                          <th>CODIGO</th>
+                                          <th>DESCRIPCION</th>
                                           <th>Opciones</th>
                                       </tr>
                                   </thead>

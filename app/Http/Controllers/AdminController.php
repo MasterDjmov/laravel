@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\InstitucionExtensionModel;
+use App\Models\RelPofUsuariosModel;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\UsuarioModel;
 use APP\Models\ReparticionModel;
+use Carbon\Carbon;
 
 class AdminController extends Controller
 {
@@ -17,6 +19,7 @@ class AdminController extends Controller
         $Sexos = DB::table('tb_sexo')->get();
         $EstadosCiviles = DB::table('tb_estadosciviles')->get();
         $Nacionalidades = DB::table('tb_nacionalidad')->get();
+        $TurnosUsuario = DB::table('tb_turnos_usuario')->get();
         //se agrego el 18 abril
         /*$RelSubOrgAgente = DB::table('tb_suborg_agente')
         ->join('tb_agentes', 'tb_agentes.idAgente', '=', 'tb_suborg_agente.idAgente')
@@ -35,6 +38,7 @@ class AdminController extends Controller
         $datos=array(
             'mensajeError'=>"",
             'mensajeNAV'=>'Panel de Creación de Usuarios',
+            'TurnosUsuario'=>$TurnosUsuario
             //'RelSubOrgAgente'=>$RelSubOrgAgente
         );
         //dd($infoPlaza);
@@ -48,6 +52,8 @@ class AdminController extends Controller
         $Sexos = DB::table('tb_sexo')->get();
         $EstadosCiviles = DB::table('tb_estadosciviles')->get();
         $Nacionalidades = DB::table('tb_nacionalidad')->get();
+        $TurnosUsuario = DB::table('tb_turnos_usuario')->get();
+       
         $Usuario = DB::table('tb_usuarios')
         ->where('tb_usuarios.Modo','!=',2)
         ->where('tb_usuarios.idusuario',$idUsuario) //es and
@@ -56,40 +62,54 @@ class AdminController extends Controller
         $datos=array(
             'mensajeError'=>"",
             'mensajeNAV'=>'Panel de Creación de Usuarios',
-            'Usuario'=>$Usuario
+            'Usuario'=>$Usuario,
+            'TurnosUsuario'=>$TurnosUsuario,
+            
         );
         //dd($infoPlaza);
         return view('bandeja.ADMIN.editar_usuario',$datos);
     }
     public function FormNuevoUsuario(Request $request){
+             
         //voy a omitir por ahora la comprobacion de agentes por DNI
+        $consultarEmail = DB::table('tb_usuarios')
+        ->where('email',$request->Correo)
+        ->get();
 
-        
-        //dd($request);
-        /*
-       "_token" => "cCCSqEM9WUgc0Homrv4kAJgvZe9MpQCyJuMh7ure"
-      "Apellido" => "loyola"            listo
-      "Nombre" => "leo"                 listo
-      "Activo" => "S"                   listo
-      "Usuario" => "Leo Loyola"         listo
-      "Clave" => "123"                  listo
-      "Correo" => "djmov@gmail.com"     listo
-        */
+          $cantidadEncontrados=count($consultarEmail);
+          //dd($cantidadEncontrados);
+          if($cantidadEncontrados == 0){ 
+            //dd($request);
+                /*
+                "_token" => "1EehVZtq97RHiL5w8cuPeD92FS4uvhY7LUarbVnP"
+                "Apellido" => "Loyola"
+                "Nombre" => "Leo Martin"
+                "Activo" => "S"
+                "Usuario" => "2"
+                "Clave" => "2"
+                "Correo" => "admin@admin.com"
+                "Turno" => "1"
+                */
        
-        $o = new UsuarioModel();
-          $o->Nombre = strtoupper($request->Apellido)." ".strtoupper($request->Nombre);
-          $o->Clave = $request->Clave;
-          $o->Usuario = $request->Usuario;
-          $o->Activo = $request->Activo;
-          $o->Email = $request->Correo;
-          $o->idReparticion = 1;
-          $o->Nivel = 119;
-          $o->Modo = 3;     //3 es menos que admin, 2 es para las escuelas  y 1 para admin
-          $o->Dependencia = 1;
-        $o->save();
+              $o = new UsuarioModel();
+                $o->Nombre = strtoupper($request->Apellido)." ".strtoupper($request->Nombre);
+                $o->Clave = $request->Clave;
+                $o->Usuario = $request->Usuario;
+                $o->Activo = $request->Activo;
+                $o->email = $request->Correo;
+                $o->idReparticion = 1;
+                $o->Nivel = 119;
+                $o->Modo = 3;     //3 es menos que admin, 2 es para las escuelas  y 1 para admin
+                $o->Dependencia = 1;
+                $o->Turno = $request->Turno;
+              $o->save();
           
-         return redirect("/nuevoUsuario")->with('ConfirmarNuevoUsuario','OK');
+          return redirect("/nuevoUsuario")->with('ConfirmarNuevoUsuario','OK');
          //LuiController::PlazaNueva($request->idSurOrg);
+        }else{
+          return redirect("/nuevoUsuario")->with('ConfirmarNuevoUsuarioError','OK');
+        }
+      
 
     }
 
@@ -215,7 +235,8 @@ class AdminController extends Controller
     public function usuariosLista(){
         //extras a enviar
         $Usuarios = DB::table('tb_usuarios')
-        ->where('tb_usuarios.Modo','!=',2)
+        ->wherein('tb_usuarios.Modo',[1,3])
+        //->whereIn('tb_novedades.Motivo', [4, 6, 7]) 
         ->get();
        
         //dd($RelSubOrgAgente);
@@ -241,6 +262,7 @@ class AdminController extends Controller
       "Usuario" => "Leo Loyola"         listo
       "Clave" => "123"                  listo
       "Correo" => "djmov@gmail.com"     listo
+      Turno     se agrego el 2802/24
         */
         
         $o = UsuarioModel::where('idUsuario', $request->us)->first();
@@ -249,6 +271,7 @@ class AdminController extends Controller
           $o->Usuario = $request->Usuario;
           $o->Activo = $request->Activo;
           $o->Email = $request->Correo;
+          $o->Turno = $request->Turno;
         $o->save();
         
         $idUs=$request->us;
@@ -256,4 +279,67 @@ class AdminController extends Controller
          //LuiController::PlazaNueva($request->idSurOrg);
 
     }
+
+    public function agregarCUEUsuario($idUsuario){
+      //extras a enviar
+      $TiposDeDocumentos = DB::table('tb_tiposdedocumento')->get();
+      $TiposDeAgentes = DB::table('tb_tiposdeagente')->get();
+      $Sexos = DB::table('tb_sexo')->get();
+      $EstadosCiviles = DB::table('tb_estadosciviles')->get();
+      $Nacionalidades = DB::table('tb_nacionalidad')->get();
+      $TurnosUsuario = DB::table('tb_turnos_usuario')->get();
+      $EstadoPOF = DB::table('tb_estado_pof')->get();
+      $Usuario = DB::table('tb_usuarios')
+      ->where('tb_usuarios.Modo','!=',2)
+      ->where('tb_usuarios.idusuario',$idUsuario) //es and
+      ->get();
+
+      $infoCUEAgregadas = DB::table('tb_rel_admines_instituciones_extensiones')
+      ->where('tb_rel_admines_instituciones_extensiones.idUsuario',$idUsuario)
+      ->get();
+      //dd($RelSubOrgAgente);
+      $datos=array(
+          'mensajeError'=>"",
+          'mensajeNAV'=>'Panel de Creación de Usuarios',
+          'Usuario'=>$Usuario,
+          'EstadoPOF'=>$EstadoPOF,
+          'infoCUEAgregada'=> $infoCUEAgregadas
+      );
+      //dd($infoPlaza);
+      return view('bandeja.ADMIN.cue_usuario',$datos);
+  }
+
+  public function FormInsertarCUE(Request $request){
+    //voy a omitir por ahora la comprobacion de agentes por DNI
+
+    
+    //dd($request);
+    /*
+      "_token" => "JvWbtJzdVXNP9d93TmF1KiWytXg1Y0TNziBhQ2vD"
+        "CUECOMPLETO" => "4600614"
+        "CantidadPersonas" => "35"
+        "usuario" => "10"
+    */
+    
+    $o = new RelPofUsuariosModel();
+      $o->CUECOMPLETO = $request->CUECOMPLETO;
+      $o->idUsuario = $request->usuario;
+      $o->CantidadSubidos = $request->CantidadPersonas;
+      $o->EstadoPOF = 1;
+      $o->FechaInicio = Carbon::parse(Carbon::now())->format('Y-m-d');;
+    $o->save();
+    
+    $idUs=$request->usuario;
+     return redirect("/agregarCUEUsuario/$idUs")->with('ConfirmarCUEusuario','OK');
+     //LuiController::PlazaNueva($request->idSurOrg);
+
+}
+
+
+
+
+
+
+
+
 }

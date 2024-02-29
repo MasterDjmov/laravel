@@ -104,6 +104,16 @@
                     )
             </script>
         @endif
+
+        @if (session('ConfirmarNuevoUsuarioError')=='OK')
+            <script>
+            Swal.fire(
+                'Registro Fallido',
+                'No se puede crear porque el correo ya esta siendo usado',
+                'error'
+                    )
+            </script>
+        @endif
     <script>
 
     $('.formularioNuevoUsuario').submit(function(e){

@@ -11,7 +11,7 @@
             <section class="content">
                 <div class="container-fluid">
                     <!-- Buscador Agente -->
-                    <h4 class="text-center display-4">Agregar Usuario Nuevo</h4>
+                    <h4 class="text-center display-4">Panel de Usuarios y T&eacute;cnicos</h4>
                     <!-- Agregar Nuevo Agente -->
                    
                     <div class="row d-flex justify-content-center">
@@ -50,7 +50,9 @@
                                             <a href="{{route('editarUsuario',$nag->idUsuario)}}" title="Editar Usuario">
                                                 <i class="fa fa-edit"></i>
                                             </a>
-                                            
+                                            <a href="{{route('agregarCUEUsuario',$nag->idUsuario)}}" title="Agregar CUE a Usuario">
+                                                <i class="fa fa-sitemap"></i>
+                                            </a>
                                         </td>
                                     </tr> 
                                     @endforeach

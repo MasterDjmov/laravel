@@ -64,6 +64,18 @@
                                                 <label for="Correo">Correo Electronico: </label>
                                                 <input type="email" autocomplete="off" class="form-control" id="Correo" name="Correo" placeholder="Ingrese Correo Electronico" value="{{$Usuario[0]->email}}">
                                             </div>
+                                            <div class="col-3">
+                                                <label for="Usuario">Turno: </label><br>
+                                                <select class="form-control" name="Turno" id="Turno" style="display: inline">
+                                                  @foreach ($TurnosUsuario as $t)
+                                                    @if ($t->idTurnoUsuario == $Usuario[0]->Turno)
+                                                        <option value="{{$t->idTurnoUsuario}}" selected="selected">{{$t->Descripcion}}</option>
+                                                    @else
+                                                        <option value="{{$t->idTurnoUsuario}}">{{$t->Descripcion}}</option>
+                                                    @endif 
+                                                    @endforeach ()
+                                                </select>
+                                              </div>
                                     </div>
                                     <!-- /.card-body -->
                                     <input type="hidden" name="us" value="{{$Usuario[0]->idUsuario}}"/>

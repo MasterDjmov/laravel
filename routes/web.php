@@ -129,6 +129,9 @@ Route::get('/generar_pdf_novedades',[AgController::class,'generar_pdf_novedades'
 //ADMIN
 Route::get('/nuevoUsuario',[AdminController::class,'nuevoUsuario'])->name('nuevoUsuario');
 Route::get('/editarUsuario/{idUsuario}',[AdminController::class,'editarUsuario'])->name('editarUsuario');
+Route::get('/agregarCUEUsuario/{idUsuario}',[AdminController::class,'agregarCUEUsuario'])->name('agregarCUEUsuario');
+Route::post('/FormInsertarCUE',[AdminController::class,'FormInsertarCUE'])->name('FormInsertarCUE');
+
 
 Route::post('/FormNuevoUsuario',[AdminController::class,'FormNuevoUsuario'])->name('FormNuevoUsuario');
 Route::post('/FormNuevoUsuario_CUE',[AdminController::class,'FormNuevoUsuario_CUE'])->name('FormNuevoUsuario_CUE');
