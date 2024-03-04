@@ -559,13 +559,14 @@ class AgController extends Controller
     }
 
     public function getBuscarAgente($DNI){
+        
         //traigo todos los agentes que coincidan con su DNI
-        $Agentes = DB::table('tb_agentes')
-        ->where('tb_agentes.Documento',$DNI)
+        $Agentes = DB::table('tb_desglose_agentes')
+        ->where('tb_desglose_agentes.docu',$DNI)
         ->select(
-            'tb_agentes.*',
+            'tb_desglose_agentes.*',
         )
-        ->orderBy('tb_agentes.idAgente','ASC')
+        ->orderBy('tb_desglose_agentes.idDesgloseAgente','ASC')
         ->get();
         if($Agentes->count()>0)
         {

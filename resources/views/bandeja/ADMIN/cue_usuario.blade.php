@@ -91,6 +91,24 @@
                                                             </td>
                                                             <td align="center">{{$n->CantidadSubidos}}</td>
                                                             <td></td>
+                                                            <td class="project_progress">
+                                                                @php
+                                                                    //obtengo la cantidad de esa pof por nodos
+                                                                    $infoNodosCUE = DB::table('tb_nodos')->where('CUECOMPLETO',$n->CUECOMPLETO)->count();
+                                                                    $MaximoValor = $n->CantidadSubidos;
+                                                                    // Calcula el porcentaje
+                                                                    $porcentaje = intval(($infoNodosCUE / $MaximoValor) * 100);
+                                                                    
+                                                                @endphp
+                                                                <div class="progress progress-sm">
+                                                                    <div class="progress-bar bg-green" role="progressbar" aria-valuenow="{{$porcentaje}}" aria-valuemin="0" aria-valuemax="100" style="width: {{$porcentaje}}%">
+                                                                    </div>
+                                                                </div>
+                                                                <small>
+                                                                    
+                                                                    {{$porcentaje}}% completado
+                                                                </small>
+                                                            </td>
                                                         </tr>
                                                     @endforeach 
                                                 </tbody> 
