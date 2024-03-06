@@ -1516,13 +1516,31 @@ class AgController extends Controller
         //traigo la info del nodo
         $nodo =  Nodo::where('idNodo', $idNodo)->first();
 
-        $nodoAnteriorPos =$nodo->PosicionAnterior;
-        //obtengo su nodo anterior y lo actualizo a null
-            $nodoAnterior =  Nodo::where('idNodo', $nodo->PosicionAnterior)->first();
-            $nodoAnterior->PosicionSiguiente = null;
-            $nodoAnterior->Usuario = session('idUsuario');
-            $nodoAnterior->save();
+        //obtengo su nodo anterior si existe y lo actualizo a null
+        // $nodoAnteriorPos =$nodo->PosicionAnterior;
         
+        //     $nodoAnterior =  Nodo::where('idNodo', $nodo->PosicionAnterior)->first();
+        //     $nodoAnterior->PosicionSiguiente = null;
+        //     $nodoAnterior->Usuario = session('idUsuario');
+        //     $nodoAnterior->save();
+        
+        $nodoAnteriorPos = $nodo->PosicionAnterior;
+
+        // Verificar si el nodo anterior existe
+        if (!is_null($nodoAnteriorPos)) {
+            $nodoAnterior = Nodo::where('idNodo', $nodoAnteriorPos)->first();
+            
+            // Verificar si se encontró el nodo anterior
+            if (!is_null($nodoAnterior)) {
+                // Actualizar el nodo anterior
+                $nodoAnterior->PosicionSiguiente = null;
+                $nodoAnterior->Usuario = session('idUsuario');
+                $nodoAnterior->save();
+            } else {
+                // El nodo anterior no existe
+                // Realizar alguna acción en caso de que el nodo anterior no se encuentre
+            }
+        }
             //dd($nodoAnterior);
         //ahora puedo borrarlo al creado
         DB::table('tb_nodos')
@@ -1536,7 +1554,7 @@ class AgController extends Controller
 
         
             //si tiene alguien lo llevo a seguir editando
-        if($nodoAnteriorPos == ""){
+        if(is_null($nodoAnteriorPos)){
             return redirect("/verArbolServicio")->with('ConfirmarBorradoNodo','OK');
         }else{
             

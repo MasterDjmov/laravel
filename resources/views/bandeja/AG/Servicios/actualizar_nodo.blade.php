@@ -51,19 +51,21 @@
 
                     
 
-                    @if ($infoNodos[0]->PosicionAnterior != "" && 
-                         $infoNodos[0]->PosicionSiguiente == "" && 
-                         $infoNodos[0]->Agente == "")
+                    {{-- solo si esta vacante le permito borrar --}}
+                    @if (empty($infoNodos[0]->PosicionAnterior) && 
+                         empty($infoNodos[0]->PosicionSiguiente) && 
+                         empty($infoNodos[0]->Agente))
                         <a href="{{route('eliminarNodo',$infoNodos[0]->idNodo)}}" id="EliminarNodo" class="btn btn-app bg-danger">
-                            <i class="fas fa-eraser"></i> Desvincular
+                            <i class="fas fa-eraser"></i> Eliminar Informacion del bloque completo
                         </a>
-                    @else
-                          @if($infoNodos[0]->PosicionAnterior != "")
-                            <a href="{{route('regresarNodo',$infoNodos[0]->idNodo)}}" id="RetornarNodo" class="btn btn-app bg-info">
-                                <i class="fas fa-undo"></i> Regresar de Licencia
-                            </a>
-                          @endif
                     @endif
+                    
+                    @if($infoNodos[0]->PosicionAnterior != "")
+                        <a href="{{route('regresarNodo',$infoNodos[0]->idNodo)}}" id="RetornarNodo" class="btn btn-app bg-info">
+                            <i class="fas fa-undo"></i> Regresar de Licencia
+                        </a>
+                    @endif
+                    
                     {{-- <a href="{{route('retornarNodo',$infoNodos[0]->idNodo)}}" id="RetornarNodo" class="btn btn-app bg-info">
                         <i class="fas fa-undo"></i> Regresar
                     </a>  --}}
