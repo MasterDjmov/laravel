@@ -311,12 +311,57 @@
           Swal.fire({
             icon: "error",
             title: "Oops...",
-            text: "Formato de fecha inválido. Por favor, ingrese una fecha válida en el formato YYYY-MM-DD",
+            text: "Formato de fecha inválido. Por favor, ingrese una fecha válida en el formato Dia-Mes-Año",
 
           });
+          return false; // Retorna false si el formato de fecha es inválido
       }
+
+      // Dividir la fecha en sus componentes
+      var partesFecha = fechaInput.split("-");
+      var año = parseInt(partesFecha[0]);
+      var mes = parseInt(partesFecha[1]);
+      var dia = parseInt(partesFecha[2]);
+
+      // Verificar si el año es válido (entre 1000 y 9999)
+      if (año < 1000 || año > 9999) {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Año inválido. Por favor, ingrese un año válido entre 1000 y 9999",
+
+          });
+          return false;
+      }
+
+      // Verificar si el mes es válido (entre 1 y 12)
+      if (mes < 1 || mes > 12) {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Mes inválido. Por favor, ingrese un mes válido entre 01 y 12",
+
+          });
+          return false;
+      }
+
+      // Verificar si el día es válido
+      var diasEnMes = new Date(año, mes, 0).getDate();
+      if (dia < 1 || dia > diasEnMes) {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Día inválido para el mes y año especificados. Por favor, ingrese un día válido",
+
+          });
+          return false;
+      }
+
+      // Si pasa todas las validaciones, retorna true
+      return true;
   }
 
   document.getElementById('FechaAltaN').addEventListener('blur', validarFecha);
 </script>
+
 @endsection

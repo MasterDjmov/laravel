@@ -105,9 +105,12 @@
                                                                     </div>
                                                                 </div>
                                                                 <small>
-                                                                    
+
                                                                     {{$porcentaje}}% completado
                                                                 </small>
+                                                            </td>
+                                                            <td class="project-state">
+                                                                <span class="badge badge-success">Success</span>
                                                             </td>
                                                         </tr>
                                                     @endforeach 
