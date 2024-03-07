@@ -324,7 +324,7 @@
                                     ->where('tb_novedades.CUECOMPLETO', session('CUECOMPLETO'))
                                     ->where('tb_novedades.idTurnoUsuario', session('idTurnoUsuario'))
                                     ->where('tb_novedades.Agente',$infoNodos[0]->Agente)
-                                    ->whereIn('tb_novedades.Motivo', [2,3, 4, 6, 7])   //menos vacante y baja traigo
+                                    ->whereNotIn('tb_novedades.Motivo', [46,47])   //menos vacante y baja traigo
                                     
                                     // ->where(function($query) {
                                     //     $query->orWhereNull('Nodo'); 
