@@ -1910,7 +1910,68 @@ class AgController extends Controller
      return view('bandeja.AG.Servicios.novedades_licencias',$datos);
     }   
 
+    public function ver_novedades_cues(){
+        //obtengo el usuario que es la escuela a trabajar
+       /* $idReparticion = session('idReparticion');
+        //consulto a reparticiones
+        $reparticion = DB::table('tb_reparticiones')
+        ->where('tb_reparticiones.idReparticion',$idReparticion)
+        ->get();
+        //dd($reparticion[0]->Organizacion);
 
+        //traigo el edificio de una suborg
+        $SubOrg = DB::table('tb_suborganizaciones')
+        ->where('tb_suborganizaciones.idSubOrganizacion',$reparticion[0]->subOrganizacion)
+        ->get();
+*/
+       $institucionExtension=DB::table('tb_institucion_extension')
+       ->where('tb_institucion_extension.idInstitucionExtension',session('idInstitucionExtension'))
+       ->get();
+
+        
+        $TiposDeEspacioCurricular = DB::table('tb_tiposespacioscurriculares')->get();
+        $Cursos = DB::table('tb_cursos')->get();
+        $Division = DB::table('tb_division')->get();
+        $Cursos = DB::table('tb_cursos')->get();
+        $TiposHora = DB::table('tb_tiposhora')->get();
+        $RegimenDictado = DB::table('tb_pof_regimendictado')->get();
+        $Divisiones = DB::table('tb_divisiones')
+        ->where('tb_divisiones.idInstitucionExtension',session('idInstitucionExtension'))
+        ->join('tb_cursos','tb_cursos.idCurso', '=', 'tb_divisiones.Curso')
+        //->join('tb_division','tb_division.idDivisionU', '=', 'tb_divisiones.Division')
+        //->join('tb_turnos', 'tb_turnos.idTurno', '=', 'tb_divisiones.Turno')
+        ->select(
+            //'tb_divisiones.idDivision',
+            'tb_divisiones.Curso',
+            //'tb_cursos.*',
+            //'tb_division.*',
+            //'tb_turnos.Descripcion as DescripcionTurno',
+           // 'tb_turnos.idTurno',
+        )
+        //->orderBy('tb_cursos.DescripcionCurso','ASC')
+        ->groupBy('tb_divisiones.Curso')
+        ->get();
+
+        $Turnos = DB::table('tb_turnos_usuario')->get();
+        $NovedadesCUE = DB::table('tb_institucion_extension')
+           ->whereNotNull('CUE')->orWhere('CUE', '')
+           ->select(
+               'tb_institucion_extension.*'
+           )
+           ->get();
+
+           //dd($Novedades);
+        $datos=array(
+            'mensajeError'=>"",
+            'NovedadesCUE'=>$NovedadesCUE,
+            'Turnos'=>$Turnos,
+            'FechaActual'=>$FechaAlta = Carbon::parse(Carbon::now())->format('Y-m-d'),
+            'mensajeNAV'=>'Panel de Novedades - Altas'
+
+
+        );
+   return view('bandeja.AG.Servicios.ver_novedades_cues',$datos);
+}
     public function activarFiltro(Request $request){
         //dd($request);
         /*

@@ -124,6 +124,8 @@ Route::get('/retornarNodo/{idNodo}',[AgController::class,'retornarNodo'])->name(
 Route::get('/ver_novedades_altas',[AgController::class,'ver_novedades_altas'])->name('ver_novedades_altas');
 Route::get('/ver_novedades_licencias',[AgController::class,'ver_novedades_licencias'])->name('ver_novedades_licencias');
 Route::get('/ver_novedades_bajas',[AgController::class,'ver_novedades_bajas'])->name('ver_novedades_bajas');
+Route::get('/ver_novedades_cues',[AgController::class,'ver_novedades_cues'])->name('ver_novedades_cues');
+
 Route::get('/generar_pdf_novedades',[AgController::class,'generar_pdf_novedades'])->name('generar_pdf_novedades');
 
 //ADMIN

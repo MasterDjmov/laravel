@@ -264,7 +264,32 @@
               </li>
               
             </ul>
-          </li>          
+          </li> 
+          <li class="nav-item menu-is-opening menu-open">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-copy"></i>
+              <p>
+                Movimientos en CUE
+                <i class="fas fa-angle-left right"></i>
+                <span class="badge badge-info right"><!--aqui algo--></span>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{{route('ver_novedades_cues')}}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Lista Rapida</p>
+                </a>
+              </li>
+              
+              <li class="nav-item">
+                <a href="{{route('buscar_dni_cue')}}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Consulta Temporal - Borrar</p>
+                </a>
+              </li>
+            </ul>
+          </li>         
         @endif
 
         @if (session('Modo')==3)
