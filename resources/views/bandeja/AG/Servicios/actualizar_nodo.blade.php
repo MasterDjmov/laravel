@@ -485,11 +485,11 @@
                         <label for="TL">Tipo de Solicitud: </label>
                         <select name="TipoLicencia" class="form-control custom-select">
                           @foreach ($TipoMotivos as $tm)
-                            {{-- @if ($tm->idMotivo == 1 || $tm->idMotivo == 5)
+                            @if ($tm->idMotivo == 46 || $tm->idMotivo == 47)
                                 {{-- no aplico nada --}}
-                            {{-- @else --}}
-                            <option value='{{$tm->idMotivo}}'>{{$tm->Codigo}} - {{$tm->Nombre_Licencia}} - F3: {{$tm->F3}}</option>
-                            {{-- @endif --}}
+                            @else
+                                <option value='{{$tm->idMotivo}}'>{{$tm->Codigo}} - {{$tm->Nombre_Licencia}} - F3: {{$tm->F3}}</option>
+                            @endif
                           @endforeach
                         </select>
                       </div>
