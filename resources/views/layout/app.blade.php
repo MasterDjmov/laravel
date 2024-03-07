@@ -45,6 +45,14 @@
   <link rel="stylesheet" href="{{ asset('css/reloj.css') }}">
   @yield('LinkCSS')
   <meta name="csrf-token" content="{{csrf_token()}}">
+  {{-- control para ancho de select --}}
+  <style>
+    .custom-select option{
+        width: 723px; /* Ancho máximo inicial */
+        max-width: 100%; /* Limita el ancho máximo al tamaño del contenedor */
+        overflow-x: auto;  /* Oculta el desbordamiento de contenido */
+    }
+  </style>
 </head>
 <!--BODY-->
 @if(session('Validar') !="")

@@ -483,7 +483,7 @@
                       </div>
                       <div class="form-group">
                         <label for="TL">Tipo de Solicitud: </label>
-                        <select name="TipoLicencia" class="form-control">
+                        <select name="TipoLicencia" class="form-control custom-select">
                           @foreach ($TipoMotivos as $tm)
                             {{-- @if ($tm->idMotivo == 1 || $tm->idMotivo == 5)
                                 {{-- no aplico nada --}}
