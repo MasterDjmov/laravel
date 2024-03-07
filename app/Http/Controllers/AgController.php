@@ -983,7 +983,7 @@ class AgController extends Controller
 
         //traemos otros array
         $SituacionRevista = DB::table('tb_situacionrevista')->get();
-        $TipoMotivo = DB::table('tb_motivos')->take(45)->get();
+        $TipoMotivo = DB::table('tb_motivos')->get();   //->take(45)
         
         $Divisiones = DB::table('tb_divisiones')
                 ->where('tb_divisiones.idInstitucionExtension',session('idInstitucionExtension'))
