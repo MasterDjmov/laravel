@@ -1728,7 +1728,7 @@ class AgController extends Controller
              $Novedades = DB::table('tb_novedades')
                 ->where('tb_novedades.CUECOMPLETO', session('CUECOMPLETO'))
                 ->where('tb_novedades.idTurnoUsuario', session('idTurnoUsuario'))
-                ->whereIn('tb_novedades.Motivo', [1]) //solo altas traigo
+                ->whereIn('tb_novedades.Motivo', [46]) //solo altas traigo
                 ->whereNotNull('tb_novedades.Nodo') // Verifica si el campo 'Nodo' no es null
                 ->whereNotNull('tb_novedades.Agente') // Verifica si el campo 'Nodo' no es null
                 ->join('tb_cargossalariales', 'tb_cargossalariales.idCargo', '=', 'tb_novedades.CargoSalarial')
@@ -1802,7 +1802,7 @@ class AgController extends Controller
         $Novedades = DB::table('tb_novedades')
             ->where('tb_novedades.CUECOMPLETO', session('CUECOMPLETO'))
             ->where('tb_novedades.idTurnoUsuario', session('idTurnoUsuario'))
-            ->whereIn('tb_novedades.Motivo', [5])   //lo busco por su anexo
+            ->whereIn('tb_novedades.Motivo', [47])   //lo busco por su anexo
             ->whereNotNull('tb_novedades.Agente') // Verifica si el campo 'Nodo' no es null
             ->where(function($query) {
                 $query->orWhereNull('Nodo');
@@ -1878,7 +1878,7 @@ class AgController extends Controller
         $Novedades = DB::table('tb_novedades')
             ->where('tb_novedades.CUECOMPLETO', session('CUECOMPLETO'))
             ->where('tb_novedades.idTurnoUsuario', session('idTurnoUsuario'))
-            ->whereIn('tb_novedades.Motivo', [2,3, 4, 6, 7])   //en tb_motivos, menos vacante y baja
+            ->whereNotIn('tb_novedades.Motivo', [46,47,48])   //en tb_motivos, menos vacante y baja
             
             // ->where(function($query) {
             //     $query->orWhereNull('Nodo');
