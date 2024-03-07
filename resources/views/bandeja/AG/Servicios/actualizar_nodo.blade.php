@@ -375,7 +375,7 @@
                                               <td class="text-center">{{ \Carbon\Carbon::parse($n->FechaHastaLicencia)->format('d-m-Y')}}</td>
                                           @endif
                                           <td class="text-center">{{$n->TotalDiasLicencia}}</td>
-                                          <td class="text-center">{{$n->Nombre_Motivo}}</td>
+                                          <td class="text-center">{{$n->Codigo}} - {{$n->Nombre_Licencia}} - {{$n->F3}}</td>
                                           @if ($n->EstaActivaLicencia == "SI")
                                               <td class="text-center" style="background-color:chartreuse">
                                                   {{$n->EstaActivaLicencia}}
@@ -485,11 +485,11 @@
                         <label for="TL">Tipo de Solicitud: </label>
                         <select name="TipoLicencia" class="form-control">
                           @foreach ($TipoMotivos as $tm)
-                            @if ($tm->idMotivo == 1 || $tm->idMotivo == 5)
+                            {{-- @if ($tm->idMotivo == 1 || $tm->idMotivo == 5)
                                 {{-- no aplico nada --}}
-                            @else
-                            <option value='{{$tm->idMotivo}}'>{{$tm->Nombre_Motivo}}</option>
-                            @endif
+                            {{-- @else --}}
+                            <option value='{{$tm->idMotivo}}'>{{$tm->Codigo}} - {{$tm->Nombre_Licencia}} - F3: {{$tm->F3}}</option>
+                            {{-- @endif --}}
                           @endforeach
                         </select>
                       </div>

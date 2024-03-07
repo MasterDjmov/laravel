@@ -61,7 +61,7 @@
                                                 <td class="text-center">{{ \Carbon\Carbon::parse($n->FechaHasta)->format('d-m-Y')}}</td>
                                             @endif
                                             <td class="text-center">{{$n->CantidadDiasTrabajados}}</td>
-                                            <td class="text-center">{{$n->Nombre_Motivo}}</td>
+                                            <td class="text-center">{{$n->Codigo}} - {{$n->Nombre_Licencia}} - {{$n->F3}}</td>
                                             <td>{{$n->Observaciones}}</td>
                                             
                                         </tr>

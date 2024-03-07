@@ -547,7 +547,7 @@ class AgController extends Controller
             $novedad->TotalDias = 1;
             $novedad->Mes = date('m');
             $novedad->Anio = date('Y');
-            $novedad->Motivo = 1;   //en este caso es vacante
+            $novedad->Motivo = 46;   //en este caso es vacante
             $novedad->Observaciones = "Alta de Servicio: ".$SituacionDeRevista[0]->Descripcion;
             $novedad->Estado = 1;   //activo tiene novedad sin fecha hasta
             $novedad->Nodo = $nodo->idNodo; //por ahora lo hago asi, tengo dudas
@@ -696,7 +696,7 @@ class AgController extends Controller
                     $novedad->TotalDias = 1;
                     $novedad->Mes = date('m');
                     $novedad->Anio = date('Y');
-                    $novedad->Motivo = 1;   //en este caso es vacante
+                    $novedad->Motivo = 46;   //en este caso es vacante
                     $novedad->Observaciones = "Alta de Servicio: ".$SituacionDeRevista[0]->Descripcion;
                     $novedad->Estado = 1;   //activo tiene novedad sin fecha hasta
                     $novedad->Nodo = $Nuevo->idNodo; //por ahora lo hago asi, tengo dudas
@@ -716,7 +716,7 @@ class AgController extends Controller
                     $novedad->TotalDias = 1;
                     $novedad->Mes = date('m');
                     $novedad->Anio = date('Y');
-                    $novedad->Motivo = 2;   //activo un suplencia
+                    $novedad->Motivo = 46;   //activo un suplencia
                     $novedad->ObservacionesLicencia = $Nuevo->Observaciones;
                     $novedad->Estado = 1;   //activo tiene novedad sin fecha hasta
                     $novedad->Nodo = $Nuevo->idNodo; //por ahora lo hago asi, tengo dudas
@@ -983,7 +983,7 @@ class AgController extends Controller
 
         //traemos otros array
         $SituacionRevista = DB::table('tb_situacionrevista')->get();
-        $TipoMotivo = DB::table('tb_motivos')->get();
+        $TipoMotivo = DB::table('tb_motivos')->take(45)->get();
         
         $Divisiones = DB::table('tb_divisiones')
                 ->where('tb_divisiones.idInstitucionExtension',session('idInstitucionExtension'))
@@ -1203,7 +1203,7 @@ class AgController extends Controller
                     ->where('Agente', $nodo->Agente)
                     ->where('CUECOMPLETO', $nodo->CUECOMPLETO)
                     ->where('idTurnoUsuario', $nodo->idTurnoUsuario)
-                    ->where('Motivo','=', 1)    //pregunto si esta activo con ALTA de tipo vacante
+                    ->where('Motivo','=', 46)    //pregunto si esta activo con ALTA de tipo vacante
                     ->whereNotNull('Nodo') // Verifica si el campo 'Nodo' no es null debido a que todavia esta activo
                     ->first();
             
@@ -1252,7 +1252,7 @@ class AgController extends Controller
                         $novedad->TotalDias = 1;
                         $novedad->Mes = date('m');
                         $novedad->Anio = date('Y');
-                        $novedad->Motivo = 1;   //en este caso es vacante
+                        $novedad->Motivo = 46;   //en este caso es vacante
                         $novedad->Observaciones = "Alta de Servicio: ".$SituacionDeRevista[0]->Descripcion;
                         $novedad->Estado = 1;   //activo tiene novedad sin fecha hasta
                         $novedad->Nodo = $nodo->idNodo; //por ahora lo hago asi, tengo dudas
@@ -1264,7 +1264,7 @@ class AgController extends Controller
                 //->where('Agente', $nodo->Agente)
                 ->where('CUECOMPLETO', $nodo->CUECOMPLETO)
                 ->where('idTurnoUsuario', $nodo->idTurnoUsuario)
-                ->where('Motivo','=', 1)    //pregunto si esta activo con ALTA
+                ->where('Motivo','=', 46)    //pregunto si esta activo con ALTA
                 ->whereNotNull('Nodo') // Verifica si el campo 'Nodo' no es null debido a que todavia esta activo
                 ->first();
 
@@ -1281,7 +1281,7 @@ class AgController extends Controller
                 //->where('Agente', $nodo->Agente)
                 ->where('CUECOMPLETO', $nodo->CUECOMPLETO)
                 ->where('idTurnoUsuario', $nodo->idTurnoUsuario)
-                ->where('Motivo', 2)     //pregunto si esta activo con ALTA
+                ->where('Motivo', 48)     //pregunto si esta activo con ALTA
                 ->whereNotNull('Nodo') // Verifica si el campo 'Nodo' no es null debido a que todavia esta activo
                 ->first();
         
@@ -1352,7 +1352,7 @@ class AgController extends Controller
                 $novedad->TotalDias = 1;
                 $novedad->Mes = date('m');
                 $novedad->Anio = date('Y');
-                $novedad->Motivo = 5;   //en este caso es vacante
+                $novedad->Motivo = 47;   //en este caso es vacante
                 $novedad->Observaciones = "Se dio de baja al docente por desvinculacion";
                 $novedad->Estado = 1;   //activo tiene novedad sin fecha hasta
                 $novedad->Nodo = null; //por ahora lo hago asi, tengo dudas
@@ -1385,7 +1385,7 @@ class AgController extends Controller
             ->where('Agente', $nodo->Agente)
             ->where('CUECOMPLETO', $nodo->CUECOMPLETO)
             ->where('idTurnoUsuario', $nodo->idTurnoUsuario)
-            ->where('Motivo','=', 1)    //pregunto si esta activo con ALTA
+            ->where('Motivo','=', 46)    //pregunto si esta activo con ALTA
             ->whereNotNull('Nodo') // Verifica si el campo 'Nodo' no es null debido a que todavia esta activo
             ->first();
 
@@ -1413,7 +1413,7 @@ class AgController extends Controller
                 $novedad->TotalDias = 1;
                 $novedad->Mes = date('m');
                 $novedad->Anio = date('Y');
-                $novedad->Motivo = 5;   //en este caso es BAJA
+                $novedad->Motivo = 47;   //en este caso es BAJA
                 $novedad->Observaciones = "Se dio de baja al docente por Retorno de Agente";
                 $novedad->Estado = 1;   //activo tiene novedad sin fecha hasta
                 $novedad->Nodo = null; //por ahora lo hago asi, tengo dudas
