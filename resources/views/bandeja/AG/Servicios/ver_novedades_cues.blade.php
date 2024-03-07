@@ -2,10 +2,38 @@
 
 @section('Titulo', 'Sage2.0 - Altas')
 
+
 @section('ContenidoPrincipal')
 <section id="container" >
     <section id="main-content">
         <section class="content-wrapper">
+            @php
+                //busco todos los niveles que se van cargando y los agrupo
+                $InstitucionesxNivel = DB::table('tb_institucion_extension')
+                ->select(
+                    'tb_institucion_extension.Nivel',
+                    DB::raw('COUNT(*) as Cantidad')
+                )
+                ->groupBy('Nivel')
+                ->get(); 
+                
+            @endphp
+        <div class="row">
+            @foreach ($InstitucionesxNivel as $fn)
+                <div class="col-md-3 inline-block">
+                    <div class="info-box shadow-lg">
+                    <span class="info-box-icon bg-success"><i class="fas fa-school"></i></span>
+        
+                    <div class="info-box-content">
+                        <span class="info-box-text">Nivel: {{ !empty($fn->Nivel) ? $fn->Nivel : 'Sin Determinar' }}</span>
+                        <span class="info-box-number">Creados: {{$fn->Cantidad}}</span>
+                    </div>
+                    <!-- /.info-box-content -->
+                    </div>
+                    <!-- /.info-box -->
+                </div>
+            @endforeach
+        </div>    
             <!-- Inicio Selectores -->
             <div class="row">
                 <div class="col-md-12">
