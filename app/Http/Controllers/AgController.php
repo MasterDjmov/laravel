@@ -874,7 +874,7 @@ class AgController extends Controller
         ->where('tb_novedades.CUECOMPLETO', session('CUECOMPLETO'))
         ->where('tb_novedades.idTurnoUsuario', session('idTurnoUsuario'))
         ->where('tb_novedades.EstaActivaLicencia', "SI")
-        ->whereIn('tb_novedades.Motivo', [2, 3, 4, 6, 7])   //lo busco por su anexo
+        ->whereNotIn('tb_novedades.Motivo', [46,47,48])   //lo busco por su anexo
         ->first();
 
         //cuando lo encuentra lo actualiza
