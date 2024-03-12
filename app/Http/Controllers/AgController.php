@@ -716,7 +716,7 @@ class AgController extends Controller
                     $novedad->TotalDias = 1;
                     $novedad->Mes = date('m');
                     $novedad->Anio = date('Y');
-                    $novedad->Motivo = 46;   //activo un suplencia
+                    $novedad->Motivo = 48;   //activo un suplencia
                     $novedad->ObservacionesLicencia = $Nuevo->Observaciones;
                     $novedad->Estado = 1;   //activo tiene novedad sin fecha hasta
                     $novedad->Nodo = $Nuevo->idNodo; //por ahora lo hago asi, tengo dudas
@@ -874,7 +874,7 @@ class AgController extends Controller
         ->where('tb_novedades.CUECOMPLETO', session('CUECOMPLETO'))
         ->where('tb_novedades.idTurnoUsuario', session('idTurnoUsuario'))
         ->where('tb_novedades.EstaActivaLicencia', "SI")
-        ->whereNotIn('tb_novedades.Motivo', [46,47,48])   //lo busco por su anexo
+        ->whereNotIn('tb_novedades.Motivo', [46,47])   //lo busco por su anexo
         ->first();
 
         //cuando lo encuentra lo actualiza
@@ -1571,6 +1571,8 @@ class AgController extends Controller
 
         //pregunto por si acaso hay triada
         if($nodoAnterior->PosicionAnterior != null || $nodoAnterior->PosicionAnterior != ""){
+            $aqui="aqui";
+           
             $nodoAnteriorAnterior =  Nodo::where('idNodo', $nodoAnterior->PosicionAnterior)->first();   //A
             //dar de baja al nodo anterior y crear novedad
             $desvinculando = $this->desvincularDocenteRetornoRaiz($nodoAnterior->idNodo);
@@ -1878,7 +1880,7 @@ class AgController extends Controller
         $Novedades = DB::table('tb_novedades')
             ->where('tb_novedades.CUECOMPLETO', session('CUECOMPLETO'))
             ->where('tb_novedades.idTurnoUsuario', session('idTurnoUsuario'))
-            ->whereNotIn('tb_novedades.Motivo', [46,47,48])   //en tb_motivos, menos vacante y baja
+            ->whereNotIn('tb_novedades.Motivo', [46,47])   //en tb_motivos, menos vacante y baja
             
             // ->where(function($query) {
             //     $query->orWhereNull('Nodo');
