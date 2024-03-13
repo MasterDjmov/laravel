@@ -163,9 +163,9 @@
                             <div class="form-group">
                                 <label for="Planes">Planes de Estudio</label>
                                 <select class="form-control" name="Planes" id="Planes">
-                                @foreach($Planes as $key => $o)
+                                {{-- @foreach($Planes as $key => $o)
                                     <option value="{{$o->idPlanEstudio}}">{{$o->DescripcionPlan}}</option>
-                                @endforeach
+                                @endforeach --}}
                                 </select>
                             </div>
                             <div class="form-group">
@@ -233,9 +233,9 @@
                             <label for="Planes">Seleccionar Modalidad de Estudio</label>
                             <select class="form-control" name="idPlan" id="idPlan" onchange="controlarPlan()">
                             <option value="0">SELECCIONE UNA MODALIDAD</option>
-                            @foreach($Planes as $key => $o)
+                            {{-- @foreach($Planes as $key => $o)
                                 <option value="{{$o->idPlanEstudio}}">{{$o->DescripcionPlan}}</option>
-                            @endforeach
+                            @endforeach --}}
                             </select>
                         </div>
                         <table id="" class="table table-bordered table-striped">

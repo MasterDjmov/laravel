@@ -512,7 +512,7 @@ class LuiController extends Controller
 
     public function verAsigEspCur(){
         //obtengo el usuario que es la escuela a trabajar
-        $idReparticion = session('idReparticion');
+       /* $idReparticion = session('idReparticion');
         //consulto a reparticiones
         $reparticion = DB::table('tb_reparticiones')
         ->where('tb_reparticiones.idReparticion',$idReparticion)
@@ -523,8 +523,11 @@ class LuiController extends Controller
         $SubOrg = DB::table('tb_suborganizaciones')
         ->where('tb_suborganizaciones.idSubOrganizacion',$reparticion[0]->subOrganizacion)
         ->get();
+*/
+        $institucionExtension=DB::table('tb_institucion_extension')
+        ->where('tb_institucion_extension.idInstitucionExtension',session('idInstitucionExtension'))
+        ->get();
 
-        
         //al panel le pasamos todo lo necesario para las opciones
         $Asignaturas = DB::table('tb_asignaturas')
         ->get();
@@ -532,19 +535,19 @@ class LuiController extends Controller
         ->join('tb_carreras','tb_carreras.idCarrera', '=', 'tb_carreras_suborg.idCarrera')
         ->where('tb_carreras_suborg.idSubOrganizacion',session('idSubOrganizacion'))
         ->get();
-        $Planes = DB::table('tb_planesestudio')
-        ->where('tb_suborganizaciones.idSubOrganizacion',session('idSubOrganizacion'))
-        ->join('tb_pof_relsuborganizacionplanesestudio','tb_pof_relsuborganizacionplanesestudio.PlanEstudio', '=', 'tb_planesestudio.idPlanEstudio')
-        ->join('tb_suborganizaciones', 'tb_suborganizaciones.idSubOrganizacion', '=', 'tb_pof_relsuborganizacionplanesestudio.SubOrg')
-        ->join('tb_pof_estadosdeplanes', 'tb_pof_estadosdeplanes.idEstadodePlan', '=', 'tb_planesestudio.Estado')
+        // $Planes = DB::table('tb_planesestudio')
+        // ->where('tb_suborganizaciones.idSubOrganizacion',session('idSubOrganizacion'))
+        // ->join('tb_pof_relsuborganizacionplanesestudio','tb_pof_relsuborganizacionplanesestudio.PlanEstudio', '=', 'tb_planesestudio.idPlanEstudio')
+        // ->join('tb_suborganizaciones', 'tb_suborganizaciones.idSubOrganizacion', '=', 'tb_pof_relsuborganizacionplanesestudio.SubOrg')
+        // ->join('tb_pof_estadosdeplanes', 'tb_pof_estadosdeplanes.idEstadodePlan', '=', 'tb_planesestudio.Estado')
 
-        ->select(
-            'tb_planesestudio.idPlanEstudio',
-            'tb_planesestudio.Descripcion as DescripcionPlan',
-            'tb_pof_estadosdeplanes.Descripcion as DescripcionEstado',
-        )
-        ->orderBy('tb_planesestudio.idPlanEstudio','ASC')
-        ->get();
+        // ->select(
+        //     'tb_planesestudio.idPlanEstudio',
+        //     'tb_planesestudio.Descripcion as DescripcionPlan',
+        //     'tb_pof_estadosdeplanes.Descripcion as DescripcionEstado',
+        // )
+        // ->orderBy('tb_planesestudio.idPlanEstudio','ASC')
+        // ->get();
         $TiposDeEspacioCurricular = DB::table('tb_tiposespacioscurriculares')->get();
         $Cursos = DB::table('tb_cursos')->get();
         $Division = DB::table('tb_division')->get();
@@ -552,7 +555,7 @@ class LuiController extends Controller
         $TiposHora = DB::table('tb_tiposhora')->get();
         $RegimenDictado = DB::table('tb_pof_regimendictado')->get();
         $Divisiones = DB::table('tb_divisiones')
-        ->where('tb_divisiones.idSubOrg',session('idSubOrganizacion'))
+        ->where('tb_divisiones.idInstitucionExtension',session('idInstitucionExtension'))
         ->join('tb_cursos','tb_cursos.idCurso', '=', 'tb_divisiones.Curso')
         //->join('tb_division','tb_division.idDivisionU', '=', 'tb_divisiones.Division')
         //->join('tb_turnos', 'tb_turnos.idTurno', '=', 'tb_divisiones.Turno')
@@ -576,7 +579,7 @@ class LuiController extends Controller
             'FechaActual'=>$FechaAlta = Carbon::parse(Carbon::now())->format('Y-m-d'),
             'TiposDeEspacioCurricular'=>$TiposDeEspacioCurricular,
             'CarrerasRelSubOrg'=>$CarrerasRelSubOrg,
-            'Planes'=>$Planes,
+            'Planes'=>null,
             'TiposHora'=>$TiposHora,
             'RegimenDictado'=>$RegimenDictado,
             'mensajeNAV'=>'Panel de Configuración de Asignaturas / Planes y Modalidades'
