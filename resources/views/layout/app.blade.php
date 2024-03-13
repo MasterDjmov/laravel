@@ -34,6 +34,9 @@
   <link rel="stylesheet" href="{{ asset('plugins/daterangepicker/daterangepicker.css') }}">
   <!-- summernote -->
   <link rel="stylesheet" href="{{ asset('plugins/summernote/summernote-bs4.min.css') }}">
+  <!--Style dropzone subir doc-->
+  <link rel="stylesheet" href="{{ asset('plugins/dropzone/min/dropzone.min.css') }}">
+
   <!--Style Bootstrap-->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
   <!--Style MaterialGoogle-->
@@ -407,6 +410,9 @@
 <script src="{{ asset('plugins/sweetalert2/sweetalert2.min.js')}}"></script>
 <!-- Toastr -->
 <script src="{{ asset('plugins/toastr/toastr.min.js')}}"></script>
+<!--subir doc-->
+<script src="{{ asset('plugins/dropzone/min/dropzone.min.js')}}"></script>
+<script src="{{ asset('js/subirDoc.js') }}"></script>
 
 @yield('Script')
 <script type="text/javascript">

@@ -2177,7 +2177,7 @@ ul.inbox-pagination li {
 
 .fileinput-button {
     border: 1px solid #e6e6e6;
-    background: #eeeeee;
+    /* background: #eeeeee; */
 }
 
 .inbox-body .modal .modal-body input, .inbox-body .modal .modal-body textarea{
