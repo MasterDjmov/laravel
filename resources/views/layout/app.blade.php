@@ -145,24 +145,24 @@
                   <p>Datos Institucionales</p>
                 </a>
               </li>
-              {{-- <li class="nav-item">
+              <li class="nav-item">
                 <a href="{{route('getCarrerasPlanes')}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Carreras y Modalidades</p>
                 </a>
-              </li>  --}}
+              </li> 
               <li class="nav-item">
                 <a href="{{route('verDivisiones')}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Cursos y Divisiones</p>
                 </a>
               </li>
-              {{-- <li class="nav-item">
+              <li class="nav-item">
                 <a href="{{route('verAsigEspCur')}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Asignaturas / Esp. Curriculares</p>
                 </a>
-              </li>  --}}
+              </li> 
               
             </ul>
           </li>
