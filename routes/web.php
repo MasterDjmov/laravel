@@ -9,6 +9,7 @@ use App\Http\Controllers\LupController;
 use App\Http\Controllers\AgController;
 use App\Http\Controllers\PruebaController;
 use App\Http\Controllers\SistemaController;
+use App\Http\Controllers\SubirDocController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
 
@@ -151,3 +152,5 @@ Route::post('/controlAsistencia',[LupController::class,'controlAsistencia'])->na
 Route::get('/buscar_dni_cue',[SistemaController::class,'buscar_dni_cue'])->name('buscar_dni_cue');
 Route::post('/buscar_dni_cue',[SistemaController::class,'buscar_dni_cue'])->name('buscar_dni_cue');
 
+//subir documentos
+Route::post('/upload', [SubirDocController::class, 'store']);

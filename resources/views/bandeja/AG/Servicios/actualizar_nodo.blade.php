@@ -255,72 +255,69 @@
                         <!-- /.card-body -->
                     </div>
                     <!-- /.card -->
-                      <!-- INICIO SUBIR DOC -->
-                
-                      <div class="card card-secondary">
-                        <div class="card-header">
-                        <h3 class="card-title">Subir Documentos <small><em></em></small></h3>
-                        </div>
-                        <div class="card-body" >
-                        <div id="actions" class="row">
-                            <div class="">
-                                <div class="btn-group w-100" >
-                                    <span class="btn btn-success fileinput-button">
-                                    <i class="fas fa-plus"></i>
-                                        Agregar
-                                    </span>                        
-                                </div>
-                            </div>
-                            <div class="col-lg-6 d-flex align-items-center">
-                            <div class="fileupload-process w-100">
-                                <div id="total-progress" class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-                                <div class="progress-bar progress-bar-success" style="width:0%;" data-dz-uploadprogress></div>
-                                </div>
-                            </div>
-                            </div>
-                        </div>
-                        <div class="table table-striped files" id="previews">
-                            <div id="template" class="row mt-2">
-                            <div class="col-auto">
-                                <span class="preview"><img src="data:," alt="" data-dz-thumbnail /></span>
-                            </div>
-                            <div class="col d-flex align-items-center">
-                                <p class="mb-0">
-                                    <span class="lead" data-dz-name></span>
-                                    (<span data-dz-size></span>)
-                                </p>
-                                <strong class="error text-danger" data-dz-errormessage></strong>
-                            </div>
-                            <div class="col-4 d-flex align-items-center">
-                                <div class="progress progress-striped active w-100" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-                                    <div class="progress-bar progress-bar-success" style="width:0%;" data-dz-uploadprogress></div>
-                                </div>
-                            </div>
-                            <div class="col-auto d-flex align-items-center">
-                                <div class="btn-group">
-                                <button class="btn btn-primary start">
-                                    <i class="fas fa-upload"></i>
-                                    
-                                </button>
-                                <button data-dz-remove class="btn btn-warning cancel">
-                                    <i class="fas fa-times-circle"></i>
-                                  
-                                </button>
-                                <button data-dz-remove class="btn btn-danger delete">
-                                    <i class="fas fa-trash"></i>
-                                  
-                                </button>
-                                </div>
-                            </div>
-                            </div>
-                        </div>
-                        </div>
-                        <!-- /.card-body -->
-                        <div class="card-footer">                                  
-                            
-                        </div>
+                     <!-- INICIO SUBIR DOC -->
+<div class="card card-secondary">
+    <div class="card-header">
+        <h3 class="card-title">Subir Documentos <small><em></em></small></h3>
+    </div>
+    <div class="card-body" >
+        <div id="actions" class="row">
+            <div class="">
+                <div class="btn-group w-100" >
+                    <span class="btn btn-success fileinput-button">
+                        <i class="fas fa-plus"></i>
+                        Agregar
+                    </span>                        
+                </div>
+            </div>
+            <div class="col-lg-6 d-flex align-items-center">
+                <div class="fileupload-process w-100">
+                    <div id="total-progress" class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                        <div class="progress-bar progress-bar-success" style="width:0%;" data-dz-uploadprogress></div>
                     </div>
-                    <!-- /.card -->
+                </div>
+            </div>
+        </div>
+        <div class="table table-striped files" id="previews">
+            <div id="template" class="row mt-2">
+                <div class="col-auto">
+                    <span class="preview"><img src="data:," alt="" data-dz-thumbnail /></span>
+                </div>
+                <div class="col d-flex align-items-center">
+                    <p class="mb-0">
+                        <span class="lead" data-dz-name></span>
+                        (<span data-dz-size></span>)
+                    </p>
+                    <strong class="error text-danger" data-dz-errormessage></strong>
+                </div>
+                <div class="col-4 d-flex align-items-center">
+                    <div class="progress progress-striped active w-100" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                        <div class="progress-bar progress-bar-success" style="width:0%;" data-dz-uploadprogress></div>
+                    </div>
+                </div>
+                <div class="col-auto d-flex align-items-center">
+                    <div class="btn-group">
+                        <button class="btn btn-primary start">
+                            <i class="fas fa-upload"></i>
+                        </button>
+                        <button data-dz-remove class="btn btn-warning cancel">
+                            <i class="fas fa-times-circle"></i>
+                        </button>
+                        <button data-dz-remove class="btn btn-danger delete">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.card-body -->
+    <div class="card-footer" id="upload-status">                                  
+        <!-- Aquí se mostrarán los mensajes de estado o errores de la carga de archivos -->
+    </div>
+</div>
+<!-- /.card -->
+
                  
 
                  <!-- FIN SUBIR DOC -->
