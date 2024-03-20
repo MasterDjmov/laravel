@@ -9,7 +9,7 @@
 
     <div id="time" style="color:rgb(74, 71, 71)"></div>
     @php
-      $activo = "SI";
+      $activo = "NO";
     @endphp
 
     <div class="card text-center bg-op-1">
