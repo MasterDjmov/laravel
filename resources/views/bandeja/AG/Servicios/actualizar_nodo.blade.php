@@ -96,6 +96,7 @@
                                     <div class="input-group">
                                         <input type="text" autocomplete="off" class="form-control" id="DescripcionNombreAgenteActualizar" name="DescripcionNombreAgenteActualizar" placeholder="Ingrese Descripcion" value="{{$infoNodos[0]->nomb}}">
                                         <input type="hidden" name="idAgente"  id="idAgente" value="{{$infoNodos[0]->Agente}}">
+                                        <input type="hidden" name="CueX" id="CueX" value="{{ session('CUEa') }}" 
                                         <span class="input-group-append">
                                             <a href="#modalAgente" class="btn btn-info btn-flat"  data-toggle="modal" data-placement="top" title="Agregar Docente"  data-target="#modalAgente">Agregar</a>
                                             <a href="{{route('desvincularDocente',$infoNodos[0]->idNodo)}}" class="btn btn-danger btn-flat">Quitar</a>
@@ -293,17 +294,18 @@
                 <div class="col-4 d-flex align-items-center">
                     <div class="progress progress-striped active w-100" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
                         <div class="progress-bar progress-bar-success" style="width:0%;" data-dz-uploadprogress></div>
+                        
                     </div>
                 </div>
                 <div class="col-auto d-flex align-items-center">
                     <div class="btn-group">
-                        <button class="btn btn-primary start">
+                        <button class="btn btn-primary start" title="Enviar Archivo">
                             <i class="fas fa-upload"></i>
                         </button>
-                        <button data-dz-remove class="btn btn-warning cancel">
+                        <button data-dz-remove class="btn btn-warning cancel"  title="Cancelar Subida">
                             <i class="fas fa-times-circle"></i>
                         </button>
-                        <button data-dz-remove class="btn btn-danger delete">
+                        <button data-dz-remove class="btn btn-danger delete"  title="Borrar Envio">
                             <i class="fas fa-trash"></i>
                         </button>
                     </div>
@@ -765,6 +767,33 @@
                 'Registro guardado',
                 'Se actualizo correctamente',
                 'success'
+                    )
+            </script>
+        @endif
+        @if (session('SubirDocExito')=='OK')
+            <script>
+            Swal.fire(
+                'Registro guardado',
+                'Archivo subido con éxito',
+                'success'
+                    )
+            </script>
+        @endif
+        @if (session('SubirDocFallo')=='OK')
+            <script>
+            Swal.fire(
+                'Registro guardado',
+                'No se encontró ningún archivo para subir',
+                'error'
+                    )
+            </script>
+        @endif
+        @if (session('SubirDocError')=='OK')
+            <script>
+            Swal.fire(
+                'Registro guardado',
+                'No se encontró ningún archivo Agente para Subir Documentos',
+                'error'
                     )
             </script>
         @endif

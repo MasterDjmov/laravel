@@ -67,6 +67,7 @@ class LoginController extends Controller
                 ->where('tb_institucion_extension.CUECOMPLETO',$usuario[0]->CUECOMPLETO)
                 ->where('tb_institucion_extension.idTurnoUsuario',$usuario[0]->Turno)
                 ->get();
+                //dd($institucionExtension);
 
                 //dd($institucionExtension);
                 if ($institucionExtension->isNotEmpty()) {

@@ -39,6 +39,8 @@ class AgController extends Controller
         $institucionExtension=DB::table('tb_institucion_extension')
                 ->where('tb_institucion_extension.idInstitucionExtension',session('idInstitucionExtension'))
                 ->get();
+        
+        //dd(session('idInstitucionExtension'));
         /*
             [
                 {
@@ -203,7 +205,7 @@ class AgController extends Controller
         $institucionExtension=DB::table('tb_institucion_extension')
                 ->where('tb_institucion_extension.idInstitucionExtension',session('idInstitucionExtension'))
                 ->get();
-
+       // dd($institucionExtension);
         /*
             [
                 {
@@ -876,7 +878,7 @@ class AgController extends Controller
         ->where('tb_novedades.EstaActivaLicencia', "SI")
         ->whereNotIn('tb_novedades.Motivo', [46,47])   //lo busco por su anexo
         ->first();
-
+        
         //cuando lo encuentra lo actualiza
             $novedad->EstaActivaLicencia = "NO" ;
             $novedad->Nodo = null;  //le quito para que no se accesible otra vez
