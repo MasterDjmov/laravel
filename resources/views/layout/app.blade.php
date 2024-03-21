@@ -66,7 +66,7 @@
 
   <!-- Preloader -->
   <div class="preloader flex-column justify-content-center align-items-center">
-    <img class="animation__shake" src="{{ asset('dist/img/AdminLTELogo.png') }}" alt="SAGE2.0" height="60" width="60">
+    <img class="animation__shake" src="{{ asset('img/logo_gob_lr.png') }}" alt="SAGE2.0" height="60" width="60">
   </div>
 
   <!--Hamburguesa-->
@@ -92,7 +92,7 @@
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="{{route('Bandeja')}}" class="brand-link">
-      <img src="{{ asset('dist/img/AdminLTELogo.png')}}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+      <img src="{{ asset('img/logo_larioja.png')}}" alt="SAGE" class="brand-image img-circle elevation-3" style="opacity: .8">
       <span class="brand-text font-weight-light">SAGE</span>
     </a>
 

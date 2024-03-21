@@ -60,14 +60,14 @@
                                         <input type="text" class="form-control" id="Telefono" name="Telefono" placeholder="Nombre Telefono" value="{{$infoInstitucion[0]->Telefono}}">
                                     </div>
                                     <div class="form-group">
-                                        <label for="EsPrivada">Ambito</label>
+                                        <label for="EsPrivada">Sector Privado?</label>
                                         <select class="form-control" name="EsPrivada" id="EsPrivada">
                                             @if ($infoInstitucion[0]->EsPrivada == "S")
-                                                <option value="S" selected="true">SI</option>
-                                                <option value="N">NO</option>
+                                                <option value="S" selected="true">PRIVADO</option>
+                                                <option value="N">ESTATAL</option>
                                             @else
-                                                <option value="S">SI</option>
-                                                <option value="N" selected="true">NO</option>
+                                                <option value="S">PRIVADO</option>
+                                                <option value="N" selected="true">ESTATAL</option>
                                             @endif
                                         </select>
                                     </div>
