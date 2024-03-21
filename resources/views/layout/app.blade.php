@@ -76,9 +76,9 @@
       <li class="nav-item d-none d-sm-inline-block">
         <a href="#" class="nav-link h5">
           <?php
-            if(isset($mensajeNAV))
+            if(session('Nombre_Institucion'))
             {
-              echo $mensajeNAV;
+              echo session('Nombre_Institucion')." - CUE: ".session('CUECOMPLETO');
             }else{
               echo "No Autenticado";
             }

@@ -74,7 +74,7 @@ class LoginController extends Controller
                     session(['CUE' => $institucionExtension[0]->CUE ?? null]);
                     session(['CUECOMPLETO' => $institucionExtension[0]->CUECOMPLETO ?? null]);
                     session(['idInstitucionExtension' => $institucionExtension[0]->idInstitucionExtension ?? null]);
-                    session(['Nombre_Institucion' => $institucionExtension[0]->idInstitucionExtension ?? null]);
+                    session(['Nombre_Institucion' => $institucionExtension[0]->Nombre_Institucion ?? null]);
                     session(['Validar' => 'ok']);
                 } else {
                     session(['CUE' => '0000000']);
