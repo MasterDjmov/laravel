@@ -30,11 +30,19 @@ class SubirDocController extends Controller
                 // Concatenar el nombre MD5 con la extensión original
                 $newFileName = $md5Name . '.' . $extension;
             
+                // Obtener la ruta al directorio de almacenamiento deseado
+                $destinationPath = storage_path('app/public/DOCUMENTOS/' . $CUECOMPLETO . '/' . $AGENTE);
+            
+                // Verificar si el directorio de destino existe, si no, crearlo
+                if (!file_exists($destinationPath)) {
+                    mkdir($destinationPath, 0777, true);
+                }
+            
                 // Mover el archivo a la ubicación deseada con el nuevo nombre
-                $file->move(public_path('DOCUMENTOS/' . $CUECOMPLETO . '/' . $AGENTE), $newFileName);
+                $file->move($destinationPath, $newFileName);
             
                 // Calcula el hash MD5 del archivo completo
-                $md5Hash = md5_file(public_path('DOCUMENTOS/' . $CUECOMPLETO . '/' . $AGENTE . '/' . $newFileName));
+                $md5Hash = md5_file($destinationPath . '/' . $newFileName);
             
                 // Agregar el documento a la tabla
                 $docNuevo = new DocumentosModel();
@@ -46,6 +54,7 @@ class SubirDocController extends Controller
             
                 return response()->json(array('success' => 200, 'SubirDocExito' => 'OK'), 200);
             }
+            
             return response()->json(array('success' => 200, 'SubirDocFallo' => 'OK'), 200);
            
            
