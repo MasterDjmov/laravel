@@ -347,6 +347,7 @@
                                                     <tr>
                                                         <th>Nombre del Documento</th>
                                                         <th>Enlace</th>
+                                                        <th>Opciones</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody id="modalBody">
