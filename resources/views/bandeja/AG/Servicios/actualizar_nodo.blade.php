@@ -821,6 +821,7 @@
                     )
             </script>
         @endif
+        
         @if (session('SubirDocFallo')=='OK')
             <script>
             Swal.fire(

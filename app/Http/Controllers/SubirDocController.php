@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\DocumentosModel;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\HigherOrderBuilderProxy;
 use Illuminate\Http\Request;
 
 use function PHPUnit\Framework\isEmpty;
@@ -73,6 +74,7 @@ class SubirDocController extends Controller
             // Obtener los documentos que coincidan con el CUECOMPLETO y el Agente
             $documentos = DocumentosModel::where('CUECOMPLETO', $CUECOMPLETO)
                 ->where('Agente', $AGENTE)
+                ->orderBy('created_at', 'desc')
                 ->get();
 
         // Devolver la vista parcial que contiene los archivos (esto depende de cómo quieras manejarlo en tu aplicación)
