@@ -256,73 +256,115 @@
                         <!-- /.card-body -->
                     </div>
                     <!-- /.card -->
+                <div class="row">
                      <!-- INICIO SUBIR DOC -->
-<div class="card card-secondary">
-    <div class="card-header">
-        <h3 class="card-title">Subir Documentos <small><em></em></small></h3>
-    </div>
-    <div class="card-body" >
-        <div id="actions" class="row">
-            <div class="">
-                <div class="btn-group w-100" >
-                    <span class="btn btn-success fileinput-button">
-                        <i class="fas fa-plus"></i>
-                        Agregar
-                    </span>                        
-                </div>
-            </div>
-            <div class="col-lg-6 d-flex align-items-center">
-                <div class="fileupload-process w-100">
-                    <div id="total-progress" class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-                        <div class="progress-bar progress-bar-success" style="width:0%;" data-dz-uploadprogress></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="table table-striped files" id="previews">
-            <div id="template" class="row mt-2">
-                <div class="col-auto">
-                    <span class="preview"><img src="data:," alt="" data-dz-thumbnail /></span>
-                </div>
-                <div class="col d-flex align-items-center">
-                    <p class="mb-0">
-                        <span class="lead" data-dz-name></span>
-                        (<span data-dz-size></span>)
-                    </p>
-                    <strong class="error text-danger" data-dz-errormessage></strong>
-                </div>
-                <div class="col-4 d-flex align-items-center">
-                    <div class="progress progress-striped active w-100" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-                        <div class="progress-bar progress-bar-success" style="width:0%;" data-dz-uploadprogress></div>
-                        
-                    </div>
-                </div>
-                <div class="col-auto d-flex align-items-center">
-                    <div class="btn-group">
-                        <button class="btn btn-primary start" title="Enviar Archivo">
-                            <i class="fas fa-upload"></i>
-                        </button>
-                        <button data-dz-remove class="btn btn-warning cancel"  title="Cancelar Subida">
-                            <i class="fas fa-times-circle"></i>
-                        </button>
-                        <button data-dz-remove class="btn btn-danger delete"  title="Borrar Envio">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- /.card-body -->
-    <div class="card-footer" id="upload-status">                                  
-        <!-- Aquí se mostrarán los mensajes de estado o errores de la carga de archivos -->
-    </div>
-</div>
-<!-- /.card -->
-
-                 
-
-                 <!-- FIN SUBIR DOC -->
+                        <div class="card card-secondary col-6">
+                            <div class="card-header">
+                                <h3 class="card-title">Subir Documentos <small><em></em></small></h3>
+                            </div>
+                            <div class="card-body" >
+                                <div id="actions" class="row">
+                                    <div class="">
+                                        <div class="btn-group w-100" >
+                                            <span class="btn btn-success fileinput-button">
+                                                <i class="fas fa-plus"></i>
+                                                Agregar
+                                            </span>                        
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 d-flex align-items-center">
+                                        <div class="fileupload-process w-100">
+                                            <div id="total-progress" class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                                                <div class="progress-bar progress-bar-success" style="width:0%;" data-dz-uploadprogress></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="table table-striped files" id="previews">
+                                    <div id="template" class="row mt-2">
+                                        <div class="col-auto">
+                                            <span class="preview"><img src="data:," alt="" data-dz-thumbnail /></span>
+                                        </div>
+                                        <div class="col d-flex align-items-center">
+                                            <p class="mb-0">
+                                                <span class="lead" data-dz-name></span>
+                                                (<span data-dz-size></span>)
+                                            </p>
+                                            <strong class="error text-danger" data-dz-errormessage></strong>
+                                        </div>
+                                        <div class="col-4 d-flex align-items-center">
+                                            <div class="progress progress-striped active w-100" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                                                <div class="progress-bar progress-bar-success" style="width:0%;" data-dz-uploadprogress></div>
+                                                
+                                            </div>
+                                        </div>
+                                        <div class="col-auto d-flex align-items-center">
+                                            <div class="btn-group">
+                                                <button class="btn btn-primary start" title="Enviar Archivo">
+                                                    <i class="fas fa-upload"></i>
+                                                </button>
+                                                <button data-dz-remove class="btn btn-warning cancel"  title="Cancelar Subida">
+                                                    <i class="fas fa-times-circle"></i>
+                                                </button>
+                                                <button data-dz-remove class="btn btn-danger delete"  title="Borrar Envio">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /.card-body -->
+                            <div class="card-footer" id="upload-status">                                  
+                                <!-- Aquí se mostrarán los mensajes de estado o errores de la carga de archivos -->
+                            </div>
+                        </div>
+                        <!-- /.card -->
+                        <!-- FIN SUBIR DOC -->
+                        <div class="card card-secondary col-4" style="margin-left:10px">
+                            <div class="card-header">
+                                <h3 class="card-title">Documentos Subidos <small><em></em></small></h3>
+                            </div>
+                            <div class="card-body">
+                                <button class="btn btn-success" data-toggle="modal" data-target="#exampleModal">Ver Documentos</button>
+                            </div>
+                            
+                            <!-- Modal -->
+                            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Documentos</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <!-- Aquí puedes mostrar los documentos -->
+                                            <!-- Por ejemplo, puedes incluir una tabla con los enlaces a los documentos -->
+                                            <table id="example1" class="table table-bordered table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Nombre del Documento</th>
+                                                        <th>Enlace</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="modalBody">
+                                                   
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /.card-body -->
+                            <div class="card-footer" id="upload-status">                                  
+                                <!-- Aquí se mostrarán los mensajes de estado o errores de la carga de archivos -->
+                            </div>
+                        </div>
                 </div>
 
                 <!-- licencias -->
@@ -821,6 +863,7 @@
 </script>
 
 <script>
+    traerArchivos();
     function validarFecha() {
         var fechaInput = document.getElementById('FA').value;
         var regex = /^\d{4}-\d{2}-\d{2}$/;
@@ -882,4 +925,5 @@
   
     document.getElementById('FA').addEventListener('blur', validarFecha);
   </script>
+  
 @endsection

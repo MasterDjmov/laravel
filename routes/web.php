@@ -154,3 +154,4 @@ Route::post('/buscar_dni_cue',[SistemaController::class,'buscar_dni_cue'])->name
 
 //subir documentos
 Route::post('/upload',[SubirDocController::class,'store'])->name('store');
+Route::get('/traerArchivos',[SubirDocController::class,'traerArchivos'])->name('traerArchivos');

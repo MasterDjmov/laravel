@@ -11,7 +11,8 @@ previewNode.parentNode.removeChild(previewNode);
 // Función para inicializar Dropzone después de cargar completamente el DOM
 document.addEventListener("DOMContentLoaded", function() {
     var myDropzone = new Dropzone(document.body, { // Make the whole body a dropzone
-        url: "http://127.0.0.1:8000/upload", // la envio como absoluta de donde llamo
+        url: "http://127.0.0.1:8000/upload", // la envio como absoluta de donde llamo local
+        //url: "http://128.201.239.26/upload", // la envio como absoluta de donde llamo
         thumbnailWidth: 80,
         params: {
             _token: csrfToken,
@@ -77,6 +78,7 @@ document.addEventListener("DOMContentLoaded", function() {
     // Manejar la respuesta JSON
     myDropzone.on("success", function(file, response) {
         if (response.success) {
+            traerArchivos();
             if (response.SubirDocExito) {
                 Swal.fire(
                     'Registro guardado',
@@ -103,3 +105,31 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
 });
+
+function traerArchivos(){
+        // Obtén el valor de los elementos HTML usando jQuery
+        var agente = $('#idAgente').val();
+        var cueX = $('#CueX').val();
+        
+        // Genera el objeto de datos que contiene los parámetros
+        var data = {
+            _token: '{{ csrf_token() }}', // Obtén el token CSRF de Laravel
+            Agente: agente,
+            CueX: cueX
+        };
+        
+        // Realiza la solicitud AJAX
+        $.ajax({
+            url: '/traerArchivos',
+            type: 'GET',
+            data: data, // Pasa los parámetros en el objeto de datos
+            success: function(data) {
+                // Actualiza el contenido del modal con los archivos recibidos en la respuesta
+                $('#modalBody').html(data);
+            },
+            error: function(xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+        //console.log("trayendo")
+}

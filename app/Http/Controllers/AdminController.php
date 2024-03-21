@@ -326,7 +326,7 @@ class AdminController extends Controller
       $o->idUsuario = $request->usuario;
       $o->CantidadSubidos = $request->CantidadPersonas;
       $o->EstadoPOF = 1;
-      $o->FechaInicio = Carbon::parse(Carbon::now())->format('Y-m-d');;
+      $o->FechaInicio = Carbon::parse(Carbon::now())->format('Y-m-d');
     $o->save();
     
     $idUs=$request->usuario;
