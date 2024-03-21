@@ -133,12 +133,12 @@
               </p>
             </a>
             <ul class="nav nav-treeview">
-              {{-- <li class="nav-item">
+              <li class="nav-item">
                 <a href="{{route('verSubOrg')}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Instituci&oacuten</p>
                 </a>
-              </li> --}}
+              </li>
               <li class="nav-item">
                 <a href="{{route('getOpcionesOrg')}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>

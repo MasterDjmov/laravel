@@ -75,7 +75,7 @@
                                         tb_institucion_extension
                                         ON 
                                             tb_nodos.CUECOMPLETO = tb_institucion_extension.CUECOMPLETO
-                                            and tb_nodos.CUECOMPLETO = '$cue'");
+                                            and tb_nodos.CUECOMPLETO = '$CUECOMPLETO'");
                                             //print_r($cantidadAgente);
                                             echo $cantidadAgente[0]->totalAgentes;
                                 @endphp
@@ -88,8 +88,8 @@
                             <div class="col-sm-4 border-right">
                                 <div class="description-block">
                                 @php
-                                    $cTurnos = DB::table('tb_turnos_suborg')
-                                            ->where('idSubOrganizacion',$SubOrganizaciones[0]->idSubOrganizacion)
+                                    $cTurnos = DB::table('tb_turnos_inst')
+                                            ->where('idInstitucionExtension',$institucionExtension[0]->idInstitucionExtension)
                                             ->get();
                                 @endphp
                                     @if (count($cTurnos)>0)
@@ -104,18 +104,11 @@
                             <!-- /.col -->
                             <div class="col-sm-4">
                                 <div class="description-block">
-                                @php
-                                    $iZona = DB::table('tb_zonasupervision')
-                                            ->where('idZonaSupervision',$SubOrganizaciones[0]->ZonaSupervision)
-                                            ->get();
-                                @endphp
-                                    @if (count($iZona)>0)
-                                        <h5 class="description-header">{{$iZona[0]->Descripcion}}</h5>
+                               
+                                
+                                        <h5 class="description-header">{{$institucionExtension[0]->Zona;}}</h5>
                                         <span class="description-text">Zona</span>
-                                    @else
-                                        <h5 class="description-header">Sin Zona Declarada</h5>
-                                        <span class="description-text">Zona</span>
-                                    @endif
+                                   
                                     
                                 
                                     
@@ -130,14 +123,14 @@
                         <strong><i class="fas fa-phone mr-1"></i> Telefonos</strong>
 
                         <p class="text-muted">
-                        {{$SubOrganizaciones[0]->Telefono}}
+                        {{$institucionExtension[0]->Telefono}}
                         </p>
 
                         <hr>
 
                         <strong><i class="fas fa-map-marker-alt mr-1"></i> Domicilio</strong>
 
-                        <p class="text-muted">{{$SubOrganizaciones[0]->Domicilio}}</p>
+                        <p class="text-muted">{{$institucionExtension[0]->Domicilio_Institucion}}</p>
 
                         <hr>
 
@@ -145,16 +138,10 @@
 
                         <p class="text-muted">
                         @php
-                            //consulta localizada
-                            $loc = DB::table('tb_localidades')
-                            ->where('tb_localidades.idLocalidad',$SubOrganizaciones[0]->Localidad)
-                            ->get();
-                            if(count($loc)>0){
-                                echo $loc[0]->localidad;
+                            
+                                echo $institucionExtension[0]->Localidad;
                                 
-                            }else{
-                                echo "No hay localidad asignada";
-                            }
+                           
                         @endphp
                        
                         </p>
@@ -163,7 +150,7 @@
 
                         <strong><i class="far fa-file-alt mr-1"></i> CUE / CUE-Anexo</strong>
 
-                        <p class="text-muted">{{$SubOrganizaciones[0]->CUE." / ".$SubOrganizaciones[0]->cuecompleto}}</p>
+                        <p class="text-muted">{{$institucionExtension[0]->CUE." / ".$institucionExtension[0]->CUECOMPLETO}}</p>
                         
                         
                     </div>
@@ -184,7 +171,7 @@
                         <!-- Add the bg color to the header using any of the bg-* classes -->
                         <!--Google map-->
                         
-                        @if ($SubOrganizaciones[0]->Latitud != "")
+                        @if ($institucionExtension[0]->Latitud != "")
                             <div id="map-container-google-2" class="z-depth-1-half map-container" style="height: 500px;">
                                 <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3475.1243238122856!2d-66.8517673850141!3d-29.42516258211173!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9427da2e0b207409%3A0x386d44c96736dcf7!2sJardin%20De%20Infantes%20N%C2%B0%204%20Ovidio%20Decroli!5e0!3m2!1ses!2sar!4v1680095961758!5m2!1ses!2sar" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                             </div>
@@ -197,7 +184,7 @@
                        
                         
                         <!--Google Maps-->
-                       @if ($SubOrganizaciones[0]->Latitud == "")
+                       @if ($institucionExtension[0]->Latitud == "")
                         <div class="card-footer">
                         
                             <div class="alert alert-warning alert-dismissible">
