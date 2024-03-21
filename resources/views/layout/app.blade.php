@@ -236,6 +236,12 @@
                   <p>Consulta Temporal - Borrar</p>
                 </a>
               </li>
+              <li class="nav-item">
+                <a href="{{route('limpiar_carga')}}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Borrar toda la carga</p>
+                </a>
+              </li>
             </ul>
           </li>
         @endif

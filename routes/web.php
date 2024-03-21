@@ -128,7 +128,7 @@ Route::get('/ver_novedades_bajas',[AgController::class,'ver_novedades_bajas'])->
 Route::get('/ver_novedades_cues',[AgController::class,'ver_novedades_cues'])->name('ver_novedades_cues');
 
 Route::get('/generar_pdf_novedades',[AgController::class,'generar_pdf_novedades'])->name('generar_pdf_novedades');
-
+Route::get('/limpiar_carga',[AgController::class,'limpiar_carga'])->name('limpiar_carga');
 //ADMIN
 Route::get('/nuevoUsuario',[AdminController::class,'nuevoUsuario'])->name('nuevoUsuario');
 Route::get('/editarUsuario/{idUsuario}',[AdminController::class,'editarUsuario'])->name('editarUsuario');

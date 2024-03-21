@@ -2079,7 +2079,23 @@ class AgController extends Controller
         
     }
 
-
+    public function limpiar_carga()
+    {
+        $CUECOMPLETO = session('CUECOMPLETO');
+        
+        // Verificar si el cuecompleto comienza con '9999999'
+        if (substr($CUECOMPLETO, 0, 7) === '9999999') {
+            // Eliminar registros de la tabla tb_novedades
+            NovedadesModel::where('cuecompleto', $CUECOMPLETO)->delete();
+    
+            // Eliminar registros de la tabla tb_nodos
+            Nodo::where('cuecompleto', $CUECOMPLETO)->delete();
+    
+            return redirect("/verArbolServicio2")->with('ConfirmarLimpieza', 'OK');
+        } else {
+            return redirect()->back()->with('ConfirmarLimpiezaError', 'OK');
+        }
+    }
 
 
 

@@ -133,6 +133,24 @@
                 )
         </script>
     @endif
+    @if (session('ConfirmarLimpieza')=='OK')
+        <script>
+        Swal.fire(
+            'Aviso',
+            'Se Elimino todo el contenido de Bloques y Novedades',
+            'success'
+                )
+        </script>
+    @endif
+    @if (session('ConfirmarLimpiezaError')=='OK')
+        <script>
+        Swal.fire(
+            'Aviso',
+            'Esta funcion solo esta disponible para CUE de Prueba',
+            'error'
+                )
+        </script>
+    @endif
 <script>
 
     $('.formularioNuevoAgenteNodo').submit(function(e){
