@@ -8,7 +8,7 @@
       <section class="content-wrapper">
         <div class="row">
            <!-- Direct Chat -->
-        <h4 class="col-md-12">Chat Blog Institucional</h4>
+        <h4 class="col-md-12">Chat Blog Institucional - Estado : <small class="badge badge-danger"><i class="far fa-clock"></i> Fuera de Linea</small></h4> 
         
           <div class="col-md-12">
             <!-- DIRECT CHAT PRIMARY -->
