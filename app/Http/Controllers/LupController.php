@@ -833,10 +833,10 @@ class LupController extends Controller
     //de paso actualizo en novedades si el nodo esta en servicio alta y le actualizo su cantidad de dias trabajados
     
         $novedad = NovedadesModel::where('Nodo', $request->input('idn'))
-        ->where('Agente', $nodo->Agente)
+        //->where('Agente', $nodo->Agente)
         ->where('CUECOMPLETO', $nodo->CUECOMPLETO)
         ->where('idTurnoUsuario', $nodo->idTurnoUsuario)
-        ->where('Motivo','=', 1)    //pregunto si esta activo con ALTA, son los unicos que tendran asistencia
+        //->where('Motivo','=', 1)    //pregunto si esta activo con ALTA, son los unicos que tendran asistencia
         ->whereNotNull('Nodo') // Verifica si el campo 'Nodo' no es null
         ->first();
 
