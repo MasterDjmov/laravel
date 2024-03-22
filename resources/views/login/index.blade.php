@@ -4,7 +4,7 @@
 
 @section('ContenidoPrincipal')
 <body class="lock-screen" onload="startTime()">
-
+  <marquee style="color:red;font-size:30px;">Se podra usar el sistema en formato de PRUEBA hasta el dia Sabado por la tarde, luego entrara en mantenimiento</marquee>
   <div class="lock-wrapper">
 
     <div id="time" style="color:rgb(74, 71, 71)"></div>
@@ -50,6 +50,8 @@
         <p>Si no tiene asignado un Usuario, haga <a href="{{ route('pedirUsuario') }}">Click AQUI</a> para solicitarlo</p>
       </div>
   </div>
+  <marquee style="color:red;font-size:30px;">Se podra usar el sistema en formato de PRUEBA hasta el dia Sabado por la tarde, luego entrara en mantenimiento</marquee>
+
 </body>
 @endsection
 
