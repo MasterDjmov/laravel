@@ -7,6 +7,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\LuiController;
 use App\Http\Controllers\LupController;
 use App\Http\Controllers\AgController;
+use App\Http\Controllers\ChatBlogController;
 use App\Http\Controllers\PruebaController;
 use App\Http\Controllers\SistemaController;
 use App\Http\Controllers\SubirDocController;
@@ -155,3 +156,7 @@ Route::post('/buscar_dni_cue',[SistemaController::class,'buscar_dni_cue'])->name
 //subir documentos
 Route::post('/upload',[SubirDocController::class,'store'])->name('store');
 Route::get('/traerArchivos',[SubirDocController::class,'traerArchivos'])->name('traerArchivos');
+
+//chatBlog
+Route::get('/chatBlog',[ChatBlogController::class,'chatBlog'])->name('chatBlog');
+Route::post('/chatBlog',[ChatBlogController::class,'chatBlog'])->name('chatBlog');
