@@ -10,7 +10,7 @@
     @php
       $activo = "NO";
     @endphp
-<marquee style="color:red;font-size:30px;">MODO PRUEBA - NO GUARDAR INFORMACION</marquee>
+{{-- <marquee style="color:red;font-size:30px;">MODO PRUEBA - NO GUARDAR INFORMACION</marquee> --}}
 
     <div class="card text-center bg-op-1">
       <img src="{{ asset('img/seguridad.jpg');}}" alt="lock avatar"/>
@@ -49,7 +49,7 @@
       <div class="card text-center bg-op-1">
         <p>Si no tiene asignado un Usuario, haga <a href="{{ route('pedirUsuario') }}">Click AQUI</a> para solicitarlo</p>
       </div>
-<marquee style="color:red;font-size:30px;">MODO PRUEBA - NO GUARDAR INFORMACION</marquee>
+<marquee style="color:rgb(81, 206, 81);font-size:30px;">ACTIVADO - ONLINE</marquee>
 
   </div>
 
