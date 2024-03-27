@@ -6,7 +6,7 @@
 @if ($institucionExtension[0]->imagen_escuela != "")
     <?php 
         $CUECOMPLETO=$institucionExtension[0]->CUECOMPLETO;
-        $turno = $infoInstitucion[0]->idTurnoUsuario;
+        $turno = $institucionExtension[0]->idTurnoUsuario;
         $cueconturno=$cuecompleto.$turno;
         $url="storage/CUE/$cueconturno/".$institucionExtension[0]->imagen_escuela;
         echo '<style>
