@@ -50,8 +50,8 @@
                         @if ($institucionExtension[0]->imagen_logo != ""){
                             <?php 
                                 $CUECOMPLETO=$institucionExtension[0]->CUECOMPLETO;
-                                $turno = $infoInstitucion[0]->idTurnoUsuario;
-                                $cueconturno=$cuecompleto.$turno;
+                                $turno = $institucionExtension[0]->idTurnoUsuario;
+                                $cueconturno=$CUECOMPLETO.$turno;
                                 $url="storage/CUE/$cueconturno/".$institucionExtension[0]->imagen_logo;
                             ?>
                         }@else{
