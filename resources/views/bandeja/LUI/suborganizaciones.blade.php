@@ -7,7 +7,7 @@
     <?php 
         $CUECOMPLETO=$institucionExtension[0]->CUECOMPLETO;
         $turno = $institucionExtension[0]->idTurnoUsuario;
-        $cueconturno=$cuecompleto.$turno;
+        $cueconturno=$CUECOMPLETO.$turno;
         $url="storage/CUE/$cueconturno/".$institucionExtension[0]->imagen_escuela;
         echo '<style>
                 .widget-user-header{background: url('.$url.');
